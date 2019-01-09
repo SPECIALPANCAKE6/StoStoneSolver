@@ -1,2 +1,2 @@
-def domainGen(currRoomIndices):
-    return print("domainGen")
+def domainGen(currRoomIndices, currRoomWeight):
+    return print("Domain Gen")

@@ -4,83 +4,76 @@ import glob
 import time
 import copy
 import queue as Q
-import connChecker
-import adjChecker
-import domainGen
+import readPuzzle
+import backtrack
 
 
 # globals for reading in the puzzle
-global rows
-global cols
-global puzzle
-global weights
-global layout
-global rooms
-global given
+#global rows
+#global cols
+#global weights
+#global layout
+#global rooms
+#global given
 global givenRooms
 global finishTime
 
-global state
-
-
-def readPuzzle(inputFile):
-    """
-    readPuzzle function which reads the file input to find puzzle room layout, room weights, and pre-shaded cells
-    :param inputFile:
-    :return:
-    """
-    global rows, cols, puzzle, weights, layout, rooms, given
-    with open(inputFile, 'r') as file:
-        file.readline()
-        file.readline()
-        rows = int(file.readline())
-        cols = int(file.readline())
-        rooms = int(file.readline())
-
-        layout = [cols * [""] for i in range(rows)]
-        for row, line in enumerate(file):
-            for col, symbol in enumerate(line.split()):
-                layout[row][col] = int(symbol)
-                if row + 1 == rows and col + 1 == cols:
-                    break
-            else:
-                continue
-            break
-
-        weights = {}
-        for row, line in enumerate(file):
-            for col, symbol in enumerate(line.split()):
-                if symbol == ".":
-                    #weights[row][col] = -1
-                    if row + 1 == rows and col + 1 == cols:
-                        break
-                    continue
-                else:
-                    #weights[row][col] = int(symbol)
-                    weights.update({layout[row][col]: (row, col, int(symbol))})
-                    if row + 1 == rows and col + 1 == cols:
-                        break
-            else:
-                continue
-            break
-
-        given = [cols * [""] for i in range(rows)]
-        for row, line in enumerate(file):
-            for col, symbol in enumerate(line.split()):
-                if symbol == ".":
-                    given[row][col] = -1
-                    if row + 1 == rows and col + 1 == cols:
-                        break
-                    continue
-                else:
-                    given[row][col] = symbol
-                    if row + 1 == rows and col + 1 == cols:
-                        break
-            else:
-                continue
-            break
-
-
+#def readPuzzle(inputFile):
+#    """
+#    readPuzzle function which reads the file input to find puzzle room layout, room weights, and pre-shaded cells
+#    :param inputFile:
+#    :return:
+#    """
+#    global rows, cols, weights, layout, rooms, given
+#    with open(inputFile, 'r') as file:
+#        file.readline()
+#        file.readline()
+#        rows = int(file.readline())
+#        cols = int(file.readline())
+#        rooms = int(file.readline())
+#
+#        layout = [cols * [""] for i in range(rows)]
+#        for row, line in enumerate(file):
+#            for col, symbol in enumerate(line.split()):
+#                layout[row][col] = int(symbol)
+#                if row + 1 == rows and col + 1 == cols:
+#                    break
+#            else:
+#                continue
+#            break
+#
+#        weights = {}
+#        for row, line in enumerate(file):
+#            for col, symbol in enumerate(line.split()):
+#                if symbol == ".":
+#                    if row + 1 == rows and col + 1 == cols:
+#                        break
+#                    continue
+#                else:
+#                    weights.update({layout[row][col]: (row, col, int(symbol))})
+#                    if row + 1 == rows and col + 1 == cols:
+#                        break
+#            else:
+#                continue
+#            break
+#
+#        given = [cols * [""] for i in range(rows)]
+#        for row, line in enumerate(file):
+#            for col, symbol in enumerate(line.split()):
+#                if symbol == ".":
+#                    given[row][col] = -1
+#                    if row + 1 == rows and col + 1 == cols:
+#                        break
+#                    continue
+#                else:
+#                    given[row][col] = symbol
+#                    if row + 1 == rows and col + 1 == cols:
+#                        break
+#            else:
+#                continue
+#            break
+#
+#
 #def connChecker(roomNum, currRoomIndices):
 #    """
 #    currently broken... would work if there are two pairs of connected vertices that aren't connected
@@ -291,59 +284,60 @@ def readPuzzle(inputFile):
 #                if drawnWeight < currRoomWeight or drawnWeight < genRoomWeight:
 #                    print("Room Num: " + str(roomNum) + " wasn't solved...")
 #                    break
+#
+#
+#def backtrack(roomNum):
+#    global rows, cols, puzzle, weights, layout, rooms, given, givenRooms, state
+#    global finishTime
+#
+#    if time.time() > finishTime:
+#        return
+#
+#    if roomNum == 0:
+#        state = copy.deepcopy(readPuzzle.given)
+#        for i in list(readPuzzle.weights.keys()):
+#            for r in range(readPuzzle.rows):
+#                for c in range(readPuzzle.cols):
+#                    if readPuzzle.layout[r][c] == i and readPuzzle.given[r][c] == '#' \
+#                            and i in list(readPuzzle.weights.keys()):
+#                        givenRooms.update({i : readPuzzle.weights[i]})
+#                        del readPuzzle.weights[i]
+#
+#    if roomNum in readPuzzle.weights.keys():
+#        currRoomWeight = readPuzzle.weights[roomNum][2]
+#        adjChecker.adjChecker(roomNum, currRoomWeight)
+#
+#    elif roomNum in list(givenRooms.keys()):
+#        backtrack(roomNum+1)
+#
+#    else:
+#        adjChecker(roomNum, 0)
 
 
-def backtrack(roomNum):
-    global rows, cols, puzzle, weights, layout, rooms, given, givenRooms, state
-    global finishTime
 
-    if time.time() > finishTime:
-        return
-
-    if roomNum == 0:
-        state = copy.deepcopy(given)
-        for i in list(weights.keys()):
-            for r in range(rows):
-                for c in range(cols):
-                    if layout[r][c] == i and given[r][c] == '#' and i in list(weights.keys()):
-                        givenRooms.update({i : weights[i]})
-                        del weights[i]
-
-    if roomNum in weights.keys():
-        currRoomWeight = weights[roomNum][2]
-        adjChecker.adjChecker(roomNum, currRoomWeight)
-
-    elif roomNum in list(givenRooms.keys()):
-        backtrack(roomNum+1)
-
-    else:
-        adjChecker(roomNum, 0)
-
-
-if __name__ == "__main__":
-    global finishTime
-    totalSolved = 0
-    totalUnsolved = 0
-    fileNames = glob.glob("puzzles/*.txt")
-    for fileName in fileNames:
-        readPuzzle(fileName)
-        print(fileName)
-        print("Layout:")
-        for line in layout:
-            print(line)
-            # cells marked by room number
-        print("Weights:")
-        for key in weights.keys():
-            print(key, ':' , weights[key])
-            # formatted room : (x, y, weight)
-        print("Given:")
-        for line in given:
-            print(line)
-            # given stones are #, -1 means empty
-        givenRooms = {}
-        startTime = time.time()
-        finishTime = startTime + 10000000
-        backtrack(0)
-        endTime = time.time()
-        print(endTime - startTime)
-        print("")
+global finishTime
+totalSolved = 0
+totalUnsolved = 0
+fileNames = glob.glob("puzzles/*.txt")
+for fileName in fileNames:
+    readPuzzle.readPuzzle(fileName)
+    print(fileName)
+    print("Layout:")
+    for line in readPuzzle.layout:
+        print(line)
+        # cells marked by room number
+    print("Weights:")
+    for key in readPuzzle.weights.keys():
+        print(key, ':' , readPuzzle.weights[key])
+        # formatted room : (x, y, weight)
+    print("Given:")
+    for line in readPuzzle.given:
+        print(line)
+        # given stones are #, -1 means empty
+    #givenRooms = {}
+    startTime = time.time()
+    finishTime = startTime + 10000000
+    backtrack.backtrack(0)
+    endTime = time.time()
+    print(endTime - startTime)
+    print("")

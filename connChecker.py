@@ -1,6 +1,8 @@
 import copy
 import queue as Q
-import Solver as S
+
+import readPuzzle
+
 
 def connChecker(roomNum, currRoomIndices):
     """
@@ -9,7 +11,7 @@ def connChecker(roomNum, currRoomIndices):
     :param currRoomIndices:
     :return: True if shaded cells are all connected, false if disconnected
     """
-    global rows, cols, puzzle, weights, layout, rooms, given, givenRooms, state
+    global rows, cols, weights, layout, rooms, given, givenRooms, state
     global finishTime
 
     connected = False
@@ -26,21 +28,21 @@ def connChecker(roomNum, currRoomIndices):
         while not que.empty():
             s = que.get()
 
-            if state[rR][rC] == '#':
+            if readPuzzle.state[rR][rC] == '#':
                 currUp = rR - 1
                 currDown = rR + 1
                 currLeft = rC - 1
                 currRight = rC + 1
-                if (currUp, rC) in currRoomIndices and state[currUp][rC] == '#':
+                if (currUp, rC) in currRoomIndices and readPuzzle.state[currUp][rC] == '#':
                     connected = True
                     continue
-                elif (currDown, rC) in currRoomIndices and state[currDown][rC] == '#':
+                elif (currDown, rC) in currRoomIndices and readPuzzle.state[currDown][rC] == '#':
                     connected = True
                     continue
-                elif (rR, currLeft) in currRoomIndices and state[rR][currLeft] == '#':
+                elif (rR, currLeft) in currRoomIndices and readPuzzle.state[rR][currLeft] == '#':
                     connected = True
                     continue
-                elif (rR, currRight) in currRoomIndices and state[rR][currRight] == '#':
+                elif (rR, currRight) in currRoomIndices and readPuzzle.state[rR][currRight] == '#':
                     connected = True
                     continue
                 else:
