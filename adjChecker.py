@@ -1,4 +1,5 @@
 import connChecker
+import domainGen
 import readPuzzle
 import backtrack
 
@@ -21,6 +22,8 @@ def adjChecker(roomNum, currRoomWeight):
         for c in range(readPuzzle.cols):
             if readPuzzle.layout[r][c] == roomNum:
                 currRoomSquareIndices.append((r, c))
+
+    domain = domainGen.domainGen(currRoomSquareIndices, currRoomWeight)
 
     if currRoomWeight == 0:
         genRoomWeight = len(currRoomSquareIndices)
