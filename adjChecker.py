@@ -11,6 +11,9 @@ def adjChecker(roomNum, currRoomWeight):
     :param currRoomWeight:
     :return:
     """
+
+    # TODO change this from cell based approach to room based approach to see if the full stone conflicts with any previously placed rooms.
+    # TODO think of it in pairs of indices. (conflicting rm num, conflict indx, currRoomIndex) Make use of layout
     global rows, cols, weights, layout, rooms, given, givenRooms
     global finishTime
 

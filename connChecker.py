@@ -11,6 +11,9 @@ def connChecker(roomNum, currRoomIndices):
     :param currRoomIndices:
     :return: True if shaded cells are all connected, false if disconnected
     """
+
+    # TODO change to room based approach. Determine which rooms connect to each other and at what indices. To be used with adjchecker for conflicts.
+
     global rows, cols, weights, layout, rooms, given, givenRooms, state
     global finishTime
 

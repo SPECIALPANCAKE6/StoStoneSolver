@@ -48,7 +48,7 @@ def domainGen(currRoomIndices, currRoomWeight = None):
                     if (n, m) in currRoomIndices and (n, m) not in visited:
                         visited.append((n, m))
 
-        paths = paths.append(visited)
+        #paths = paths.append(visited)
         visited = []
 
                         #continue
