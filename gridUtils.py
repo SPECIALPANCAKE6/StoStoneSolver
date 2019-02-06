@@ -1,11 +1,18 @@
 import random
 import itertools
 import iterators
+import readPuzzle
 
-# TODO get conflicts for each room and put into an array, use a list with len(cols). Each element is a counter for stones in each col.
-# TODO set up a check that finds (conflicting rm num, conflict indx, currRoomIndex)
+# TODO get conflicts for each room and put into an array, use a list with len(cols). Each element is a counter
 
 
+def conflictGen(coords):
+    conflicts = []
+    for coord in coords:
+        neighbors = [neighbor for neighbor in gridNeighbors(coord, readPuzzle.rows, readPuzzle.cols) if neighbor not in coords]
+        conflicts += ((readPuzzle.layout[r][c], (r, c), coord) for (r, c) in neighbors)
+
+    return conflicts
 
 # connectedSubgrids
 # input: coords is a list of (row, col) co-ordinates defining the individual squares of a connected grid region.
@@ -118,9 +125,14 @@ if __name__ == "__main__":
     # Sample grid.
     grid = [(0,0), (0,1), (0,2), (1,0), (1,1), (1,2)]
 
+
     # Print the grid.
     print("Original grid squares")
     print(grid)
+
+    # gen possible conflict cells/rooms
+    conflicts = conflictGen(grid)
+
 
     # Sample subgrids.
     subgrids = connectedSubgrids(grid)
