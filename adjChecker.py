@@ -7,16 +7,16 @@ import gridUtils
 
 def domainParser(roomNum, conflicts, inDomain):
     # place subgrid from domain
-    for subgrid in inDomain:
+    for subgrid in inDomain: #code breaks when all cells have conflicts and inDomain becomes empty
         # print("Subgrid " + str(subgrid) + " needs to be placed.")
         for (r, c) in subgrid:
-            print("place strone at " + str(subgrid))
+            print("place stone at " + str(subgrid))
             for i in range(len(conflicts)):
                 (conR, conC) = conflicts[i][1]
                 if conflicts[i][2] == (r, c) and readPuzzle.state[conR][conC] == '#':
                     inDomain.remove(subgrid)
-                    domain = domainParser(roomNum, conflicts, inDomain)
-                    return domain
+                    inDomain = domainParser(roomNum, conflicts, inDomain)
+                    return inDomain
     return inDomain
 
 
@@ -25,18 +25,19 @@ def drawStone(subgrid):
         readPuzzle.state[r][c] = '#'
 
 
+def unDraw(subgrid):
+    for (r, c) in subgrid:
+        readPuzzle.state[r][c] = -1
 
 
 def adjChecker(roomNum, currRoomWeight):
     """
-    checks each cell in each rooms adjacents and whether they are shaded and in another or the same room
+    gens conflicts for current room, and then generates rooms domain based on conflicts
     :param roomNum:
     :param currRoomWeight:
-    :return:
+    :return: domain: Fully parsed domain for currRoom
     """
 
-    # TODO change this from cell based approach to room based approach to see if the full stone conflicts with any previously placed rooms.
-    # TODO think of it in pairs of indices. (conflicting rm num, conflict indx, currRoomIndex) Make use of layout
     global rows, cols, weights, layout, rooms, given, givenRooms
     global finishTime
 
@@ -53,15 +54,15 @@ def adjChecker(roomNum, currRoomWeight):
 
     # gen possible conflict locations and domains for room
     conflicts = gridUtils.conflictGen(currRoomSquareIndices)
+
     if currRoomWeight == 0:
         domain = gridUtils.connectedSubgrids(currRoomSquareIndices)
     else:
         domain = gridUtils.connectedSubgrids(currRoomSquareIndices, currRoomWeight)
 
-    domainNew = domainParser(roomNum, conflicts, domain)
-    for subgrid in domainNew:
-        drawStone(subgrid)
-        backtrack.backtrack(roomNum + 1)
+    domain = domainParser(roomNum, conflicts, domain)
+    return domain
+
 
 
 

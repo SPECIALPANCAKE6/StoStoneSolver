@@ -10,6 +10,10 @@ def backtrack(roomNum):
     #if time.time() > finishTime:
     #    return
 
+
+    if roomNum > readPuzzle.rooms:
+        return
+
     if roomNum == 0:
         #state = copy.deepcopy(readPuzzle.given)
         for i in list(readPuzzle.weights.keys()):
@@ -22,11 +26,19 @@ def backtrack(roomNum):
 
     if roomNum in readPuzzle.weights.keys():
         currRoomWeight = readPuzzle.weights[roomNum][2]
-        adjChecker.adjChecker(roomNum, currRoomWeight)
+        domain = adjChecker.adjChecker(roomNum, currRoomWeight)
+        for subgrid in domain:
+            adjChecker.drawStone(subgrid)
+            backtrack(roomNum + 1)
+            adjChecker.unDraw(subgrid)
 
     elif roomNum in list(givenRooms.keys()):
         backtrack(roomNum+1)
 
     else:
-        adjChecker.adjChecker(roomNum, 0)
+        domain = adjChecker.adjChecker(roomNum, 0)
+        for subgrid in domain:
+            adjChecker.drawStone(subgrid)
+            backtrack(roomNum + 1)
+            adjChecker.unDraw(subgrid)
 
