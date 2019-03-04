@@ -1,5 +1,5 @@
 import time
-import adjChecker
+import domainBuilder
 import readPuzzle
 
 
@@ -27,12 +27,12 @@ def backtrack(roomNum):
 
     if roomNum in readPuzzle.weights.keys():
         currRoomWeight = readPuzzle.weights[roomNum][2]
-        domain = adjChecker.adjChecker(roomNum, currRoomWeight)
+        domain = domainBuilder.domainBuilder(roomNum, currRoomWeight)
         for subgrid in domain:
-            adjChecker.drawStone(subgrid)
+            domainBuilder.drawStone(subgrid)
             backtrack(roomNum + 1)
             if not solved:
-                adjChecker.unDraw(subgrid)
+                domainBuilder.unDraw(subgrid)
             else:
                 return
 
@@ -40,12 +40,12 @@ def backtrack(roomNum):
         backtrack(roomNum+1)
 
     else:
-        domain = adjChecker.adjChecker(roomNum, 0)
+        domain = domainBuilder.domainBuilder(roomNum, 0)
         for subgrid in domain:
-            adjChecker.drawStone(subgrid)
+            domainBuilder.drawStone(subgrid)
             backtrack(roomNum + 1)
             if not solved:
-                adjChecker.unDraw(subgrid)
+                domainBuilder.unDraw(subgrid)
             else:
                 return
 

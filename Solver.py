@@ -117,7 +117,7 @@ global finishTime
 #        return connected
 
 
-#def adjChecker(roomNum, currRoomWeight):
+#def domainBuilder(roomNum, currRoomWeight):
 #    """
 #    checks each cell in each rooms adjacents and whether they are shaded and in another or the same room
 #    :param roomNum:
@@ -302,13 +302,13 @@ global finishTime
 #
 #    if roomNum in readPuzzle.weights.keys():
 #        currRoomWeight = readPuzzle.weights[roomNum][2]
-#        adjChecker.adjChecker(roomNum, currRoomWeight)
+#        domainBuilder.domainBuilder(roomNum, currRoomWeight)
 #
 #    elif roomNum in list(givenRooms.keys()):
 #        backtrack(roomNum+1)
 #
 #    else:
-#        adjChecker(roomNum, 0)
+#        domainBuilder(roomNum, 0)
 
 
 totalSolved = 0

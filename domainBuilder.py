@@ -2,14 +2,13 @@ import readPuzzle
 import gridUtils
 
 
-def domainParser(roomNum, conflicts, inDomain):
+def domainReduce(conflicts, origDomain):
     # place subgrid from domain
 
     reducedDomain = []
 
     if conflicts:
-        for subgrid in inDomain:  # code breaks when all cells have conflicts and inDomain becomes empty
-            # print("Subgrid " + str(subgrid) + " needs to be placed.")
+        for subgrid in origDomain:
             conflict = False
             for (r, c) in subgrid:
                 for i in range(len(conflicts)):
@@ -24,7 +23,7 @@ def domainParser(roomNum, conflicts, inDomain):
         return reducedDomain
 
     else:
-        return inDomain
+        return origDomain
 
 
 def drawStone(subgrid):
@@ -37,7 +36,7 @@ def unDraw(subgrid):
         readPuzzle.state[r][c] = -1
 
 
-def adjChecker(roomNum, currRoomWeight):
+def domainBuilder(roomNum, currRoomWeight):
     """
     gens conflicts for current room, and then generates rooms domain based on conflicts
     :param roomNum:
@@ -62,7 +61,7 @@ def adjChecker(roomNum, currRoomWeight):
     else:
         domain = gridUtils.connectedSubgrids(readPuzzle.allRoomIndices[roomNum], currRoomWeight)
 
-    domain = domainParser(roomNum, readPuzzle.allRoomConflicts[roomNum], domain)
+    domain = domainReduce(readPuzzle.allRoomConflicts[roomNum], domain)
     return domain
 
     # if currRoomWeight == 0:
