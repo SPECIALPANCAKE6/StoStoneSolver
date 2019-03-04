@@ -1,9 +1,6 @@
 # import libs for measurement of time
-import sys
 import glob
 import time
-import copy
-import queue as Q
 import readPuzzle
 import backtrack
 
@@ -314,13 +311,12 @@ global finishTime
 #        adjChecker(roomNum, 0)
 
 
-
-global finishTime
 totalSolved = 0
 totalUnsolved = 0
 fileNames = glob.glob("puzzles/*.txt")
 for fileName in fileNames:
     readPuzzle.readPuzzle(fileName)
+    print(time.time())
     print(fileName)
     print("Layout:")
     for line in readPuzzle.layout:
@@ -334,10 +330,11 @@ for fileName in fileNames:
     for line in readPuzzle.given:
         print(line)
         # given stones are #, -1 means empty
-    #givenRooms = {}
     startTime = time.time()
-    finishTime = startTime + 10000000
+    finishTime = startTime + 1000000
     backtrack.backtrack(0)
+    for line in readPuzzle.state:
+        print(line)
     endTime = time.time()
     print(endTime - startTime)
     print("")

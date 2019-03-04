@@ -1,4 +1,6 @@
 import copy
+import gridUtils
+
 
 def readPuzzle(inputFile):
     """
@@ -6,7 +8,7 @@ def readPuzzle(inputFile):
     :param inputFile:
     :return:
     """
-    global rows, cols, weights, layout, rooms, given, state
+    global rows, cols, weights, layout, rooms, given, givenRooms, state, allRoomIndices, allRoomConflicts
     with open(inputFile, 'r') as file:
         file.readline()
         file.readline()
@@ -55,3 +57,27 @@ def readPuzzle(inputFile):
                 continue
             break
         state = copy.deepcopy(given)
+
+        givenRooms = {}
+        for i in list(weights.keys()):
+            for r in range(rows):
+                for c in range(cols):
+                    if layout[r][c] == i and given[r][c] == '#' \
+                            and i in list(weights.keys()):
+                        givenRooms.update({i : weights[i]})
+                        del weights[i]
+
+        allRoomIndices = []
+        allRoomConflicts = []
+
+        for currRoom in range(rooms):
+            currRoomSquareIndices = []
+            for r in range(rows):
+                for c in range(cols):
+                    if layout[r][c] == currRoom:
+                        currRoomSquareIndices.append((r, c))
+            allRoomIndices.append(currRoomSquareIndices)
+
+        for room, roomIdx in enumerate(allRoomIndices):
+            conflicts = gridUtils.conflictGen(room, roomIdx)
+            allRoomConflicts.append(conflicts)

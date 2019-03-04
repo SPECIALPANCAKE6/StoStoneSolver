@@ -1,23 +1,30 @@
-import connChecker
-import domainGen
 import readPuzzle
-import backtrack
 import gridUtils
 
 
 def domainParser(roomNum, conflicts, inDomain):
     # place subgrid from domain
-    for subgrid in inDomain: #code breaks when all cells have conflicts and inDomain becomes empty
-        # print("Subgrid " + str(subgrid) + " needs to be placed.")
-        for (r, c) in subgrid:
-            print("place stone at " + str(subgrid))
-            for i in range(len(conflicts)):
-                (conR, conC) = conflicts[i][1]
-                if conflicts[i][2] == (r, c) and readPuzzle.state[conR][conC] == '#':
-                    inDomain.remove(subgrid)
-                    inDomain = domainParser(roomNum, conflicts, inDomain)
-                    return inDomain
-    return inDomain
+
+    reducedDomain = []
+
+    if conflicts:
+        for subgrid in inDomain:  # code breaks when all cells have conflicts and inDomain becomes empty
+            # print("Subgrid " + str(subgrid) + " needs to be placed.")
+            conflict = False
+            for (r, c) in subgrid:
+                for i in range(len(conflicts)):
+                    (conR, conC) = conflicts[i][1]
+                    if conflicts[i][2] == (r, c) and readPuzzle.state[conR][conC] == '#':
+                        conflict = True
+                        break
+                if conflict:
+                    break
+            if not conflict:
+                reducedDomain.append(subgrid)
+        return reducedDomain
+
+    else:
+        return inDomain
 
 
 def drawStone(subgrid):
@@ -41,30 +48,22 @@ def adjChecker(roomNum, currRoomWeight):
     global rows, cols, weights, layout, rooms, given, givenRooms
     global finishTime
 
-    drawnWeight = 0
-    genRoomWeight = -1
-    currRoomSquareIndices = []
+    # currRoomSquareIndices = []
+    #
+    # for r in range(readPuzzle.rows):
+    #     for c in range(readPuzzle.cols):
+    #         if readPuzzle.layout[r][c] == roomNum:
+    #             currRoomSquareIndices.append((r, c))
 
-    for r in range(readPuzzle.rows):
-        for c in range(readPuzzle.cols):
-            if readPuzzle.layout[r][c] == roomNum:
-                currRoomSquareIndices.append((r, c))
-
-    # domain = domainGen.domainGen(currRoomSquareIndices, currRoomWeight)
-
-    # gen possible conflict locations and domains for room
-    conflicts = gridUtils.conflictGen(currRoomSquareIndices)
+    # conflicts = gridUtils.conflictGen(roomNum, currRoomSquareIndices) # gen possible conflict locations and domains for room
 
     if currRoomWeight == 0:
-        domain = gridUtils.connectedSubgrids(currRoomSquareIndices)
+        domain = gridUtils.connectedSubgrids(readPuzzle.allRoomIndices[roomNum])
     else:
-        domain = gridUtils.connectedSubgrids(currRoomSquareIndices, currRoomWeight)
+        domain = gridUtils.connectedSubgrids(readPuzzle.allRoomIndices[roomNum], currRoomWeight)
 
-    domain = domainParser(roomNum, conflicts, domain)
+    domain = domainParser(roomNum, readPuzzle.allRoomConflicts[roomNum], domain)
     return domain
-
-
-
 
     # if currRoomWeight == 0:
     #     genRoomWeight = len(currRoomSquareIndices)

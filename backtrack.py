@@ -1,28 +1,29 @@
+import time
 import adjChecker
 import readPuzzle
 
-givenRooms = {}
 
 def backtrack(roomNum):
-    global rows, cols, puzzle, weights, layout, rooms, given, givenRooms, state
-    #global finishTime
+    global rows, cols, puzzle, weights, layout, rooms, given, givenRooms, state, finishTime, solved
+
+    solved = False
 
     #if time.time() > finishTime:
-    #    return
+        #return print("Unable to find solution.")
 
+    if roomNum >= readPuzzle.rooms:
+        colCounter = []
+        for c in range(readPuzzle.cols):
+            colCounter.append(0)
 
-    if roomNum > readPuzzle.rooms:
+        for r in range(readPuzzle.rows):
+            for c in range(readPuzzle.cols):
+                if readPuzzle.state[r][c] == '#':
+                    colCounter[c] += 1
+        if colCounter.count(colCounter[0]) == len(colCounter) and colCounter[0] == readPuzzle.cols / 2:
+            solved = True
+            return print("Solution found!")
         return
-
-    if roomNum == 0:
-        #state = copy.deepcopy(readPuzzle.given)
-        for i in list(readPuzzle.weights.keys()):
-            for r in range(readPuzzle.rows):
-                for c in range(readPuzzle.cols):
-                    if readPuzzle.layout[r][c] == i and readPuzzle.given[r][c] == '#' \
-                            and i in list(readPuzzle.weights.keys()):
-                        givenRooms.update({i : readPuzzle.weights[i]})
-                        del readPuzzle.weights[i]
 
     if roomNum in readPuzzle.weights.keys():
         currRoomWeight = readPuzzle.weights[roomNum][2]
@@ -30,9 +31,12 @@ def backtrack(roomNum):
         for subgrid in domain:
             adjChecker.drawStone(subgrid)
             backtrack(roomNum + 1)
-            adjChecker.unDraw(subgrid)
+            if not solved:
+                adjChecker.unDraw(subgrid)
+            else:
+                return
 
-    elif roomNum in list(givenRooms.keys()):
+    elif roomNum in list(readPuzzle.givenRooms.keys()):
         backtrack(roomNum+1)
 
     else:
@@ -40,5 +44,8 @@ def backtrack(roomNum):
         for subgrid in domain:
             adjChecker.drawStone(subgrid)
             backtrack(roomNum + 1)
-            adjChecker.unDraw(subgrid)
+            if not solved:
+                adjChecker.unDraw(subgrid)
+            else:
+                return
 

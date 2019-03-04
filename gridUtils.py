@@ -3,14 +3,16 @@ import itertools
 import iterators
 import readPuzzle
 
-# TODO get conflicts for each room and put into an array, use a list with len(cols). Each element is a counter
 
+def conflictGen(roomNum, coords):
 
-def conflictGen(coords):
     conflicts = []
     for coord in coords:
-        neighbors = [neighbor for neighbor in gridNeighbors(coord, readPuzzle.rows, readPuzzle.cols) if neighbor not in coords]
-        conflicts += ((readPuzzle.layout[r][c], (r, c), coord) for (r, c) in neighbors)
+        neighbors = [neighbor for neighbor in gridNeighbors(coord, readPuzzle.rows, readPuzzle.cols)
+                     if neighbor not in coords]
+
+        conflicts += ((readPuzzle.layout[r][c], (r, c), coord) for (r, c) in neighbors
+                      if readPuzzle.layout[r][c] < roomNum or readPuzzle.layout[r][c] in readPuzzle.givenRooms)
 
     return conflicts
 
@@ -118,7 +120,6 @@ def randomCoords(rows, cols, num):
             coords.append(coord)
 
     return coords
-
 
 
 if __name__ == "__main__":
