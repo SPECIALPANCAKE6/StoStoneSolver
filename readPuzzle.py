@@ -1,4 +1,6 @@
 import copy
+
+import domainBuilder
 import gridUtils
 
 
@@ -8,7 +10,7 @@ def readPuzzle(inputFile):
     :param inputFile:
     :return:
     """
-    global rows, cols, weights, layout, rooms, given, givenRooms, state, allRoomIndices, allRoomConflicts
+    global rows, cols, weights, layout, rooms, given, givenRooms, state, allRoomIndices, allRoomConflicts, allRoomDomains
     with open(inputFile, 'r') as file:
         file.readline()
         file.readline()
@@ -68,6 +70,7 @@ def readPuzzle(inputFile):
                         del weights[i]
 
         allRoomIndices = []
+        allRoomDomains = []
         allRoomConflicts = []
 
         for currRoom in range(rooms):
@@ -77,6 +80,14 @@ def readPuzzle(inputFile):
                     if layout[r][c] == currRoom:
                         currRoomSquareIndices.append((r, c))
             allRoomIndices.append(currRoomSquareIndices)
+
+            if currRoom in weights.keys():
+                currRoomWeight = weights[currRoom][2]
+                domain = gridUtils.connectedSubgrids(allRoomIndices[currRoom], currRoomWeight)
+                allRoomDomains.append(domain)
+            else:
+                domain = gridUtils.connectedSubgrids(allRoomIndices[currRoom])
+                allRoomDomains.append(domain)
 
         for room, roomIdx in enumerate(allRoomIndices):
             conflicts = gridUtils.conflictGen(room, roomIdx)

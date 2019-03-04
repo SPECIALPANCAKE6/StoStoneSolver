@@ -26,8 +26,8 @@ def backtrack(roomNum):
         return
 
     if roomNum in readPuzzle.weights.keys():
-        currRoomWeight = readPuzzle.weights[roomNum][2]
-        domain = domainBuilder.domainBuilder(roomNum, currRoomWeight)
+        #currRoomWeight = readPuzzle.weights[roomNum][2]
+        domain = domainBuilder.domainReduce(readPuzzle.allRoomConflicts[roomNum], readPuzzle.allRoomDomains[roomNum])
         for subgrid in domain:
             domainBuilder.drawStone(subgrid)
             backtrack(roomNum + 1)
@@ -40,7 +40,7 @@ def backtrack(roomNum):
         backtrack(roomNum+1)
 
     else:
-        domain = domainBuilder.domainBuilder(roomNum, 0)
+        domain = domainBuilder.domainReduce(readPuzzle.allRoomConflicts[roomNum], readPuzzle.allRoomDomains[roomNum])
         for subgrid in domain:
             domainBuilder.drawStone(subgrid)
             backtrack(roomNum + 1)

@@ -55,11 +55,10 @@ def domainBuilder(roomNum, currRoomWeight):
     #             currRoomSquareIndices.append((r, c))
 
     # conflicts = gridUtils.conflictGen(roomNum, currRoomSquareIndices) # gen possible conflict locations and domains for room
-
-    if currRoomWeight == 0:
-        domain = gridUtils.connectedSubgrids(readPuzzle.allRoomIndices[roomNum])
-    else:
-        domain = gridUtils.connectedSubgrids(readPuzzle.allRoomIndices[roomNum], currRoomWeight)
+    # if currRoomWeight == 0:
+    #     domain = gridUtils.connectedSubgrids(readPuzzle.allRoomIndices[roomNum])
+    # else:
+    #     domain = gridUtils.connectedSubgrids(readPuzzle.allRoomIndices[roomNum], currRoomWeight)
 
     domain = domainReduce(readPuzzle.allRoomConflicts[roomNum], domain)
     return domain
