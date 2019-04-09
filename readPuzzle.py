@@ -43,19 +43,19 @@ def readPuzzle(inputFile):
         #        continue
         #    break
 
-        weights = {}
-        for row in range(rows):
-            line = file.readline()
-            for col, symbol in enumerate(line.split()):
-                if symbol != ".":
-                    weights.update({layout[row][col]: (row, col, int(symbol))})
-
-        #weights = [None] * rooms
+        #weights = {}
         #for row in range(rows):
         #    line = file.readline()
         #    for col, symbol in enumerate(line.split()):
         #        if symbol != ".":
-        #            weights[layout[row][col]] = (row, col, int(symbol))
+        #            weights.update({layout[row][col]: (row, col, int(symbol))})
+
+        weights = [None] * rooms
+        for row in range(rows):
+            line = file.readline()
+            for col, symbol in enumerate(line.split()):
+                if symbol != ".":
+                    weights[layout[row][col]] = (row, col, int(symbol))
 
         given = [cols * [""] for i in range(rows)]
         for row, line in enumerate(file):
@@ -74,12 +74,13 @@ def readPuzzle(inputFile):
             break
         state = copy.deepcopy(given)
 
+        # TODO: allow for any cell to possible be given at init, not just the full room
         givenRooms = {}
-        for i in list(weights.keys()):
+        for i in weights:
             for r in range(rows):
                 for c in range(cols):
                     if layout[r][c] == i and given[r][c] == '#' \
-                            and i in list(weights.keys()):
+                            and i in weights:
                         givenRooms.update({i : weights[i]})
                         del weights[i]
 
@@ -106,7 +107,7 @@ def readPuzzle(inputFile):
                         currRoomSquareIndices.append((r, c))
             allRoomIndices.append(currRoomSquareIndices)
 
-            if currRoom in weights.keys():
+            if weights[currRoom] != None:
                 currRoomWeight = weights[currRoom][2]
                 domain = gridUtils.connectedSubgrids(allRoomIndices[currRoom], currRoomWeight)
                 allRoomDomains.append(domain)

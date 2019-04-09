@@ -25,7 +25,7 @@ def backtrack(roomNum):
             return print("Solution found!")
         return
 
-    if roomNum in readPuzzle.weights.keys():
+    if readPuzzle.weights[roomNum] != None:
         #currRoomWeight = readPuzzle.weights[roomNum][2]
         domain = domainBuilder.domainReduce(readPuzzle.allRoomBorders[roomNum], readPuzzle.allRoomDomains[roomNum])
         for subgrid in domain:

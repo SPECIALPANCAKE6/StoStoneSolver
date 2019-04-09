@@ -323,8 +323,8 @@ for fileName in fileNames:
         print(line)
         # cells marked by room number
     print("Weights:")
-    for key in readPuzzle.weights.keys():
-        print(key, ':' , readPuzzle.weights[key])
+    for room, val in enumerate(readPuzzle.weights):
+        print(room, ':' , val)
         # formatted room : (x, y, weight)
     print("Given:")
     for line in readPuzzle.given:
