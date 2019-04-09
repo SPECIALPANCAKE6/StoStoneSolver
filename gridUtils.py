@@ -4,14 +4,16 @@ import iterators
 import readPuzzle
 
 
-def conflictGen(roomNum, coords):
+# TODO rename this borderGen and have it go around the entire room
+# also, borders should be pairs of cells (no need for the other room index)
+def borderGen(roomNum, coords):
 
     conflicts = []
     for coord in coords:
         neighbors = [neighbor for neighbor in gridNeighbors(coord, readPuzzle.rows, readPuzzle.cols)
                      if neighbor not in coords]
 
-        conflicts += ((readPuzzle.layout[r][c], (r, c), coord) for (r, c) in neighbors
+        conflicts += (((r, c), coord) for (r, c) in neighbors
                       if readPuzzle.layout[r][c] < roomNum or readPuzzle.layout[r][c] in readPuzzle.givenRooms)
 
     return conflicts
@@ -132,7 +134,7 @@ if __name__ == "__main__":
     print(grid)
 
     # gen possible conflict cells/rooms
-    conflicts = conflictGen(grid)
+    conflicts = borderGen(grid)
 
 
     # Sample subgrids.

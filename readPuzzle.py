@@ -83,6 +83,17 @@ def readPuzzle(inputFile):
                         givenRooms.update({i : weights[i]})
                         del weights[i]
 
+        # givenRooms should be replaced with initialState
+        # TODO: initialState will be passed to the domain generator code
+        initialState = [cols * [""] for i in range(rows)]
+        for row in range(rows):
+            line = file.readline()
+            for col, symbol in enumerate(line.split()):
+                if symbol == ".":
+                    initialState[row][col] = -1
+                else:
+                    initialState[row][col] = "#"
+
         allRoomIndices = []
         allRoomDomains = []
         allRoomConflicts = []
@@ -104,5 +115,5 @@ def readPuzzle(inputFile):
                 allRoomDomains.append(domain)
 
         for room, roomIdx in enumerate(allRoomIndices):
-            conflicts = gridUtils.conflictGen(room, roomIdx)
+            conflicts = gridUtils.borderGen(room, roomIdx)
             allRoomConflicts.append(conflicts)
