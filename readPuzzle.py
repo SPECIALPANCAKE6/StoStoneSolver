@@ -28,20 +28,34 @@ def readPuzzle(inputFile):
                 continue
             break
 
+        #weights = {}
+        #for row, line in enumerate(file):
+        #    for col, symbol in enumerate(line.split()):
+        #        if symbol == ".":
+        #            if row + 1 == rows and col + 1 == cols:
+        #                break
+        #            continue
+        #        else:
+        #            weights.update({layout[row][col]: (row, col, int(symbol))})
+        #            if row + 1 == rows and col + 1 == cols:
+        #                break
+        #    else:
+        #        continue
+        #    break
+
         weights = {}
-        for row, line in enumerate(file):
+        for row in range(rows):
+            line = file.readline()
             for col, symbol in enumerate(line.split()):
-                if symbol == ".":
-                    if row + 1 == rows and col + 1 == cols:
-                        break
-                    continue
-                else:
+                if symbol != ".":
                     weights.update({layout[row][col]: (row, col, int(symbol))})
-                    if row + 1 == rows and col + 1 == cols:
-                        break
-            else:
-                continue
-            break
+
+        #weights = [None] * rooms
+        #for row in range(rows):
+        #    line = file.readline()
+        #    for col, symbol in enumerate(line.split()):
+        #        if symbol != ".":
+        #            weights[layout[row][col]] = (row, col, int(symbol))
 
         given = [cols * [""] for i in range(rows)]
         for row, line in enumerate(file):
