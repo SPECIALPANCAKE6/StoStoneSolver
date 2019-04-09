@@ -8,14 +8,14 @@ import readPuzzle
 # also, borders should be pairs of cells (no need for the other room index)
 def borderGen(roomNum, coords):
 
-    conflicts = []
+    borders = []
     for coord in coords:
         neighbors = [neighbor for neighbor in gridNeighbors(coord, readPuzzle.rows, readPuzzle.cols)
                      if neighbor not in coords]
 
-        conflicts += (((r, c), coord) for (r, c) in neighbors)
+        borders += (((r, c), coord) for (r, c) in neighbors)
 
-    return conflicts
+    return borders
 
 # connectedSubgrids
 # input: coords is a list of (row, col) co-ordinates defining the individual squares of a connected grid region.
@@ -132,8 +132,8 @@ if __name__ == "__main__":
     print("Original grid squares")
     print(grid)
 
-    # gen possible conflict cells/rooms
-    conflicts = borderGen(grid)
+    # gen possible border cells/rooms
+    borders = borderGen(grid)
 
 
     # Sample subgrids.

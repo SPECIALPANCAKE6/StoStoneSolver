@@ -2,18 +2,18 @@ import readPuzzle
 import gridUtils
 
 
-def domainReduce(conflicts, origDomain):
+def domainReduce(borders, origDomain):
     # place subgrid from domain
 
     reducedDomain = []
 
-    if conflicts:
+    if borders:
         for subgrid in origDomain:
             conflict = False
             for (r, c) in subgrid:
-                for i in range(len(conflicts)):
-                    (conR, conC) = conflicts[i][0]
-                    if conflicts[i][1] == (r, c) and readPuzzle.state[conR][conC] == '#':
+                for i in range(len(borders)):
+                    (conR, conC) = borders[i][0]
+                    if borders[i][1] == (r, c) and readPuzzle.state[conR][conC] == '#':
                         conflict = True
                         break
                 if conflict:
@@ -38,7 +38,7 @@ def unDraw(subgrid):
 
 def domainBuilder(roomNum, currRoomWeight):
     """
-    gens conflicts for current room, and then generates rooms domain based on conflicts
+    gens borders for current room, and then generates rooms domain based on borders
     :param roomNum:
     :param currRoomWeight:
     :return: domain: Fully parsed domain for currRoom
@@ -54,13 +54,13 @@ def domainBuilder(roomNum, currRoomWeight):
     #         if readPuzzle.layout[r][c] == roomNum:
     #             currRoomSquareIndices.append((r, c))
 
-    # conflicts = gridUtils.borderGen(roomNum, currRoomSquareIndices) # gen possible conflict locations and domains for room
+    # borders = gridUtils.borderGen(roomNum, currRoomSquareIndices) # gen possible border locations and domains for room
     # if currRoomWeight == 0:
     #     domain = gridUtils.connectedSubgrids(readPuzzle.allRoomIndices[roomNum])
     # else:
     #     domain = gridUtils.connectedSubgrids(readPuzzle.allRoomIndices[roomNum], currRoomWeight)
 
-    domain = domainReduce(readPuzzle.allRoomConflicts[roomNum], domain)
+    domain = domainReduce(readPuzzle.allRoomBorders[roomNum], domain)
     return domain
 
     # if currRoomWeight == 0:

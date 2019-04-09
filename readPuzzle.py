@@ -10,7 +10,7 @@ def readPuzzle(inputFile):
     :param inputFile:
     :return:
     """
-    global rows, cols, weights, layout, rooms, given, givenRooms, state, allRoomIndices, allRoomConflicts, allRoomDomains
+    global rows, cols, weights, layout, rooms, given, givenRooms, state, allRoomIndices, allRoomBorders, allRoomDomains
     with open(inputFile, 'r') as file:
         file.readline()
         file.readline()
@@ -96,7 +96,7 @@ def readPuzzle(inputFile):
 
         allRoomIndices = []
         allRoomDomains = []
-        allRoomConflicts = []
+        allRoomBorders = []
 
         for currRoom in range(rooms):
             currRoomSquareIndices = []
@@ -115,5 +115,5 @@ def readPuzzle(inputFile):
                 allRoomDomains.append(domain)
 
         for room, roomIdx in enumerate(allRoomIndices):
-            conflicts = gridUtils.borderGen(room, roomIdx)
-            allRoomConflicts.append(conflicts)
+            borders = gridUtils.borderGen(room, roomIdx)
+            allRoomBorders.append(borders)
