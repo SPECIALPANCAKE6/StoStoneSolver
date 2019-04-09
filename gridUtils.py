@@ -13,8 +13,7 @@ def borderGen(roomNum, coords):
         neighbors = [neighbor for neighbor in gridNeighbors(coord, readPuzzle.rows, readPuzzle.cols)
                      if neighbor not in coords]
 
-        conflicts += (((r, c), coord) for (r, c) in neighbors
-                      if readPuzzle.layout[r][c] < roomNum or readPuzzle.layout[r][c] in readPuzzle.givenRooms)
+        conflicts += (((r, c), coord) for (r, c) in neighbors)
 
     return conflicts
 
