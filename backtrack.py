@@ -36,7 +36,8 @@ def backtrack(roomNum):
             else:
                 return
 
-    elif roomNum in list(readPuzzle.givenRooms.keys()):
+    elif readPuzzle.givenRooms[roomNum] != None:
+        # then reduce to only domains that include the given cells and test
         backtrack(roomNum+1)
 
     else:

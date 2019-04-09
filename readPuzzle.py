@@ -57,6 +57,7 @@ def readPuzzle(inputFile):
                 if symbol != ".":
                     weights[layout[row][col]] = (row, col, int(symbol))
 
+        # TODO: replace given and givenRooms with initialState and make domainGen take into accounr filled cells
         given = [cols * [""] for i in range(rows)]
         for row, line in enumerate(file):
             for col, symbol in enumerate(line.split()):
@@ -74,15 +75,17 @@ def readPuzzle(inputFile):
             break
         state = copy.deepcopy(given)
 
-        # TODO: allow for any cell to possible be given at init, not just the full room
-        givenRooms = {}
-        for i in weights:
+
+        givenRooms = [None] * rooms
+        for room, val in enumerate(weights):
             for r in range(rows):
                 for c in range(cols):
-                    if layout[r][c] == i and given[r][c] == '#' \
-                            and i in weights:
-                        givenRooms.update({i : weights[i]})
-                        del weights[i]
+                    if layout[r][c] == room and given[r][c] == '#':
+                        if givenRooms[room] == None:
+                            givenRooms[room] = [(r, c)]
+                        else:
+                            givenRooms[room].append((r, c))
+        print(givenRooms)
 
         # givenRooms should be replaced with initialState
         # TODO: initialState will be passed to the domain generator code
