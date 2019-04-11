@@ -10,7 +10,7 @@ def readPuzzle(inputFile):
     :param inputFile:
     :return:
     """
-    global rows, cols, weights, layout, rooms, given, givenRooms, state, allRoomIndices, allRoomBorders, allRoomDomains
+    global rows, cols, weights, layout, rooms, initialState, state, allRoomIndices, allRoomBorders, allRoomDomains
     with open(inputFile, 'r') as file:
         file.readline()
         file.readline()
@@ -19,84 +19,30 @@ def readPuzzle(inputFile):
         rooms = int(file.readline())
 
         layout = [cols * [""] for i in range(rows)]
-        for row, line in enumerate(file):
+        for row in range(rows):
+            line = file.readline()
             for col, symbol in enumerate(line.split()):
                 layout[row][col] = int(symbol)
-                if row + 1 == rows and col + 1 == cols:
-                    break
-            else:
-                continue
-            break
-
-        #weights = {}
-        #for row, line in enumerate(file):
-        #    for col, symbol in enumerate(line.split()):
-        #        if symbol == ".":
-        #            if row + 1 == rows and col + 1 == cols:
-        #                break
-        #            continue
-        #        else:
-        #            weights.update({layout[row][col]: (row, col, int(symbol))})
-        #            if row + 1 == rows and col + 1 == cols:
-        #                break
-        #    else:
-        #        continue
-        #    break
-
-        #weights = {}
-        #for row in range(rows):
-        #    line = file.readline()
-        #    for col, symbol in enumerate(line.split()):
-        #        if symbol != ".":
-        #            weights.update({layout[row][col]: (row, col, int(symbol))})
 
         weights = [None] * rooms
         for row in range(rows):
             line = file.readline()
             for col, symbol in enumerate(line.split()):
                 if symbol != ".":
-                    weights[layout[row][col]] = (row, col, int(symbol))
+                    weights[layout[row][col]] = ((row, col), int(symbol))
 
-        # TODO: replace given and givenRooms with initialState and make domainGen take into accounr filled cells
-        given = [cols * [""] for i in range(rows)]
-        for row, line in enumerate(file):
-            for col, symbol in enumerate(line.split()):
-                if symbol == ".":
-                    given[row][col] = -1
-                    if row + 1 == rows and col + 1 == cols:
-                        break
-                    continue
-                else:
-                    given[row][col] = symbol
-                    if row + 1 == rows and col + 1 == cols:
-                        break
-            else:
-                continue
-            break
-        state = copy.deepcopy(given)
-
-
-        givenRooms = [None] * rooms
-        for room, val in enumerate(weights):
-            for r in range(rows):
-                for c in range(cols):
-                    if layout[r][c] == room and given[r][c] == '#':
-                        if givenRooms[room] == None:
-                            givenRooms[room] = [(r, c)]
-                        else:
-                            givenRooms[room].append((r, c))
-        print(givenRooms)
-
-        # givenRooms should be replaced with initialState
-        # TODO: initialState will be passed to the domain generator code
         initialState = [cols * [""] for i in range(rows)]
+        state = [cols * [""] for i in range(rows)]
         for row in range(rows):
             line = file.readline()
             for col, symbol in enumerate(line.split()):
                 if symbol == ".":
                     initialState[row][col] = -1
+                    state[row][col] = -1
                 else:
-                    initialState[row][col] = "#"
+                    initialState[row][col] = ' #'
+                    state[row][col] = ' #'
+
 
         allRoomIndices = []
         allRoomDomains = []
@@ -111,12 +57,24 @@ def readPuzzle(inputFile):
             allRoomIndices.append(currRoomSquareIndices)
 
             if weights[currRoom] != None:
-                currRoomWeight = weights[currRoom][2]
+                currRoomWeight = weights[currRoom][1]
                 domain = gridUtils.connectedSubgrids(allRoomIndices[currRoom], currRoomWeight)
                 allRoomDomains.append(domain)
             else:
                 domain = gridUtils.connectedSubgrids(allRoomIndices[currRoom])
                 allRoomDomains.append(domain)
+
+            initialStones = []
+            reducedDomain = []
+            for (r, c) in allRoomIndices[currRoom]:
+                if initialState[r][c] == ' #':
+                    initialStones.append((r, c))
+            if initialStones:
+                for subdomain in allRoomDomains[currRoom]:
+                    domainHasGiven = all(coords in subdomain for coords in initialStones)
+                    if domainHasGiven:
+                        reducedDomain.append(subdomain)
+                allRoomDomains[currRoom] = reducedDomain
 
         for room, roomIdx in enumerate(allRoomIndices):
             borders = gridUtils.borderGen(room, roomIdx)

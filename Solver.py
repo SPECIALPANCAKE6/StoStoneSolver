@@ -1,6 +1,7 @@
 # import libs for measurement of time
 import glob
 import time
+
 import readPuzzle
 import backtrack
 
@@ -319,22 +320,21 @@ for fileName in fileNames:
     print(time.time())
     print(fileName)
     print("Layout:")
-    for line in readPuzzle.layout:
-        print(line)
-        # cells marked by room number
+    # cells marked by room number
+    print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.layout]))
     print("Weights:")
+    # formatted room : (x, y), weight
     for room, val in enumerate(readPuzzle.weights):
-        print(room, ':' , val)
-        # formatted room : (x, y, weight)
-    print("Given:")
-    for line in readPuzzle.given:
-        print(line)
-        # given stones are #, -1 means empty
+        if val is not None:
+            print(room, ':' , val[0], ',', val[1])
+
+    print("Initial State:")
+    # given stones are #, -1 means empty
+    print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.initialState]))
     startTime = time.time()
     finishTime = startTime + 1000000
     backtrack.backtrack(0)
-    for line in readPuzzle.state:
-        print(line)
+    print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.state]))
     endTime = time.time()
     print(endTime - startTime)
     print("")

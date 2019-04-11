@@ -29,21 +29,21 @@ def connChecker(roomNum, currRoomIndices):
         while not que.empty():
             s = que.get()
 
-            if readPuzzle.state[rR][rC] == '#':
+            if readPuzzle.state[rR][rC] == ' #':
                 currUp = rR - 1
                 currDown = rR + 1
                 currLeft = rC - 1
                 currRight = rC + 1
-                if (currUp, rC) in currRoomIndices and readPuzzle.state[currUp][rC] == '#':
+                if (currUp, rC) in currRoomIndices and readPuzzle.state[currUp][rC] == ' #':
                     connected = True
                     continue
-                elif (currDown, rC) in currRoomIndices and readPuzzle.state[currDown][rC] == '#':
+                elif (currDown, rC) in currRoomIndices and readPuzzle.state[currDown][rC] == ' #':
                     connected = True
                     continue
-                elif (rR, currLeft) in currRoomIndices and readPuzzle.state[rR][currLeft] == '#':
+                elif (rR, currLeft) in currRoomIndices and readPuzzle.state[rR][currLeft] == ' #':
                     connected = True
                     continue
-                elif (rR, currRight) in currRoomIndices and readPuzzle.state[rR][currRight] == '#':
+                elif (rR, currRight) in currRoomIndices and readPuzzle.state[rR][currRight] == ' #':
                     connected = True
                     continue
                 else:

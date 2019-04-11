@@ -2,18 +2,18 @@ import readPuzzle
 import gridUtils
 
 
-def domainReduce(borders, origDomain):
+def domainReduce(borders, domain):
     # place subgrid from domain
 
     reducedDomain = []
 
     if borders:
-        for subgrid in origDomain:
+        for subgrid in domain:
             conflict = False
             for (r, c) in subgrid:
                 for i in range(len(borders)):
                     (conR, conC) = borders[i][0]
-                    if borders[i][1] == (r, c) and readPuzzle.state[conR][conC] == '#':
+                    if borders[i][1] == (r, c) and readPuzzle.state[conR][conC] == ' #':
                         conflict = True
                         break
                 if conflict:
@@ -23,12 +23,14 @@ def domainReduce(borders, origDomain):
         return reducedDomain
 
     else:
-        return origDomain
+        return domain
+
+
 
 
 def drawStone(subgrid):
     for (r, c) in subgrid:
-        readPuzzle.state[r][c] = '#'
+        readPuzzle.state[r][c] = ' #'
 
 
 def unDraw(subgrid):
@@ -36,7 +38,7 @@ def unDraw(subgrid):
         readPuzzle.state[r][c] = -1
 
 
-def domainBuilder(roomNum, currRoomWeight):
+def domainBuilder(roomNum, origDomain, borders, indices):
     """
     gens borders for current room, and then generates rooms domain based on borders
     :param roomNum:
@@ -60,7 +62,7 @@ def domainBuilder(roomNum, currRoomWeight):
     # else:
     #     domain = gridUtils.connectedSubgrids(readPuzzle.allRoomIndices[roomNum], currRoomWeight)
 
-    domain = domainReduce(readPuzzle.allRoomBorders[roomNum], domain)
+    domain = domainReduce(borders, origDomain)
     return domain
 
     # if currRoomWeight == 0:
