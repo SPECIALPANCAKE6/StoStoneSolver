@@ -19,8 +19,8 @@ stostone
 . . . . . . 
 . . . . . . 
 . . . . . . 
-. . . . . .
-. . . . . .
+. . . . . . 
+. . . . . . 
 
 info:{
  "metadata": {
@@ -29,5 +29,3 @@ info:{
   "comment": "Puzzle #1 for Thesis"
  }
 }
-
-http://pzv.jp/p.html?stostone/6/6/em5tdj88lp2k1h3g52g

@@ -321,7 +321,8 @@ for fileName in fileNames:
     print(fileName)
     print("Layout:")
     # cells marked by room number
-    print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.layout]))
+    #print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.layout]))
+    readPuzzle.printGrid(readPuzzle.layout)
     print("Weights:")
     # formatted room : (x, y), weight
     for room, val in enumerate(readPuzzle.weights):
@@ -330,11 +331,13 @@ for fileName in fileNames:
 
     print("Initial State:")
     # given stones are #, -1 means empty
-    print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.initialState]))
+    #print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.initialState]))
+    readPuzzle.printGrid(readPuzzle.initialState)
     startTime = time.time()
-    finishTime = startTime + 1000000
+    #finishTime = startTime + 1000000
     backtrack.backtrack(0)
-    print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.state]))
+    #print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.state]))
+    readPuzzle.printGrid(readPuzzle.state)
     endTime = time.time()
     print(endTime - startTime)
     print("")

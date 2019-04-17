@@ -63,3 +63,11 @@ stostone
 . . . . . 
 . . . . . 
 . . . . . 
+
+info:{
+ "metadata": {
+  "author": "Yellow Puzzle",
+  "hard": "Hard",
+  "comment": "Puzzle from http://kiiroipazuru.blog.fc2.com/blog-entry-264.html"
+ }
+}
