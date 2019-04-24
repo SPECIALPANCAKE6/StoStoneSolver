@@ -54,22 +54,23 @@ def backtrack(roomNum):
                 belows.append(getBelow(subgrid))
             for room in belows:
                 emptyBelow.append(checkBelow(room))
-            while (True in empty for empty in emptyBelow):
-                for idx, empty in enumerate(emptyBelow):
-                    if None not in belows[idx] and True in emptyBelow[idx]:
-                        dropDown(idx, belows[idx])
-                        lastPlaced[idx] = belows[idx]
-                        belows[idx] = getBelow(belows[idx])
-                        emptyBelow[idx] = checkBelow(belows[idx])
-            if (True not in empty for empty in emptyBelow):
+            while any(True in empty for empty in emptyBelow):
+                try:
+                    for idx, empty in enumerate(emptyBelow):
+                        if None not in belows[idx] and True in checkBelow(belows[idx]):
+                            dropDown(idx, belows[idx])
+                            lastPlaced[idx] = belows[idx]
+                            belows[idx] = getBelow(belows[idx])
+                            emptyBelow[idx] = checkBelow(belows[idx])
+                except:
+                    print("Sand worked but not Stone!")
+                    for room, subgrid in enumerate(lastPlaced):
+                        domainBuilder.unDraw(lastPlaced[room])
+                    for room in readPuzzle.usedSubgrids:
+                        domainBuilder.drawStone(room)
+            else:
                 solved = True
                 return print("Solution found!")
-            else:
-                print("Sand worked but not Stone!")
-                for room, subgrid in enumerate(lastPlaced):
-                    domainBuilder.unDraw(lastPlaced[room])
-                for room in readPuzzle.usedSubgrids:
-                    domainBuilder.drawStone(room)
 
             #    maxDown[room] = min(checkBelow(subgrid))
             #    testDomains[room] = dropDown(maxDown[room], subgrid)
@@ -79,9 +80,10 @@ def backtrack(roomNum):
             #    domainBuilder.drawStone(testDomains[room])
             # for i in range(readPuzzle.rooms):
             #    finalCheck[i] = min(checkBelow(testDomains[i]))
-            # if finalCheck.count(finalCheck[0]) == len(finalCheck) and finalCheck[0] == 0 and ' #' not in readPuzzle.state[int(readPuzzle.rows / 2)-1]:
-            #
-            # else:
+            #if finalCheck.count(finalCheck[0]) == len(finalCheck) and finalCheck[0] == 0 and ' #' not in readPuzzle.state[int(readPuzzle.rows / 2)-1]:
+            #    solved = True
+            #    return print("Solution found!")
+            #else:
             #    print("Sand worked but not Stone!")
             #    for room, test in enumerate(testDomains):
             #        domainBuilder.unDraw(testDomains[room])
