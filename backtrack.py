@@ -28,7 +28,7 @@ def dropDown(roomNum, subgrid):
 # TODO: find below positions for each room and check if empty, if so move stone down. while loop that runs while theres at least one stone that can move down
 
 def backtrack(roomNum):
-    global rows, cols, puzzle, weights, layout, rooms, initialState, given, givenRooms, state, finishTime, solved, maxDown, lastPlaced
+    global rows, cols, puzzle, weights, layout, rooms, initialState, given, givenRooms, state, finishTime, solved, maxDown, lastPlaced, belows
 
     solved = False
 
@@ -55,19 +55,12 @@ def backtrack(roomNum):
             for room in belows:
                 emptyBelow.append(checkBelow(room))
             while any(True in empty for empty in emptyBelow):
-                try:
-                    for idx, empty in enumerate(emptyBelow):
-                        if None not in belows[idx] and True in checkBelow(belows[idx]):
-                            dropDown(idx, belows[idx])
-                            lastPlaced[idx] = belows[idx]
-                            belows[idx] = getBelow(belows[idx])
-                            emptyBelow[idx] = checkBelow(belows[idx])
-                except:
-                    print("Sand worked but not Stone!")
-                    for room, subgrid in enumerate(lastPlaced):
-                        domainBuilder.unDraw(lastPlaced[room])
-                    for room in readPuzzle.usedSubgrids:
-                        domainBuilder.drawStone(room)
+                for idx, empty in enumerate(emptyBelow):
+                    if None not in belows[idx] and True in checkBelow(belows[idx]):
+                        dropDown(idx, belows[idx])
+                        lastPlaced[idx] = belows[idx]
+                        belows[idx] = getBelow(belows[idx])
+                        emptyBelow[idx] = checkBelow(belows[idx])
             else:
                 solved = True
                 return print("Solution found!")
