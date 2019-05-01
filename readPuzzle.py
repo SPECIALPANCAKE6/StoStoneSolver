@@ -12,7 +12,7 @@ def readPuzzle(inputFile):
     :param inputFile:
     :return:
     """
-    global rows, cols, weights, layout, rooms, initialState, state, allRoomIndices, allRoomBorders, allRoomDomains, usedSubgrids
+    global rows, cols, weights, layout, rooms, initialState, state, allRoomIndices, allRoomBorders, allRoomDomains, drawnStones
     with open(inputFile, 'r') as file:
         file.readline()
         file.readline()
@@ -82,4 +82,4 @@ def readPuzzle(inputFile):
             borders = gridUtils.borderGen(room, roomIdx)
             allRoomBorders.append(borders)
 
-        usedSubgrids = [None] * rooms
+        drawnStones = [None] * rooms

@@ -337,7 +337,6 @@ for fileName in fileNames:
     #finishTime = startTime + 1000000
     backtrack.backtrack(0)
     #print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.state]))
-    readPuzzle.printGrid(readPuzzle.state)
     endTime = time.time()
     print(endTime - startTime)
     print("")
