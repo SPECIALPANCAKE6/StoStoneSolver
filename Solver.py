@@ -44,7 +44,7 @@ def outputPUZPRE(fileName):
         file.write("\ninfo:{\n \"metadata\": {\n  \"author\": \"Addison Allen's Solver\",\n }\n}")
 
 
-fileNames = glob.glob("puzzles\\YP-002.txt")
+fileNames = glob.glob("puzzles\\*.txt")
 currDir = os.getcwd()
 try:
     shutil.rmtree("%s\\solutions" % currDir)
