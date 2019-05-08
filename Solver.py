@@ -32,6 +32,12 @@ def outputPUZPRE(fileName):
 
         for r in range(readPuzzle.rows):
             row = ["."] * readPuzzle.cols
+            for c in range(readPuzzle.cols):
+                for stone in readPuzzle.drawnStones:
+                    for coord in stone:
+                        if (r, c) == coord:
+                            row[c] = "#"
+
             row = '\n'.join([' '.join([str(cell) for cell in row])])
             file.write("%s\n" % row)
 
