@@ -12,7 +12,7 @@ def connChecker(roomNum, currRoomIndices):
     :return: True if shaded cells are all connected, false if disconnected
     """
 
-    global rows, cols, weights, layout, rooms, given, givenRooms, state
+    global rows, cols, weights, layout, rooms, given, state
     global finishTime
 
     connected = False

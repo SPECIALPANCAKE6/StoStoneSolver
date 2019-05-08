@@ -1,10 +1,9 @@
-import copy
-
-import domainBuilder
 import gridUtils
+
 
 def printGrid(name):
     return print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in name]))
+
 
 def readPuzzle(inputFile):
     """
@@ -79,7 +78,7 @@ def readPuzzle(inputFile):
                 allRoomDomains[currRoom] = reducedDomain
 
         for room, roomIdx in enumerate(allRoomIndices):
-            borders = gridUtils.borderGen(room, roomIdx)
+            borders = gridUtils.borderGen(roomIdx)
             allRoomBorders.append(borders)
 
         drawnStones = [None] * rooms

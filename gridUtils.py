@@ -4,17 +4,12 @@ import iterators
 import readPuzzle
 
 
-# TODO rename this borderGen and have it go around the entire room
-# also, borders should be pairs of cells (no need for the other room index)
-def borderGen(roomNum, coords):
-
+def borderGen(coords):
     borders = []
     for coord in coords:
         neighbors = [neighbor for neighbor in gridNeighbors(coord, readPuzzle.rows, readPuzzle.cols)
                      if neighbor not in coords]
-
         borders += (((r, c), coord) for (r, c) in neighbors)
-
     return borders
 
 # connectedSubgrids

@@ -1,20 +1,75 @@
 # import libs for measurement of time
 import glob
 import time
+import os
+import shutil
 
 import readPuzzle
 import backtrack
 
 
-# globals for reading in the puzzle
-#global rows
-#global cols
-#global weights
-#global layout
-#global rooms
-#global given
-global givenRooms
-global finishTime
+def outputPUZPRE(fileName):
+    fileName = fileName.replace(".", "-solved.")
+    fileName = fileName.replace("puzzles", "solutions")
+    with open(fileName, "w+") as file:
+        file.write("puzprv3\nstostone\n")
+        file.write(str(readPuzzle.rows) + "\n")
+        file.write(str(readPuzzle.cols) + "\n")
+        file.write(str(readPuzzle.rooms) + "\n")
+
+        for i in readPuzzle.layout:
+            row = '\n'.join([' '.join([str(cell) for cell in i])])
+            file.write("%s\n" % row)
+
+        for r in range(readPuzzle.rows):
+            row = ["."] * readPuzzle.cols
+            for c in range(readPuzzle.cols):
+                for idx, val in enumerate(readPuzzle.weights):
+                    if val and (r, c) in val:
+                        row[c] = (str(val[1]))
+            row = '\n'.join([' '.join([str(cell) for cell in row])])
+            file.write("%s\n" %row)
+
+        for r in range(readPuzzle.rows):
+            row = ["."] * readPuzzle.cols
+            row = '\n'.join([' '.join([str(cell) for cell in row])])
+            file.write("%s\n" % row)
+
+        file.write("\ninfo:{\n \"metadata\": {\n  \"author\": \"Addison Allen's Solver\",\n }\n}")
+
+
+fileNames = glob.glob("puzzles\\YP-002.txt")
+currDir = os.getcwd()
+try:
+    shutil.rmtree("%s\\solutions" % currDir)
+    os.mkdir("%s\\solutions" % currDir)
+except OSError:
+    os.mkdir("%s\\solutions" % currDir)
+
+print("Initialization Time: " + str(time.time()))
+for fileName in fileNames:
+    readPuzzle.readPuzzle(fileName)
+    print(fileName)
+    print("Layout:")
+    # cells marked by room number
+    readPuzzle.printGrid(readPuzzle.layout)
+    print("Weights:")
+    # formatted room : (x, y), weight
+    for room, val in enumerate(readPuzzle.weights):
+        if val is not None:
+            print(room, ':' , val[0], ',', val[1])
+    print("Initial State:")
+    # given stones are #, -1 means empty
+    readPuzzle.printGrid(readPuzzle.initialState)
+    startTime = time.time()
+    print(fileName + " started at " + str(startTime))
+    finishTime = startTime + 1000000
+    backtrack.backtrack(0)
+    endTime = time.time()
+    elapsedTime = endTime - startTime
+    print("Finish Time: " + str(endTime) + "\nElapsed Time: " + str(elapsedTime))
+    print("")
+    outputPUZPRE(fileName)
 
 #def readPuzzle(inputFile):
 #    """
@@ -310,33 +365,3 @@ global finishTime
 #
 #    else:
 #        domainBuilder(roomNum, 0)
-
-
-totalSolved = 0
-totalUnsolved = 0
-fileNames = glob.glob("puzzles/*.txt")
-for fileName in fileNames:
-    readPuzzle.readPuzzle(fileName)
-    print(time.time())
-    print(fileName)
-    print("Layout:")
-    # cells marked by room number
-    #print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.layout]))
-    readPuzzle.printGrid(readPuzzle.layout)
-    print("Weights:")
-    # formatted room : (x, y), weight
-    for room, val in enumerate(readPuzzle.weights):
-        if val is not None:
-            print(room, ':' , val[0], ',', val[1])
-
-    print("Initial State:")
-    # given stones are #, -1 means empty
-    #print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.initialState]))
-    readPuzzle.printGrid(readPuzzle.initialState)
-    startTime = time.time()
-    #finishTime = startTime + 1000000
-    backtrack.backtrack(0)
-    #print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in readPuzzle.state]))
-    endTime = time.time()
-    print(endTime - startTime)
-    print("")

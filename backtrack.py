@@ -1,4 +1,3 @@
-import time
 import domainBuilder
 import readPuzzle
 
@@ -9,10 +8,30 @@ def isStoSand(state):
         for c in range(readPuzzle.cols):
             if state[r][c] == ' #':
                 colCounter[c] += 1
-
     if all(count == readPuzzle.rows / 2 for count in colCounter):
         return True
     return False
+
+
+def getBelow(stone):
+    cellsBelow = [None for coords in stone]
+    for idx, (r, c) in enumerate(stone):
+        if r + 1 < readPuzzle.rows:
+            cellsBelow[idx] = (r + 1, c)
+    return cellsBelow
+
+
+def canStoneDrop(roomNum, subgrid):
+    if None not in subgrid:
+        for idx, (r, c) in enumerate(subgrid):
+            if readPuzzle.state[r][c] == -1 and (r, c) not in lastPlaced[roomNum]:
+                return True
+    return False
+
+
+def dropDown(roomNum, stone):
+    domainBuilder.unDraw(lastPlaced[roomNum])
+    domainBuilder.drawStone(stone)
 
 
 def isStoStone():
@@ -41,31 +60,8 @@ def isStoStone():
         return False
 
 
-def getBelow(stone):
-    cellsBelow = [None for coords in stone]
-    for idx, (r, c) in enumerate(stone):
-        if r + 1 < readPuzzle.rows:
-            cellsBelow[idx] = (r + 1, c)
-    return cellsBelow
-
-
-def canStoneDrop(roomNum, subgrid):
-    if None not in subgrid:
-        for idx, (r, c) in enumerate(subgrid):
-            if readPuzzle.state[r][c] == -1 and (r, c) not in lastPlaced[roomNum]:
-                return True
-    return False
-
-
-def dropDown(roomNum, stone):
-    domainBuilder.unDraw(lastPlaced[roomNum])
-    domainBuilder.drawStone(stone)
-
-
-# TODO: find below positions for each room and check if empty, if so move stone down. while loop that runs while theres at least one stone that can move down
-
 def backtrack(roomNum):
-    global rows, cols, puzzle, weights, layout, rooms, initialState, given, givenRooms, state, finishTime, solved, maxDown, lastPlaced, belows
+    global solved, lastPlaced
 
     solved = False
 
@@ -73,15 +69,12 @@ def backtrack(roomNum):
     # return print("Unable to find solution.")
 
     if roomNum >= readPuzzle.rooms:
-        finalCheck = [0] * readPuzzle.rooms
         lastPlaced = [subgrid for subgrid in readPuzzle.drawnStones]
 
         if isStoSand(readPuzzle.state):
             print("This is a Sto-Sand Solution:")
             readPuzzle.printGrid(readPuzzle.state)
             solved = isStoStone()
-
-
             #    maxDown[room] = min(canStoneDrop(subgrid))
             #    testDomains[room] = dropDown(maxDown[room], subgrid)
             # for domain in readPuzzle.usedSubgrids:
@@ -119,10 +112,8 @@ def backtrack(roomNum):
     #
     #            domain = domainBuilder.domainReduce(readPuzzle.allRoomBorders[roomNum], readPuzzle.allRoomDomains[roomNum])
     #    backtrack(roomNum + 1)
-
     else:
         domain = domainBuilder.domainReduce(readPuzzle.allRoomBorders[roomNum], readPuzzle.allRoomDomains[roomNum])
-
         for subgrid in domain:
             domainBuilder.drawStone(subgrid)
             readPuzzle.drawnStones[roomNum] = subgrid
