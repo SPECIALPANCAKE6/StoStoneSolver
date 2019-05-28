@@ -11,8 +11,8 @@ import backtrack
 def outputPUZPRE(fileName):
     fileName = fileName.replace(".", "-solved.")
     fileName = fileName.replace("puzzles", "solutions")
-    with open(fileName, "w+") as file:
-        file.write("puzprv3\nstostone\n")
+    with open(fileName, "w+", newline='\n') as file:
+        file.write("pzprv3\nstostone\n")
         file.write(str(readPuzzle.rows) + "\n")
         file.write(str(readPuzzle.cols) + "\n")
         file.write(str(readPuzzle.rooms) + "\n")

@@ -94,16 +94,15 @@ def backtrack(roomNum):
             #        domainBuilder.drawStone(room)
         return
 
-    if readPuzzle.weights[roomNum] is not None:
-        domain = domainBuilder.domainReduce(readPuzzle.allRoomBorders[roomNum], readPuzzle.allRoomDomains[roomNum])
-        for subgrid in domain:
-            domainBuilder.drawStone(subgrid)
-            readPuzzle.drawnStones[roomNum] = subgrid
-            backtrack(roomNum + 1)
-            if not solved:
-                domainBuilder.unDraw(subgrid)
-            else:
-                return
+    domain = domainBuilder.domainReduce(readPuzzle.allRoomBorders[roomNum], readPuzzle.allRoomDomains[roomNum])
+    for subgrid in domain:
+        domainBuilder.drawStone(subgrid)
+        readPuzzle.drawnStones[roomNum] = subgrid
+        backtrack(roomNum + 1)
+        if not solved:
+            domainBuilder.unDraw(subgrid)
+        else:
+            return
 
     # elif given is None:
     #    # then reduce to only domains that include the given cells and test
@@ -112,13 +111,4 @@ def backtrack(roomNum):
     #
     #            domain = domainBuilder.domainReduce(readPuzzle.allRoomBorders[roomNum], readPuzzle.allRoomDomains[roomNum])
     #    backtrack(roomNum + 1)
-    else:
-        domain = domainBuilder.domainReduce(readPuzzle.allRoomBorders[roomNum], readPuzzle.allRoomDomains[roomNum])
-        for subgrid in domain:
-            domainBuilder.drawStone(subgrid)
-            readPuzzle.drawnStones[roomNum] = subgrid
-            backtrack(roomNum + 1)
-            if not solved:
-                domainBuilder.unDraw(subgrid)
-            else:
-                return
+
