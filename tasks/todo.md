@@ -68,3 +68,24 @@
 - `python Solver.py list`
 - `python Solver.py show 000-000`
 - `python Solver.py solve 000-000 --solutions-dir solutions`
+
+## KISS / DRY Cleanup
+
+### Checklist
+- [x] Split lightweight puzzle metadata reads from full solver precomputation.
+- [x] Remove `backtrack.py` scratch-state coupling on injected `lastPlaced`.
+- [x] Collapse duplicate connectivity and legacy domain helpers onto shared utilities.
+- [x] Simplify PUZ-PRE export loops without changing solved-file behavior.
+- [x] Re-run CLI smoke commands for metadata and solving.
+
+### Review
+- Added `readPuzzle._readPuzzleSections(...)` so the PUZ-PRE section parsing is shared by both the full loader and the new lightweight metadata reader.
+- Added `readPuzzle.readPuzzleMetadata(...)` and switched `solver_runner.summarize_puzzle(...)` to use it, so `python Solver.py show ...` no longer builds room domains or mutable solver state.
+- Simplified `solver_runner.output_puzpre(...)` with one grid-writing helper plus precomputed weight and filled-cell lookups instead of repeating three near-identical nested loops.
+- Removed the runtime-injected `puzzleDict['lastPlaced']` scratch key from `backtrack.py`; Sto-Stone drop bookkeeping now stays local inside `isStoStone(...)`.
+- Replaced `connChecker.py`'s duplicate BFS with a thin call to `gridUtils.isConnected(...)`.
+- Replaced the stale `domainGen.py` prototype with a compatibility wrapper around `gridUtils.connectedSubgrids(...)`, eliminating its old dependency on `readPuzzle` globals.
+- Commands run:
+- `python Solver.py show 000-000` -> reported the expected puzzle metadata successfully.
+- `python Solver.py solve 000-000 --solutions-dir solutions` -> solved successfully and wrote `solutions/000-000-solved.txt`.
+- `python -c "import readPuzzle, backtrack; p = readPuzzle.readPuzzle('puzzles/000-000.txt'); print('lastPlaced_before', 'lastPlaced' in p); print('solve', backtrack.backtrack(0, p)); print('lastPlaced_after', 'lastPlaced' in p)"` -> `lastPlaced_before False`, `solve True`, `lastPlaced_after False`.

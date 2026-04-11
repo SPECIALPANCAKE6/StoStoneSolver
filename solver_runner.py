@@ -43,17 +43,17 @@ def resolve_puzzle_target(target: str, puzzle_dir: pathlib.Path) -> pathlib.Path
 
 def summarize_puzzle(puzzle_path: pathlib.Path) -> dict[str, int | pathlib.Path]:
     """Load puzzle metadata in a UI-friendly shape without solving it."""
-    puzzle_dict = readPuzzle.readPuzzle(puzzle_path)
-    numbered_rooms = sum(weight is not None for weight in puzzle_dict['weights'])
-    given_cells = sum(cell == ' #' for row in puzzle_dict['initialState'] for cell in row)
+    summary = readPuzzle.readPuzzleMetadata(puzzle_path)
     return {
         "path": puzzle_path.resolve(),
-        "rows": puzzle_dict['rows'],
-        "cols": puzzle_dict['cols'],
-        "rooms": puzzle_dict['rooms'],
-        "numbered_rooms": numbered_rooms,
-        "pre_shaded_cells": given_cells,
+        **summary,
     }
+
+
+def _write_puzpre_grid(file, rows: list[list[int | str]]) -> None:
+    """Write one PUZ-PRE grid section with space-separated cells."""
+    for row in rows:
+        file.write(" ".join(str(cell) for cell in row) + "\n")
 
 
 def output_puzpre(file_name: pathlib.Path, puzzle_dict: dict[str, int | list]) -> None:
@@ -65,30 +65,26 @@ def output_puzpre(file_name: pathlib.Path, puzzle_dict: dict[str, int | list]) -
         file.write(str(puzzle_dict['cols']) + "\n")
         file.write(str(puzzle_dict['rooms']) + "\n")
 
-        for row_values in puzzle_dict['layout']:
-            row = '\n'.join([' '.join([str(cell) for cell in row_values])])
-            file.write("%s\n" % row)
+        _write_puzpre_grid(file, puzzle_dict['layout'])
 
-        for r in range(puzzle_dict['rows']):
-            row = ["."] * puzzle_dict['cols']
-            for c in range(puzzle_dict['cols']):
-                for val in puzzle_dict['weights']:
-                    if val is not None and val[0] == (r, c):
-                        row[c] = str(val[1])
-            row = '\n'.join([' '.join([str(cell) for cell in row])])
-            file.write("%s\n" % row)
+        weight_lookup = {coord: weight for coord, weight in (val for val in puzzle_dict['weights'] if val is not None)}
+        weight_rows = [
+            [weight_lookup.get((r, c), ".") for c in range(puzzle_dict['cols'])]
+            for r in range(puzzle_dict['rows'])
+        ]
+        _write_puzpre_grid(file, weight_rows)
 
-        for r in range(puzzle_dict['rows']):
-            row = ["."] * puzzle_dict['cols']
-            for c in range(puzzle_dict['cols']):
-                for stone in puzzle_dict['drawnStones']:
-                    if stone is None:
-                        continue
-                    for coord in stone:
-                        if (r, c) == coord:
-                            row[c] = "#"
-            row = '\n'.join([' '.join([str(cell) for cell in row])])
-            file.write("%s\n" % row)
+        filled_cells = {
+            coord
+            for stone in puzzle_dict['drawnStones']
+            if stone is not None
+            for coord in stone
+        }
+        stone_rows = [
+            ["#" if (r, c) in filled_cells else "." for c in range(puzzle_dict['cols'])]
+            for r in range(puzzle_dict['rows'])
+        ]
+        _write_puzpre_grid(file, stone_rows)
 
         file.write("\ninfo:{\n \"metadata\": {\n  \"author\": \"Addison Allen's Solver\",\n }\n}")
 

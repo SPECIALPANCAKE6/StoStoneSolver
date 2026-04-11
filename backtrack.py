@@ -51,17 +51,14 @@ def getBelow(stone: list[tuple[int,int]], rows: int) -> list[tuple[int,int] | No
     return cellsBelow
 
 
-def canStoneDrop(roomNum: int, subgrid: list[tuple[int,int] | None],
-                 puzzleDict: dict[str, int | list]) -> bool:
+def canStoneDrop(subgrid: list[tuple[int,int] | None],
+                 state: list[list[int | str]],
+                 current_stone: set[tuple[int, int]]) -> bool:
     """Return True if the stone described by `subgrid` can drop one row.
 
     subgrid is the output of `getBelow`; entries may be None when the stone
-    is at the bottom of the board.  roomNum is only needed for consulting
-    the previously placed stones from the last successful configuration.
+    is at the bottom of the board.
     """
-    state = puzzleDict['state']
-    current_stone = set(puzzleDict['lastPlaced'][roomNum] or [])
-
     for cell in subgrid:
         if cell is None:
             return False
@@ -70,14 +67,14 @@ def canStoneDrop(roomNum: int, subgrid: list[tuple[int,int] | None],
     return True
 
 
-def dropDown(roomNum: int, stone: list[tuple[int,int]],
-             puzzleDict: dict[str, int | list]) -> None:
-    """Move the last placed stone for roomNum out and replace with `stone`.
+def dropDown(previous_stone: list[tuple[int, int]],
+             stone: list[tuple[int,int]],
+             state: list[list[int | str]]) -> None:
+    """Move a stone out of its current cells and replace it with `stone`.
 
-    This function mutates `puzzleDict['state']` via domainBuilder helpers.
+    This function mutates `state` via domainBuilder helpers.
     """
-    state = puzzleDict['state']
-    domainBuilder.unDraw(puzzleDict['lastPlaced'][roomNum], state)
+    domainBuilder.unDraw(previous_stone, state)
     domainBuilder.drawStone(stone, state)
 
 
@@ -85,24 +82,24 @@ def isStoStone(puzzleDict: dict[str, int | list]) -> bool:
     """Perform the Sto-Stone drop test on the current puzzle dictionary.
 
     This function simulates gravity for the stones stored in
-    `puzzleDict['drawnStones']`.  It modifies the state as it drops stones and
-    uses `puzzleDict['lastPlaced']` to remember the previous configuration so
-    it can restore it at the end if the test fails.
+    `puzzleDict['drawnStones']`. It modifies the state as it drops stones,
+    tracks each stone's last position locally, and restores the original
+    placement if the test fails.
     """
     rows = puzzleDict['rows']
     state = puzzleDict['state']
     drawn = puzzleDict['drawnStones']
-    lastPlaced = puzzleDict['lastPlaced']
-    belows = [getBelow(stone, rows) for stone in drawn]
-    emptyBelow = [canStoneDrop(i, belows[i], puzzleDict) for i in range(len(belows))]
+    lastPlaced = list(drawn)
 
-    while any(emptyBelow):
-        for idx, below in enumerate(belows):
-            if emptyBelow[idx]:
-                dropDown(idx, below, puzzleDict)
+    moved = True
+    while moved:
+        moved = False
+        for idx, stone in enumerate(lastPlaced):
+            below = getBelow(stone, rows)
+            if canStoneDrop(below, state, set(stone)):
+                dropDown(stone, below, state)
                 lastPlaced[idx] = below
-                belows[idx] = getBelow(below, rows)
-                emptyBelow[idx] = canStoneDrop(idx, belows[idx], puzzleDict)
+                moved = True
 
     if fillsBottomHalf(puzzleDict):
         return True
@@ -124,13 +121,8 @@ def backtrack(roomNum: int, puzzleDict: dict[str, int | list],
     """
     rooms = puzzleDict['rooms']
 
-    # allocate lastPlaced list on first call
-    if 'lastPlaced' not in puzzleDict:
-        puzzleDict['lastPlaced'] = [None] * rooms
-
     if roomNum >= rooms:
         # all rooms assigned; check the requested drop rules
-        puzzleDict['lastPlaced'] = list(puzzleDict['drawnStones'])
         sto_sand = isStoSand(puzzleDict)
         if mode == "sto-sand":
             return sto_sand
