@@ -1,17 +1,46 @@
+import pathlib
 import gridUtils
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-def printGrid(name):
-    return print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in name]))
-
-
-def readPuzzle(inputFile):
+def printFormatGrid(name: list[list[str]]) -> str:
     """
-    readPuzzle function which reads the file input to find puzzle room layout, room weights, and pre-shaded cells
-    :param inputFile:
-    :return:
+        printFormatGrid function which formats the grid for logging purposes
+
+        Args:
+            name (list[list[str]]): The grid to be formatted, represented as a list of lists of strings.
+
+        Returns:
+            str: A string representation of the grid, formatted for logging.
     """
-    global rows, cols, weights, layout, rooms, initialState, state, allRoomIndices, allRoomBorders, allRoomDomains, drawnStones
+    return '\n'.join(['\t'.join([str(cell) for cell in row]) for row in name])
+
+
+def readPuzzle(inputFile: pathlib.Path) -> dict:
+    """
+    readPuzzle function which reads the file input to find puzzle room layout, room weights, and pre-shaded cells.
+    It also generates the initial state of the puzzle, the list of room indices, the list of room borders, and the list of room domains.
+
+    Args:
+        inputFile (pathlib.Path): The path to the input puzzle file.
+
+    Returns:
+        dict[str, int | list]: A dictionary containing the following keys and their corresponding values:
+            - "rows" (int): The number of rows in the puzzle grid.
+            - "cols" (int): The number of columns in the puzzle grid.
+            - "weights" (list[tuple[tuple[int, int], int] | None]): A list of tuples containing the room index, coordinates, and weight for each room that has a weight. Rooms without weights will have a value of None.
+            - "layout" (list[list[int]]): A 2D list representing the layout of the puzzle grid, where each cell contains the room index it belongs to.
+            - "rooms" (int): The number of rooms in the puzzle.
+            - "initialState" (list[list[int | str]]): A 2D list representing the initial state of the puzzle grid, where each cell is either -1 (indicating a unshaded cell) or ' #' (indicating a pre-shaded cell).
+            - "state" (list[list[int | str]]): A 2D list representing the current state of the puzzle grid, initialized to the same values as "initialState".
+            - "allRoomIndices" (list[list[tuple[int, int]]]): A list of lists, where each inner list contains the coordinates of the cells belonging to a specific room.
+            - "allRoomBorders" (list[list[tuple[tuple[int, int], tuple[int, int]]]]): A list of lists, where each inner list contains the coordinates of the border cells for a specific room.
+            - "allRoomDomains" (list[list[list[tuple[int, int]]]]): A list of lists, where each inner list contains the possible configurations of shaded cells for a specific room, based on the room's weight and the pre-shaded cells.
+            - "drawnStones" (list[None | tuple[int, int] | list[tuple[int, int]]]): A list initialized with None values, which will later be used to keep track of the drawn stones for each room in the solution.
+    """
+
     with open(inputFile, 'r') as file:
         file.readline()
         file.readline()
@@ -19,66 +48,69 @@ def readPuzzle(inputFile):
         cols = int(file.readline())
         rooms = int(file.readline())
 
-        layout = [cols * [""] for i in range(rows)]
+        # layout: 2D list representing the layout of the puzzle grid, where each cell contains the room index it belongs to.
+        layout = [[int(symbol) for symbol in file.readline().strip().split()] for _ in range(rows)]
+
+        # weights: A list of tuples containing the room index, coordinates, and weight for each room that has a weight. Rooms without weights will have a value of None.
+        weights: list[tuple[tuple[int, int], int] | None] = [None] * rooms
         for row in range(rows):
-            line = file.readline()
-            for col, symbol in enumerate(line.split()):
-                layout[row][col] = int(symbol)
+            for col, weight in enumerate(file.readline().strip().split()):
+                if weight != ".":
+                    weights[layout[row][col]] = ((row, col), int(weight))
 
-        weights = [None] * rooms
-        for row in range(rows):
-            line = file.readline()
-            for col, symbol in enumerate(line.split()):
-                if symbol != ".":
-                    weights[layout[row][col]] = ((row, col), int(symbol))
+        initialState = [[-1 if cell == "." else ' #' for cell in file.readline().strip().split()] for _ in range(rows)]
+        state = [row[:] for row in initialState]
 
-        initialState = [cols * [""] for i in range(rows)]
-        state = [cols * [""] for i in range(rows)]
-        for row in range(rows):
-            line = file.readline()
-            for col, symbol in enumerate(line.split()):
-                if symbol == ".":
-                    initialState[row][col] = -1
-                    state[row][col] = -1
-                else:
-                    initialState[row][col] = ' #'
-                    state[row][col] = ' #'
+        # allRoomIndices: A list of lists, where each inner list contains the coordinates of the cells belonging to a specific room.
+        allRoomIndices: list[list[tuple[int, int]]] = [[] for _ in range(rooms)]
+        for r in range(rows):
+            for c in range(cols):
+                allRoomIndices[layout[r][c]].append((r, c))
 
-
-        allRoomIndices = []
-        allRoomDomains = []
+        allRoomDomains: list[list[list[tuple[int, int]]]] = []
         allRoomBorders = []
 
         for currRoom in range(rooms):
-            currRoomSquareIndices = []
-            for r in range(rows):
-                for c in range(cols):
-                    if layout[r][c] == currRoom:
-                        currRoomSquareIndices.append((r, c))
-            allRoomIndices.append(currRoomSquareIndices)
+            currRoomIndices = allRoomIndices[currRoom]
 
-            if weights[currRoom] != None:
-                currRoomWeight = weights[currRoom][1]
-                domain = gridUtils.connectedSubgrids(allRoomIndices[currRoom], currRoomWeight)
-                allRoomDomains.append(domain)
+            if weights[currRoom] is not None:
+                currRoomWeight = weights[currRoom][1] # type: ignore
+                domain = gridUtils.connectedSubgrids(currRoomIndices, currRoomWeight)
             else:
-                domain = gridUtils.connectedSubgrids(allRoomIndices[currRoom])
-                allRoomDomains.append(domain)
+                domain = gridUtils.connectedSubgrids(currRoomIndices)
 
-            initialStones = []
-            reducedDomain = []
-            for (r, c) in allRoomIndices[currRoom]:
-                if initialState[r][c] == ' #':
-                    initialStones.append((r, c))
+            if domain is None:
+                raise ValueError(f"Invalid room {currRoom}: cannot generate connected subgrids")
+            allRoomDomains.append(domain)
+
+            # collect any pre-shaded cells in this room as a set for efficient lookup
+            initialStones = {(r, c) for (r, c) in currRoomIndices if initialState[r][c] == ' #'}
+
+            # if there are pre-shaded cells, filter the domain to only subgrids that contain all of them
             if initialStones:
-                for subdomain in allRoomDomains[currRoom]:
-                    domainHasGiven = all(coords in subdomain for coords in initialStones)
-                    if domainHasGiven:
-                        reducedDomain.append(subdomain)
+                reducedDomain = [
+                    subdomain for subdomain in allRoomDomains[currRoom]
+                    if initialStones.issubset(subdomain)  # O(k) check
+                ]
                 allRoomDomains[currRoom] = reducedDomain
 
         for room, roomIdx in enumerate(allRoomIndices):
-            borders = gridUtils.borderGen(roomIdx)
+            borders = gridUtils.borderGen(roomIdx, rows, cols)
             allRoomBorders.append(borders)
 
+        # drawnStones: A list (the play grid) initialized with None values. FOR FUTURE USE
         drawnStones = [None] * rooms
+
+    return {
+        "rows": rows,
+        "cols": cols,
+        "weights": weights,
+        "layout": layout,
+        "rooms": rooms,
+        "initialState": initialState,
+        "state": state,
+        "allRoomIndices": allRoomIndices,
+        "allRoomBorders": allRoomBorders,
+        "allRoomDomains": allRoomDomains,
+        "drawnStones": drawnStones
+    }

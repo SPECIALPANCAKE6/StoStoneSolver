@@ -1,114 +1,154 @@
 import domainBuilder
-import readPuzzle
+
+# the backtracking module no longer relies on global puzzle state stored in
+# readPuzzle; instead every function takes a puzzleDict that was returned by
+# readPuzzle.readPuzzle.  This keeps the solver reentrant and removes hidden
+# dependencies.
 
 
-def isStoSand(state):
-    colCounter = [0 for i in range(readPuzzle.cols)]
-    for r in range(readPuzzle.rows):
-        for c in range(readPuzzle.cols):
+def isStoSand(puzzleDict: dict[str, int | list]) -> bool:
+    """
+    Sto-Sand check applied to a puzzle dictionary.  Uses only the passed state and
+    dimensions instead of reading globals.
+    """
+    rows = puzzleDict['rows']
+    cols = puzzleDict['cols']
+    state = puzzleDict['state']
+
+    colCounter = [0] * cols
+    for r in range(rows):
+        for c in range(cols):
             if state[r][c] == ' #':
                 colCounter[c] += 1
-    if all(count == readPuzzle.rows / 2 for count in colCounter):
-        return True
-    return False
+    # rows is integer; ensure the half is integrally compared
+    half = rows // 2
+    return all(count == half for count in colCounter)
 
 
-def getBelow(stone):
-    cellsBelow = [None for coords in stone]
+def fillsBottomHalf(puzzleDict: dict[str, int | list]) -> bool:
+    """Return True when the current board is exactly the bottom half filled.
+
+    Sto-Stone's final rigid-drop state must occupy every cell in the bottom
+    half of the grid and leave every cell in the top half empty.
+    """
+    rows = puzzleDict['rows']
+    cols = puzzleDict['cols']
+    state = puzzleDict['state']
+    half = rows // 2
+
+    return all(state[r][c] != ' #' for r in range(half) for c in range(cols)) and \
+        all(state[r][c] == ' #' for r in range(half, rows) for c in range(cols))
+
+
+def getBelow(stone: list[tuple[int,int]], rows: int) -> list[tuple[int,int] | None]:
+    """Return the coordinates directly below each cell in a stone.
+    Cells that would fall off the bottom edge are replaced with None.
+    """
+    cellsBelow = [None] * len(stone)
     for idx, (r, c) in enumerate(stone):
-        if r + 1 < readPuzzle.rows:
+        if r + 1 < rows:
             cellsBelow[idx] = (r + 1, c)
     return cellsBelow
 
 
-def canStoneDrop(roomNum, subgrid):
-    if None not in subgrid:
-        for idx, (r, c) in enumerate(subgrid):
-            if readPuzzle.state[r][c] == -1 and (r, c) not in lastPlaced[roomNum]:
-                return True
+def canStoneDrop(roomNum: int, subgrid: list[tuple[int,int] | None],
+                 puzzleDict: dict[str, int | list]) -> bool:
+    """Return True if the stone described by `subgrid` can drop one row.
+
+    subgrid is the output of `getBelow`; entries may be None when the stone
+    is at the bottom of the board.  roomNum is only needed for consulting
+    the previously placed stones from the last successful configuration.
+    """
+    state = puzzleDict['state']
+    current_stone = set(puzzleDict['lastPlaced'][roomNum] or [])
+
+    for cell in subgrid:
+        if cell is None:
+            return False
+        if cell not in current_stone and state[cell[0]][cell[1]] != -1:
+            return False
+    return True
+
+
+def dropDown(roomNum: int, stone: list[tuple[int,int]],
+             puzzleDict: dict[str, int | list]) -> None:
+    """Move the last placed stone for roomNum out and replace with `stone`.
+
+    This function mutates `puzzleDict['state']` via domainBuilder helpers.
+    """
+    state = puzzleDict['state']
+    domainBuilder.unDraw(puzzleDict['lastPlaced'][roomNum], state)
+    domainBuilder.drawStone(stone, state)
+
+
+def isStoStone(puzzleDict: dict[str, int | list]) -> bool:
+    """Perform the Sto-Stone drop test on the current puzzle dictionary.
+
+    This function simulates gravity for the stones stored in
+    `puzzleDict['drawnStones']`.  It modifies the state as it drops stones and
+    uses `puzzleDict['lastPlaced']` to remember the previous configuration so
+    it can restore it at the end if the test fails.
+    """
+    rows = puzzleDict['rows']
+    state = puzzleDict['state']
+    drawn = puzzleDict['drawnStones']
+    lastPlaced = puzzleDict['lastPlaced']
+    belows = [getBelow(stone, rows) for stone in drawn]
+    emptyBelow = [canStoneDrop(i, belows[i], puzzleDict) for i in range(len(belows))]
+
+    while any(emptyBelow):
+        for idx, below in enumerate(belows):
+            if emptyBelow[idx]:
+                dropDown(idx, below, puzzleDict)
+                lastPlaced[idx] = below
+                belows[idx] = getBelow(below, rows)
+                emptyBelow[idx] = canStoneDrop(idx, belows[idx], puzzleDict)
+
+    if fillsBottomHalf(puzzleDict):
+        return True
+
+    # restore original stones
+    for room, stone in enumerate(drawn):
+        domainBuilder.unDraw(lastPlaced[room], state)
+        domainBuilder.drawStone(stone, state)
     return False
 
 
-def dropDown(roomNum, stone):
-    domainBuilder.unDraw(lastPlaced[roomNum])
-    domainBuilder.drawStone(stone)
+def backtrack(roomNum: int, puzzleDict: dict[str, int | list],
+              mode: str = "sto-stone") -> bool:
+    """Recursive backtracking search using an explicit puzzle dictionary.
 
+    Returns True as soon as a solution matching `mode` is discovered; otherwise
+    False. The puzzleDict is mutated in place (stones drawn/undrawn) but
+    restored before the call returns to its caller.
+    """
+    rooms = puzzleDict['rooms']
 
-def isStoStone():
-    belows = []
-    emptyBelow = []
-    for subgrid in readPuzzle.drawnStones:
-        belows.append(getBelow(subgrid))
-    for room in belows:
-        emptyBelow.append(canStoneDrop(belows.index(room), room))
-    while True in emptyBelow:
-        for idx, below in enumerate(belows):
-            if canStoneDrop(idx, below):
-                dropDown(idx, below)
-                lastPlaced[idx] = below
-                belows[idx] = getBelow(below)
-                emptyBelow[idx] = canStoneDrop(idx, belows[idx])
-    if isStoSand(readPuzzle.state):
-        print("Sto-Stone Solution found!")
-        readPuzzle.printGrid(readPuzzle.state)
-        return True
-    else:
-        for room, stone in enumerate(readPuzzle.drawnStones):
-            domainBuilder.unDraw(lastPlaced[room])
-            domainBuilder.drawStone(stone)
-        print("Not a Sto-Stone Solution...")
-        return False
+    # allocate lastPlaced list on first call
+    if 'lastPlaced' not in puzzleDict:
+        puzzleDict['lastPlaced'] = [None] * rooms
 
+    if roomNum >= rooms:
+        # all rooms assigned; check the requested drop rules
+        puzzleDict['lastPlaced'] = list(puzzleDict['drawnStones'])
+        sto_sand = isStoSand(puzzleDict)
+        if mode == "sto-sand":
+            return sto_sand
+        if not sto_sand:
+            return False
+        return isStoStone(puzzleDict)
 
-def backtrack(roomNum):
-    global solved, lastPlaced
-
-    solved = False
-
-    # if time.time() > finishTime:
-    # return print("Unable to find solution.")
-
-    if roomNum >= readPuzzle.rooms:
-        lastPlaced = [subgrid for subgrid in readPuzzle.drawnStones]
-
-        if isStoSand(readPuzzle.state):
-            print("This is a Sto-Sand Solution:")
-            readPuzzle.printGrid(readPuzzle.state)
-            solved = isStoStone()
-            #    maxDown[room] = min(canStoneDrop(subgrid))
-            #    testDomains[room] = dropDown(maxDown[room], subgrid)
-            # for domain in readPuzzle.usedSubgrids:
-            #    domainBuilder.unDraw(domain)
-            # for room, test in enumerate(testDomains):
-            #    domainBuilder.drawStone(testDomains[room])
-            # for i in range(readPuzzle.rooms):
-            #    finalCheck[i] = min(canStoneDrop(testDomains[i]))
-            #if finalCheck.count(finalCheck[0]) == len(finalCheck) and finalCheck[0] == 0 and ' #' not in readPuzzle.state[int(readPuzzle.rows / 2)-1]:
-            #    solved = True
-            #    return print("Solution found!")
-            #else:
-            #    print("Sand worked but not Stone!")
-            #    for room, test in enumerate(testDomains):
-            #        domainBuilder.unDraw(testDomains[room])
-            #    for room in readPuzzle.usedSubgrids:
-            #        domainBuilder.drawStone(room)
-        return
-
-    domain = domainBuilder.domainReduce(readPuzzle.allRoomBorders[roomNum], readPuzzle.allRoomDomains[roomNum])
+    state = puzzleDict['state']
+    domain = domainBuilder.domainReduce(
+        puzzleDict['allRoomBorders'][roomNum],
+        puzzleDict['allRoomDomains'][roomNum],
+        state
+    )
     for subgrid in domain:
-        domainBuilder.drawStone(subgrid)
-        readPuzzle.drawnStones[roomNum] = subgrid
-        backtrack(roomNum + 1)
-        if not solved:
-            domainBuilder.unDraw(subgrid)
-        else:
-            return
-
-    # elif given is None:
-    #    # then reduce to only domains that include the given cells and test
-    #    for subgrid in readPuzzle.allRoomDomains[roomNum]:
-    #        for (r, c) in subgrid:
-    #
-    #            domain = domainBuilder.domainReduce(readPuzzle.allRoomBorders[roomNum], readPuzzle.allRoomDomains[roomNum])
-    #    backtrack(roomNum + 1)
-
+        domainBuilder.drawStone(subgrid, state)
+        puzzleDict['drawnStones'][roomNum] = subgrid
+        if backtrack(roomNum + 1, puzzleDict, mode):
+            return True
+        domainBuilder.unDraw(subgrid, state, puzzleDict['initialState'])
+        puzzleDict['drawnStones'][roomNum] = None
+    return False

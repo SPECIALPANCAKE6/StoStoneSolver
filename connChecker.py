@@ -1,58 +1,42 @@
-import copy
-import queue as Q
+from collections import deque
 
-import readPuzzle
-
-
-def connChecker(roomNum, currRoomIndices):
+def connChecker(puzzle: dict, roomNum: int) -> bool:
     """
-    currently broken... would work if there are two pairs of connected vertices that aren't connected
-    :param roomNum:
-    :param currRoomIndices:
-    :return: True if shaded cells are all connected, false if disconnected
+    Check whether all shaded cells (' #') in a room form a single connected component.
+
+    Args:
+        puzzle: The puzzle dictionary containing state, allRoomIndices, etc.
+        roomNum: The room index.
+
+    Returns:
+        True if all shaded cells in the room are connected, False otherwise.
     """
 
-    global rows, cols, weights, layout, rooms, given, state
-    global finishTime
+    state = puzzle['state']
+    currRoomIndices = puzzle['allRoomIndices'][roomNum]
+    # Convert to set for O(1) membership checks
+    room_cells = set(currRoomIndices)
 
-    connected = False
-    visited = copy.deepcopy(currRoomIndices)
-    for i in range(len(visited)):
-        visited[i] = visited[i],  False
-    que = Q.Queue()
+    # Find all shaded cells in this room
+    shaded = [cell for cell in currRoomIndices if state[cell[0]][cell[1]] == ' #']
 
-    for (rR, rC) in currRoomIndices:
-        for i in range(len(visited)):
-            if (rR, rC) in visited[i]:
-                visited[i] = visited[i][0], True
-                que.put((rR, rC))
-        while not que.empty():
-            s = que.get()
+    # If there are no shaded cells or only one, they're trivially connected
+    if len(shaded) <= 1:
+        return True
 
-            if readPuzzle.state[rR][rC] == ' #':
-                currUp = rR - 1
-                currDown = rR + 1
-                currLeft = rC - 1
-                currRight = rC + 1
-                if (currUp, rC) in currRoomIndices and readPuzzle.state[currUp][rC] == ' #':
-                    connected = True
-                    continue
-                elif (currDown, rC) in currRoomIndices and readPuzzle.state[currDown][rC] == ' #':
-                    connected = True
-                    continue
-                elif (rR, currLeft) in currRoomIndices and readPuzzle.state[rR][currLeft] == ' #':
-                    connected = True
-                    continue
-                elif (rR, currRight) in currRoomIndices and readPuzzle.state[rR][currRight] == ' #':
-                    connected = True
-                    continue
-                else:
-                    print("Room Num " + str(roomNum) + " might be broken...")
-        return connected
+    # BFS from the first shaded cell to see if we can reach all others
+    visited = {shaded[0]}
+    queue = deque([shaded[0]])
 
-    currRoomIndices = []
+    while queue:
+        r, c = queue.popleft()
+        # Check all 4 neighbors
+        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            nr, nc = r + dr, c + dc
+            if (nr, nc) in room_cells and (nr, nc) not in visited:
+                if state[nr][nc] == ' #':
+                    visited.add((nr, nc))
+                    queue.append((nr, nc))
 
-    for r in range(rows):
-        for c in range(cols):
-            if layout[r][c] == roomNum:
-                currRoomIndices.append((r, c))
+    # All shaded cells are connected if we visited all of them
+    return len(visited) == len(shaded)

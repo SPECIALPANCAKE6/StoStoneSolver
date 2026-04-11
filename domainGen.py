@@ -19,10 +19,6 @@ def dfs(currRoomIndices, start = None, goal = None, visited = None):
     return visited
 
 
-
-
-
-
 def domainGen(currRoomIndices, currRoomWeight = None):
     #for each v ∈ Adj[u] do
     #process
@@ -34,7 +30,7 @@ def domainGen(currRoomIndices, currRoomWeight = None):
 
     visited = []
     paths = []
-   
+
     for (rR, rC) in currRoomIndices:
         if (rR, rC) not in visited:
             visited.append((rR,rC))
@@ -48,11 +44,9 @@ def domainGen(currRoomIndices, currRoomWeight = None):
                     if (n, m) in currRoomIndices and (n, m) not in visited:
                         visited.append((n, m))
 
-        #paths = paths.append(visited)
         visited = []
 
                         #continue
-   
+
     return print("Domain Gen")
 
-    #dfs(currRoomIndices)
