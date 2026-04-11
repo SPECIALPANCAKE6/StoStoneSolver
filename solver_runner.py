@@ -1,12 +1,25 @@
 import pathlib
+import logging
 from datetime import datetime
 
 import backtrack
 import readPuzzle
 
+logger = logging.getLogger(__name__)
+
 SOLVE_MODES = ("sto-stone", "sto-sand", "both")
 BASE_DIR = pathlib.Path(__file__).resolve().parent
 DEFAULT_PUZZLE_DIR = BASE_DIR.joinpath("puzzles")
+
+
+class SolveInterrupted(Exception):
+    """Raised when the user interrupts a solve attempt."""
+
+    def __init__(self, puzzle_path: pathlib.Path, iteration: int, elapsed) -> None:
+        self.puzzle_path = puzzle_path
+        self.iteration = iteration
+        self.elapsed = elapsed
+        super().__init__(f"Solve interrupted for {puzzle_path}")
 
 
 def discover_puzzles(puzzle_dir: pathlib.Path) -> list[pathlib.Path]:
@@ -56,6 +69,16 @@ def _write_puzpre_grid(file, rows: list[list[int | str]]) -> None:
         file.write(" ".join(str(cell) for cell in row) + "\n")
 
 
+def _format_weights(weights: list[tuple[tuple[int, int], int] | None]) -> str:
+    """Format room weights for debug logging."""
+    lines = [
+        f"Room {room}: {val[0]}, {val[1]}"
+        for room, val in enumerate(weights)
+        if val is not None
+    ]
+    return "\n".join(lines) if lines else "None"
+
+
 def output_puzpre(file_name: pathlib.Path, puzzle_dict: dict[str, int | list]) -> None:
     """Write a solved puzzle back out in PUZ-PRE v3 format."""
     file_name.parent.mkdir(parents=True, exist_ok=True)
@@ -86,7 +109,11 @@ def output_puzpre(file_name: pathlib.Path, puzzle_dict: dict[str, int | list]) -
         ]
         _write_puzpre_grid(file, stone_rows)
 
-        file.write("\ninfo:{\n \"metadata\": {\n  \"author\": \"Addison Allen's Solver\",\n }\n}")
+        info_section = puzzle_dict.get('infoSection')
+        if isinstance(info_section, str) and info_section.strip():
+            file.write("\n" + info_section.strip() + "\n")
+        else:
+            file.write("\ninfo:{\n \"metadata\": {\n  \"author\": \"Addison Allen's Solver\",\n }\n}")
 
 
 def solve_puzzle(
@@ -99,8 +126,24 @@ def solve_puzzle(
         raise ValueError(f"Unsupported solve mode: {mode}")
 
     start_time = datetime.now()
-    puzzle_dict = readPuzzle.readPuzzle(puzzle_path)
-    solved = backtrack.backtrack(0, puzzle_dict, mode=mode)
+    puzzle_dict = {
+        'constraintChecks': 0,
+        'puzzlePath': str(puzzle_path.resolve()),
+    }
+    try:
+        puzzle_dict = readPuzzle.readPuzzle(puzzle_path)
+        puzzle_dict['puzzlePath'] = str(puzzle_path.resolve())
+        puzzle_dict['constraintChecks'] = 0
+        logger.debug("Layout:\n%s", readPuzzle.printFormatGrid(puzzle_dict['layout']))
+        logger.debug("Weights:\n%s", _format_weights(puzzle_dict['weights']))
+        logger.debug("Initial State:\n%s", readPuzzle.printFormatGrid(puzzle_dict['initialState']))
+        solved = backtrack.backtrack(0, puzzle_dict, mode=mode)
+    except KeyboardInterrupt as exc:
+        raise SolveInterrupted(
+            puzzle_path.resolve(),
+            int(puzzle_dict.get('constraintChecks', 0)),
+            datetime.now() - start_time,
+        ) from exc
     elapsed = datetime.now() - start_time
 
     solution_path = None

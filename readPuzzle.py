@@ -1,11 +1,12 @@
 import pathlib
 import gridUtils
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
 
-def printFormatGrid(name: list[list[str]]) -> str:
+def printFormatGrid(name: list[list[int | str]]) -> str:
     """
         printFormatGrid function which formats the grid for logging purposes
 
@@ -16,6 +17,24 @@ def printFormatGrid(name: list[list[str]]) -> str:
             str: A string representation of the grid, formatted for logging.
     """
     return '\n'.join(['\t'.join([str(cell) for cell in row]) for row in name])
+
+
+def _readPuzzleInfo(file) -> str | None:
+    """Read and normalize the optional trailing PUZ-PRE info block."""
+    info = file.read().strip()
+    return info or None
+
+
+def _extractPuzzleMetadata(info: str | None) -> dict[str, str | None]:
+    """Extract a few well-known metadata fields from a raw info block."""
+    if info is None:
+        return {"author": None, "difficulty": None}
+
+    fields = dict(re.findall(r'"([^"]+)"\s*:\s*"([^"]*)"', info))
+    return {
+        "author": fields.get("author"),
+        "difficulty": fields.get("difficulty") or fields.get("hard"),
+    }
 
 
 def _readPuzzleSections(file) -> tuple[
@@ -45,10 +64,12 @@ def _readPuzzleSections(file) -> tuple[
     return rows, cols, rooms, layout, weights, initialState
 
 
-def readPuzzleMetadata(inputFile: pathlib.Path | str) -> dict[str, int]:
+def readPuzzleMetadata(inputFile: pathlib.Path | str) -> dict[str, int | str | None]:
     """Load only the puzzle metadata needed by the lightweight CLI commands."""
     with open(inputFile, 'r') as file:
         rows, cols, rooms, _, weights, initialState = _readPuzzleSections(file)
+        info = _readPuzzleInfo(file)
+        metadata = _extractPuzzleMetadata(info)
 
     return {
         "rows": rows,
@@ -56,6 +77,8 @@ def readPuzzleMetadata(inputFile: pathlib.Path | str) -> dict[str, int]:
         "rooms": rooms,
         "numbered_rooms": sum(weight is not None for weight in weights),
         "pre_shaded_cells": sum(cell == ' #' for row in initialState for cell in row),
+        "author": metadata["author"],
+        "difficulty": metadata["difficulty"],
     }
 
 
@@ -84,6 +107,8 @@ def readPuzzle(inputFile: pathlib.Path | str) -> dict:
 
     with open(inputFile, 'r') as file:
         rows, cols, rooms, layout, weights, initialState = _readPuzzleSections(file)
+        info = _readPuzzleInfo(file)
+        metadata = _extractPuzzleMetadata(info)
         state = [row[:] for row in initialState]
 
         # allRoomIndices: A list of lists, where each inner list contains the coordinates of the cells belonging to a specific room.
@@ -137,5 +162,7 @@ def readPuzzle(inputFile: pathlib.Path | str) -> dict:
         "allRoomIndices": allRoomIndices,
         "allRoomBorders": allRoomBorders,
         "allRoomDomains": allRoomDomains,
-        "drawnStones": drawnStones
+        "drawnStones": drawnStones,
+        "infoSection": info,
+        "metadata": metadata,
     }

@@ -26,6 +26,6 @@ info:{
  "metadata": {
   "author": "Addison Allen",
   "hard": "Easy",
-  "comment": "Puzzle #1 for Thesis"
+  "comment": "Puzzle #1 for Thesis including a pre-filled room"
  }
 }

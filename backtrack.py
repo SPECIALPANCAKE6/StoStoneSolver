@@ -1,4 +1,7 @@
 import domainBuilder
+import logging
+
+logger = logging.getLogger(__name__)
 
 # the backtracking module no longer relies on global puzzle state stored in
 # readPuzzle; instead every function takes a puzzleDict that was returned by
@@ -90,6 +93,7 @@ def isStoStone(puzzleDict: dict[str, int | list]) -> bool:
     state = puzzleDict['state']
     drawn = puzzleDict['drawnStones']
     lastPlaced = list(drawn)
+    logger.debug("Dropping stones")
 
     moved = True
     while moved:
@@ -102,8 +106,10 @@ def isStoStone(puzzleDict: dict[str, int | list]) -> bool:
                 moved = True
 
     if fillsBottomHalf(puzzleDict):
+        logger.info("[%s] Sto-Stone check passed", puzzleDict.get('puzzlePath', '<unknown puzzle>'))
         return True
 
+    logger.debug("[%s] Failed Sto-Stone check after dropping stones", puzzleDict.get('puzzlePath', '<unknown puzzle>'))
     # restore original stones
     for room, stone in enumerate(drawn):
         domainBuilder.unDraw(lastPlaced[room], state)
@@ -123,12 +129,28 @@ def backtrack(roomNum: int, puzzleDict: dict[str, int | list],
 
     if roomNum >= rooms:
         # all rooms assigned; check the requested drop rules
+        puzzleDict['constraintChecks'] = puzzleDict.get('constraintChecks', 0) + 1
+        iteration = puzzleDict['constraintChecks']
         sto_sand = isStoSand(puzzleDict)
         if mode == "sto-sand":
+            if sto_sand:
+                logger.info(
+                    "[%s] Sto-Sand check passed at iteration %s",
+                    puzzleDict.get('puzzlePath', '<unknown puzzle>'),
+                    iteration,
+                )
             return sto_sand
+        if sto_sand:
+            logger.info(
+                "[%s] Sto-Sand check passed at iteration %s",
+                puzzleDict.get('puzzlePath', '<unknown puzzle>'),
+                iteration,
+            )
         if not sto_sand:
             return False
-        return isStoStone(puzzleDict)
+        if not isStoStone(puzzleDict):
+            return False
+        return True
 
     state = puzzleDict['state']
     domain = domainBuilder.domainReduce(

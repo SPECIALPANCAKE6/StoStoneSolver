@@ -25,7 +25,12 @@ def resolve_puzzle_dir(dir_name: str | None) -> pathlib.Path:
 def setup_logging(log_level: str = "INFO", log_file: pathlib.Path | None = None) -> None:
     """Configure console logging and optionally a rotating log file."""
     console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(logging.Formatter("%(message)s"))
+    console_handler.setFormatter(
+        logging.Formatter(
+            fmt='%(asctime)s - %(levelname)s - %(message)s',
+            datefmt='%m/%d/%Y %H:%M:%S',
+        )
+    )
     handlers: list[logging.Handler] = [console_handler]
 
     if log_file is not None:
@@ -79,6 +84,8 @@ def emit_show(puzzle_path: pathlib.Path) -> None:
     print(f"Rooms: {summary['rooms']}")
     print(f"Numbered rooms: {summary['numbered_rooms']}")
     print(f"Pre-shaded cells: {summary['pre_shaded_cells']}")
+    print(f"Author: {summary.get('author') or 'Unknown'}")
+    print(f"Difficulty: {summary.get('difficulty') or 'Unknown'}")
 
 
 def run_solve(args: argparse.Namespace) -> int:
@@ -93,14 +100,22 @@ def run_solve(args: argparse.Namespace) -> int:
 
     for puzzle_path in puzzle_paths:
         logger.info(f"Solving {puzzle_path.name} in {describe_mode(args.mode)} mode")
-        result = solver_runner.solve_puzzle(puzzle_path, mode=args.mode, solutions_dir=solutions_dir)
+        try:
+            result = solver_runner.solve_puzzle(puzzle_path, mode=args.mode, solutions_dir=solutions_dir)
+        except solver_runner.SolveInterrupted as exc:
+            logger.warning(
+                "[%s] Solve interrupted by user after %s at last attempted iteration %s",
+                exc.puzzle_path,
+                exc.elapsed,
+                exc.iteration,
+            )
+            logger.info(f"Summary: solved {solved_count} of {len(puzzle_paths)} puzzle(s) before interruption")
+            return 130
         if result['solved']:
             solved_count += 1
             logger.info(f"Solved {puzzle_path.name} in {result['elapsed']}")
             if result['solution_path'] is not None:
                 logger.info(f"Wrote solution file: {result['solution_path']}")
-            if args.mode == "both":
-                logger.info("The reported solution satisfies the Sto-Sand check along the Sto-Stone search path.")
         else:
             logger.warning(
                 f"No {describe_mode(args.mode)} solution found for {puzzle_path.name} after {result['elapsed']}"
