@@ -3,3 +3,5 @@ __pycache__/*
 .idea/*
 logs/*
 solutions/*
+**/__pycache__/*
+artifacts/*

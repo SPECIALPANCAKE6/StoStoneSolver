@@ -1,4 +1,4 @@
-from solver_cli import main
+from stostone.cli import main
 
 
 if __name__ == "__main__":

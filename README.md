@@ -2,7 +2,7 @@
 
 This repository began as my thesis project: a Python solver for the Sto-Stone puzzle and its Sto-Sand variant. I am revisiting it now as the solver foundation for a broader Sto-Stone project that should eventually include puzzle generation and simple playable desktop, browser, and mobile experiences.
 
-Today, this repository is still solver-first. It already parses puzzle files, solves sample puzzles from the command line, and exports solved PUZ-PRE files, but it does not yet include a generator or a playable UI.
+Today, this repository is still solver-first. It already parses puzzle files, solves sample puzzles from the command line, and exports solved PUZ-PRE files, but it does not yet include a generator or a playable UI. The codebase now uses a module-based package layout centered on `src/stostone/` instead of the older flat root-module arrangement.
 
 ## Vision
 
@@ -103,11 +103,15 @@ When a puzzle is solved with `--solutions-dir`, the solver writes a new PUZ-PRE 
 
 ## How the Solver Works
 
-For builders, the main parser contract is:
+For builders, the main parser contract is now:
 
 ```python
-readPuzzle.readPuzzle(path) -> dict
+stostone.load_puzzle(path) -> Puzzle
 ```
+
+The active `Puzzle` model carries separate immutable puzzle data, derived room caches, and mutable solver state while preserving the existing low-level grid/list representations.
+
+Compatibility wrappers for the older flat API still live under `stostone.compat`.
 
 The returned puzzle dictionary currently carries the solver's working state and precomputed room data, including:
 
@@ -127,46 +131,49 @@ The active solver flow is:
 
 The core modules in the active path are:
 
-- `Solver.py`: thin CLI entrypoint
-- `solver_cli.py`: argument parsing, command dispatch, and logging setup
-- `solver_runner.py`: puzzle discovery, solve orchestration, and solved-file export
-- `readPuzzle.py`: PUZ-PRE parsing and puzzle-dict construction
-- `backtrack.py`: recursive search plus Sto-Stone / Sto-Sand validation
-- `domainBuilder.py`: domain filtering and draw / undraw helpers over explicit state
-- `connChecker.py`: room-level connectivity checks
-- `gridUtils.py`: shared border, connectivity, and grid helpers
-
-`domainGen.py` is present in the repository, but it is not part of the current active solver path.
+- `Solver.py`: thin repo-root CLI entrypoint
+- `src/stostone/cli.py`: argument parsing, command dispatch, and logging setup
+- `src/stostone/io/`: PUZ-PRE parsing, metadata loading, and solved-file export
+- `src/stostone/models.py`: dataclasses for puzzle spec, caches, state, and solve results
+- `src/stostone/core/`: shared grid, connectivity, and domain helpers
+- `src/stostone/solver/`: search, validation, and state operations
+- `src/stostone/generator/`: generator-facing construction/reset seams
+- `src/stostone/compat/`: wrappers for the older flat module API
 
 ## Repository Layout
 
 ```text
 StoStoneSolver/
 |-- Solver.py
-|-- solver_cli.py
-|-- solver_runner.py
-|-- readPuzzle.py
-|-- backtrack.py
-|-- domainBuilder.py
-|-- connChecker.py
-|-- gridUtils.py
-|-- domainGen.py
+|-- README.md
+|-- pyproject.toml
+|-- docs/
 |-- puzzles/
-|   |-- *.txt
-|   `-- images/
-|-- solutions/
-|-- logs/
+|-- src/
+|   `-- stostone/
+|       |-- cli.py
+|       |-- models.py
+|       |-- compat/
+|       |-- core/
+|       |-- generator/
+|       |-- io/
+|       `-- solver/
+|-- stostone/
+|-- puzzles/
 |-- tasks/
-|-- AGENTS.md
-`-- Final Thesis.docx
+|-- tests/
+`-- AGENTS.md
 ```
 
 In practice:
 
+- `docs/` contains architecture notes and archived legacy examples
 - `puzzles/` contains bundled sample inputs
 - `puzzles/images/` contains reference images for some puzzles
 - `solutions/` holds exported solved puzzle files
 - `logs/` is a convenient location for CLI log output
+- `src/stostone/` contains the real package implementation
+- `stostone/` is a lightweight shim so the package can be run from the repo without installing first
 - `tasks/` contains working notes, review notes, and project lessons
 
 ## Roadmap

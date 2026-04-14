@@ -7,3 +7,5 @@
 - `domainGen.py` is not part of the live solver path. Any future revival should start from the room-domain loop in `readPuzzle.py`, not from the current stale prototype.
 - Lightweight CLI metadata commands should stay on a parse-only path. Building room domains and mutable solver state just to show puzzle counts adds unnecessary work and couples inspection to solver internals.
 - If a legacy helper module must remain for compatibility, point it at the shared live implementation instead of carrying a second stale algorithm that can drift.
+- Keep package `__init__` files lightweight during a module split. Pulling in high-level orchestration imports from `__init__` can create circular imports between generator, IO, and solver layers before the package finishes initializing.
+- If the goal is a visibly cleaner architecture, moving implementation into packages is not enough by itself. The repo root should only keep true entrypoints and project metadata; legacy surfaces belong under an explicit `compat` package, not as top-level files.

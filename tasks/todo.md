@@ -1,91 +1,41 @@
 # Todo
 
 ## Assumptions
-- Verification will use smoke runs because the repo has no dedicated tests.
-- The goal is a minimal correctness pass, not a redesign.
+- This phase is a structural reorganization, not a solver-rule rewrite.
+- Verification is smoke-only; the current pytest suite is out of scope.
+- Top-level entry modules remain as compatibility shims over the new package API.
 
 ## Checklist
-- [x] Inspect active solver files and search for remaining global-state dependencies.
-- [x] Confirm whether tests exist and establish the smoke-run fallback.
-- [x] Verify `domainBuilder.domainReduce(...)` against `gridUtils.borderGen(...)` tuple semantics.
-- [x] Verify `backtrack.py` rigid-drop collision logic, bool returns, and failed-branch cleanup.
-- [x] Verify `Solver.outputPUZPRE(...)` handles solved and unsolved states safely.
-- [x] Apply the minimal code fixes required by the audit.
-- [x] Run the `readPuzzle`/`backtrack` smoke command on `puzzles/000-000.txt`.
-- [x] Run `python Solver.py` and confirm the solver progresses without immediate exceptions.
-- [x] Add a review note with exact commands and outcomes.
+- [x] Add package/project scaffolding for an installable `src/stostone/` layout.
+- [x] Introduce dataclass models for puzzle metadata, immutable spec, derived room cache, mutable puzzle state, aggregate puzzle, and solve results.
+- [x] Move PUZ-PRE parsing and export into `stostone.io`.
+- [x] Move grid and domain helpers into `stostone.core`.
+- [x] Move state mutation, validation, and backtracking into `stostone.solver`.
+- [x] Add generator-facing seams for in-memory puzzle construction and state reset without implementing generation algorithms.
+- [x] Replace the active root modules with compatibility shims over the new package.
+- [x] Run the approved smoke commands and capture exact outcomes.
 
 ## Discovery Notes
-- No test files were found.
-- No active `readPuzzle.` global attribute usage was found in solver execution code.
-- `connChecker.py` already follows the `allRoomIndices` requirement.
-- The worktree is already dirty in the refactor files, so edits must stay surgical.
-- `puzzles/001-000-1.txt` contains pre-shaded givens, so backtracking cleanup must preserve original cell values.
-- `domainGen.py` appears to be dead prototype code rather than part of the active solver flow.
+- The repo already has a small CLI split between `Solver.py`, `solver_cli.py`, and `solver_runner.py`.
+- The active solver still centers on a mutable puzzle dictionary; this task migrates the internal implementation to dataclasses while preserving the existing low-level shapes.
+- A pytest suite exists today, but it is not part of this phase's success criteria.
 
 ## Review
-- Implemented fixes:
-- `domainBuilder.domainReduce(...)` now uses explicit `outside_cell` / `room_cell` names so the border comparison matches `gridUtils.borderGen(...)` semantics directly.
-- `domainBuilder.unDraw(...)` can now restore from `initialState` during backtracking cleanup, which preserves required givens.
-- `backtrack.canStoneDrop(...)` now requires every non-self destination cell to be empty before a rigid stone can fall one row.
-- `backtrack.backtrack(...)` now restores room cells from `initialState` on failed branches and clears stale `drawnStones` entries.
-- `Solver.outputPUZPRE(...)` now takes `puzzleDict` explicitly, uses direct weight-coordinate checks, skips `None` stones safely, and only writes solution files for solved puzzles.
+- Added `pyproject.toml` and a new `src/stostone/` shared package with dataclass-based models, parser/export IO, core grid/domain helpers, solver modules, generator-facing seams, and a package-native CLI.
+- Follow-up tree cleanup moved the compatibility wrappers into `src/stostone/compat/` and moved the remaining root helper modules into package directories under `src/stostone/core/` and `src/stostone/solver/`.
+- Simplified the repo root so only `Solver.py`, project metadata/config, docs, and major workspace directories remain.
+- Added a root `stostone/` shim package so `python -m stostone.cli ...` works from the repo root without needing an install step.
+- Added `docs/architecture.md` and moved the old solved sample files into `docs/examples/legacy-solutions/`.
+- Resolved one packaging bug discovered during smoke verification: `solver.__init__` was importing `service`, which created a circular import through `generator` and `io`; the package init was reduced to a lightweight solver export surface.
 
-- Commands run:
-- `@' import readPuzzle, backtrack ... '@ | python -` on `puzzles/000-000.txt` before edits: `rooms: 5`, `solve: True`.
-- `python Solver.py` before edits with a 20s timeout: startup and multiple puzzles progressed without immediate exceptions.
-- `@' import readPuzzle, domainBuilder ... '@ | python -` after edits on `puzzles/001-000-1.txt`: `givens_restored: True`.
-- `@' import backtrack ... '@ | python -` after edits with a blocked rigid-drop scenario: `blocked_drop: False`.
-- `@' import readPuzzle, backtrack ... '@ | python -` after edits on `puzzles/000-000.txt`: `rooms: 5`, `solve: True`.
-- `python Solver.py` after edits with a 5s timeout: progressed cleanly through the early puzzle set, including `001-000-1.txt` with givens, with no immediate exceptions.
-- Focused validation on `puzzles/001-001.txt` exposed a false-positive Sto-Stone acceptance: the rigid-drop result satisfied per-column counts but did not fill the contiguous bottom half.
-- Added `fillsBottomHalf(...)` in `backtrack.py` and switched the final Sto-Stone acceptance check to use it instead of column counts alone.
-- `@' ... detailed validation for puzzles/001-001.txt ... '@ | python -` before the final fix: `solve: True`, with a top-half fill mismatch after the rigid drop.
-- `@' import readPuzzle, backtrack ... '@ | python -` after the final fix on `puzzles/001-001.txt`: `solve: False`.
-- `python Solver.py` after the final fix with a 5s timeout: `001-001.txt` now logs `Backtracking exhausted without finding a solution.` and the run continues without immediate exceptions.
-- `solutions/001-001-solved.txt` still exists from the earlier false-positive run and is now stale.
-- Further focused debugging on `001-001` found the remaining false-negative in the rigid-drop loop: `isStoStone(...)` cached droppability per stone and only refreshed it for stones that had already moved, so stones that became movable after lower stones fell could remain incorrectly stuck.
-- Rewrote the `isStoStone(...)` drop loop to recompute each stone's downward move from the current board state on every pass.
-- `@' import readPuzzle, backtrack ... '@ | python -` after the drop-loop fix on `puzzles/001-001.txt`: `solve: True`, and the final board is the exact bottom half filled.
-- `@' import readPuzzle, backtrack ... '@ | python -` after the drop-loop fix on `puzzles/000-000.txt`: `solve: True`.
-- `python Solver.py` after the drop-loop fix with a 5s timeout: `001-001.txt` now logs `Puzzle was solved successfully.` and the run continues without immediate exceptions.
-
-## README Refresh
-
-### Checklist
-- [x] Re-verify the CLI commands and output snippets that will be documented.
-- [x] Add a root `README.md` framed as the thesis solver foundation for future generator and game work.
-- [x] Document current capabilities, puzzle format, solver flow, repository layout, and roadmap.
-- [x] Re-run the documented commands to confirm the examples still match the live CLI.
-
-### Review
-- Added `README.md` as the new project entry document.
-- Framed the repository explicitly as the revived thesis solver, with the solver positioned as the foundation for future generator and playable game work.
-- Documented the current CLI surface, solve modes, PUZ-PRE puzzle inputs, solved-file output behavior, and active solver modules.
-- Added a staged roadmap that keeps generator and game work clearly future-facing.
-- Commands rechecked for the README:
-- `python Solver.py --help`
-- `python Solver.py list`
-- `python Solver.py show 000-000`
-- `python Solver.py solve 000-000 --solutions-dir solutions`
-
-## KISS / DRY Cleanup
-
-### Checklist
-- [x] Split lightweight puzzle metadata reads from full solver precomputation.
-- [x] Remove `backtrack.py` scratch-state coupling on injected `lastPlaced`.
-- [x] Collapse duplicate connectivity and legacy domain helpers onto shared utilities.
-- [x] Simplify PUZ-PRE export loops without changing solved-file behavior.
-- [x] Re-run CLI smoke commands for metadata and solving.
-
-### Review
-- Added `readPuzzle._readPuzzleSections(...)` so the PUZ-PRE section parsing is shared by both the full loader and the new lightweight metadata reader.
-- Added `readPuzzle.readPuzzleMetadata(...)` and switched `solver_runner.summarize_puzzle(...)` to use it, so `python Solver.py show ...` no longer builds room domains or mutable solver state.
-- Simplified `solver_runner.output_puzpre(...)` with one grid-writing helper plus precomputed weight and filled-cell lookups instead of repeating three near-identical nested loops.
-- Removed the runtime-injected `puzzleDict['lastPlaced']` scratch key from `backtrack.py`; Sto-Stone drop bookkeeping now stays local inside `isStoStone(...)`.
-- Replaced `connChecker.py`'s duplicate BFS with a thin call to `gridUtils.isConnected(...)`.
-- Replaced the stale `domainGen.py` prototype with a compatibility wrapper around `gridUtils.connectedSubgrids(...)`, eliminating its old dependency on `readPuzzle` globals.
-- Commands run:
-- `python Solver.py show 000-000` -> reported the expected puzzle metadata successfully.
-- `python Solver.py solve 000-000 --solutions-dir solutions` -> solved successfully and wrote `solutions/000-000-solved.txt`.
-- `python -c "import readPuzzle, backtrack; p = readPuzzle.readPuzzle('puzzles/000-000.txt'); print('lastPlaced_before', 'lastPlaced' in p); print('solve', backtrack.backtrack(0, p)); print('lastPlaced_after', 'lastPlaced' in p)"` -> `lastPlaced_before False`, `solve True`, `lastPlaced_after False`.
+### Commands Run
+- `python -c "import stostone, solver_cli, solver_runner, readPuzzle, backtrack; print('imports ok')"` -> `imports ok`
+- `python Solver.py --help` -> rendered the expected `list/show/solve` CLI usage
+- `python -m stostone.cli --help` -> rendered the expected package CLI usage
+- `python Solver.py list` -> listed the bundled puzzle files successfully
+- `python Solver.py show 000-000` -> reported the expected metadata for `000-000.txt`
+- `python -c "from stostone import load_puzzle, solve_puzzle; puzzle = load_puzzle('puzzles/000-000.txt'); result = solve_puzzle(puzzle); print(type(puzzle).__name__, type(result).__name__, result.solved, result.mode)"` -> `Puzzle SolveResult True sto-stone`
+- `python Solver.py solve 000-000` -> solved successfully
+- `python -m stostone.cli solve 000-000` -> solved successfully
+- `python -c "import readPuzzle, backtrack; puzzle = readPuzzle.readPuzzle('puzzles/000-000.txt'); print('rooms', puzzle['rooms']); print('solve', backtrack.backtrack(0, puzzle)); print('checks', puzzle['constraintChecks'])"` -> `rooms 5`, `solve True`, `checks 40`
+- `python -c "from stostone.compat import readPuzzle, backtrack; puzzle = readPuzzle('puzzles/000-000.txt'); print('rooms', puzzle['rooms']); print('solve', backtrack(0, puzzle))"` -> `rooms 5`, `solve True`

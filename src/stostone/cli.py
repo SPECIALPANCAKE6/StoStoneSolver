@@ -1,16 +1,17 @@
+from __future__ import annotations
+
 import argparse
 import logging
 import pathlib
 import sys
 from logging.handlers import RotatingFileHandler
 
-import solver_runner
+from .solver.service import DEFAULT_PUZZLE_DIR, SOLVE_MODES, SolveInterrupted, discover_puzzles, resolve_puzzle_target, solve_puzzle_file, summarize_puzzle
 
 logger = logging.getLogger(__name__)
 
 
 def resolve_cli_path(path_name: str) -> pathlib.Path:
-    """Resolve CLI-supplied paths relative to the current working directory."""
     path = pathlib.Path(path_name).expanduser()
     if not path.is_absolute():
         path = pathlib.Path.cwd().joinpath(path)
@@ -18,17 +19,15 @@ def resolve_cli_path(path_name: str) -> pathlib.Path:
 
 
 def resolve_puzzle_dir(dir_name: str | None) -> pathlib.Path:
-    """Return the puzzle directory selected by the user or the repo default."""
-    return solver_runner.DEFAULT_PUZZLE_DIR if dir_name is None else resolve_cli_path(dir_name)
+    return DEFAULT_PUZZLE_DIR if dir_name is None else resolve_cli_path(dir_name)
 
 
 def setup_logging(log_level: str = "INFO", log_file: pathlib.Path | None = None) -> None:
-    """Configure console logging and optionally a rotating log file."""
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(
         logging.Formatter(
-            fmt='%(asctime)s - %(levelname)s - %(message)s',
-            datefmt='%m/%d/%Y %H:%M:%S',
+            fmt="%(asctime)s - %(levelname)s - %(message)s",
+            datefmt="%m/%d/%Y %H:%M:%S",
         )
     )
     handlers: list[logging.Handler] = [console_handler]
@@ -37,15 +36,15 @@ def setup_logging(log_level: str = "INFO", log_file: pathlib.Path | None = None)
         log_file.parent.mkdir(parents=True, exist_ok=True)
         file_handler = RotatingFileHandler(
             filename=log_file,
-            mode='a+',
+            mode="a+",
             maxBytes=5 * 1024 * 1024,
             backupCount=5,
-            encoding='utf-8',
+            encoding="utf-8",
         )
         file_handler.setFormatter(
             logging.Formatter(
-                fmt='%(asctime)s - %(levelname)s - %(message)s',
-                datefmt='%m/%d/%Y %H:%M:%S',
+                fmt="%(asctime)s - %(levelname)s - %(message)s",
+                datefmt="%m/%d/%Y %H:%M:%S",
             )
         )
         handlers.append(file_handler)
@@ -54,7 +53,6 @@ def setup_logging(log_level: str = "INFO", log_file: pathlib.Path | None = None)
 
 
 def describe_mode(mode: str) -> str:
-    """Return a human-readable label for the selected solve mode."""
     return {
         "sto-stone": "Sto-Stone",
         "sto-sand": "Sto-Sand",
@@ -63,33 +61,30 @@ def describe_mode(mode: str) -> str:
 
 
 def collect_solve_targets(puzzles: list[str], solve_all: bool, puzzle_dir: pathlib.Path) -> list[pathlib.Path]:
-    """Resolve the user's solve target selection into concrete puzzle paths."""
     if solve_all and puzzles:
         raise ValueError("Choose either explicit puzzles or --all, not both.")
     if solve_all:
-        puzzle_paths = solver_runner.discover_puzzles(puzzle_dir)
+        puzzle_paths = discover_puzzles(puzzle_dir)
         if not puzzle_paths:
             raise FileNotFoundError(f"No puzzle files were found in {puzzle_dir}")
         return puzzle_paths
     if not puzzles:
         raise ValueError("Provide at least one puzzle or use --all.")
-    return [solver_runner.resolve_puzzle_target(puzzle_name, puzzle_dir) for puzzle_name in puzzles]
+    return [resolve_puzzle_target(puzzle_name, puzzle_dir) for puzzle_name in puzzles]
 
 
 def emit_show(puzzle_path: pathlib.Path) -> None:
-    """Print a compact metadata summary for a single puzzle file."""
-    summary = solver_runner.summarize_puzzle(puzzle_path)
-    print(f"Puzzle: {summary['path']}")
-    print(f"Size: {summary['rows']} x {summary['cols']}")
-    print(f"Rooms: {summary['rooms']}")
-    print(f"Numbered rooms: {summary['numbered_rooms']}")
-    print(f"Pre-shaded cells: {summary['pre_shaded_cells']}")
-    print(f"Author: {summary.get('author') or 'Unknown'}")
-    print(f"Difficulty: {summary.get('difficulty') or 'Unknown'}")
+    summary = summarize_puzzle(puzzle_path)
+    print(f"Puzzle: {summary.path}")
+    print(f"Size: {summary.rows} x {summary.cols}")
+    print(f"Rooms: {summary.rooms}")
+    print(f"Numbered rooms: {summary.numbered_rooms}")
+    print(f"Pre-shaded cells: {summary.pre_shaded_cells}")
+    print(f"Author: {summary.author or 'Unknown'}")
+    print(f"Difficulty: {summary.difficulty or 'Unknown'}")
 
 
 def run_solve(args: argparse.Namespace) -> int:
-    """Solve the requested puzzles and print a concise summary to stdout."""
     puzzle_dir = resolve_puzzle_dir(args.dir)
     puzzle_paths = collect_solve_targets(args.puzzles, args.all, puzzle_dir)
     log_file = resolve_cli_path(args.log_file) if args.log_file else None
@@ -99,54 +94,47 @@ def run_solve(args: argparse.Namespace) -> int:
     solved_count = 0
 
     for puzzle_path in puzzle_paths:
-        logger.info(f"Solving {puzzle_path.name} in {describe_mode(args.mode)} mode")
+        logger.info("Solving %s in %s mode", puzzle_path.name, describe_mode(args.mode))
         try:
-            result = solver_runner.solve_puzzle(puzzle_path, mode=args.mode, solutions_dir=solutions_dir)
-        except solver_runner.SolveInterrupted as exc:
+            result = solve_puzzle_file(puzzle_path, mode=args.mode, solutions_dir=solutions_dir)
+        except SolveInterrupted as exc:
             logger.warning(
                 "[%s] Solve interrupted by user after %s at last attempted iteration %s",
                 exc.puzzle_path,
                 exc.elapsed,
                 exc.iteration,
             )
-            logger.info(f"Summary: solved {solved_count} of {len(puzzle_paths)} puzzle(s) before interruption")
+            logger.info("Summary: solved %s of %s puzzle(s) before interruption", solved_count, len(puzzle_paths))
             return 130
-        if result['solved']:
-            solved_count += 1
-            logger.info(f"Solved {puzzle_path.name} in {result['elapsed']}")
-            if result['solution_path'] is not None:
-                logger.info(f"Wrote solution file: {result['solution_path']}")
-        else:
-            logger.warning(
-                f"No {describe_mode(args.mode)} solution found for {puzzle_path.name} after {result['elapsed']}"
-            )
 
-    logger.info(f"Summary: solved {solved_count} of {len(puzzle_paths)} puzzle(s)")
+        if result.solved:
+            solved_count += 1
+            logger.info("Solved %s in %s", puzzle_path.name, result.elapsed)
+            if result.solution_path is not None:
+                logger.info("Wrote solution file: %s", result.solution_path)
+        else:
+            logger.warning("No %s solution found for %s after %s", describe_mode(args.mode), puzzle_path.name, result.elapsed)
+
+    logger.info("Summary: solved %s of %s puzzle(s)", solved_count, len(puzzle_paths))
     return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
-    """Build the command-line parser for the solver CLI."""
     parser = argparse.ArgumentParser(description="Sto-Stone solver CLI")
     subparsers = parser.add_subparsers(dest="command")
 
     list_parser = subparsers.add_parser("list", help="List available puzzle files")
-    list_parser.add_argument("--dir", help=f"Puzzle directory. Defaults to {solver_runner.DEFAULT_PUZZLE_DIR}")
+    list_parser.add_argument("--dir", help=f"Puzzle directory. Defaults to {DEFAULT_PUZZLE_DIR}")
 
     show_parser = subparsers.add_parser("show", help="Show metadata for one puzzle file")
     show_parser.add_argument("puzzle", help="Puzzle name or path")
-    show_parser.add_argument("--dir", help=f"Puzzle directory. Defaults to {solver_runner.DEFAULT_PUZZLE_DIR}")
+    show_parser.add_argument("--dir", help=f"Puzzle directory. Defaults to {DEFAULT_PUZZLE_DIR}")
 
     solve_parser = subparsers.add_parser("solve", help="Solve one or more puzzles")
     solve_parser.add_argument("puzzles", nargs="*", help="Puzzle names or paths")
     solve_parser.add_argument("--all", action="store_true", help="Solve every puzzle in the selected directory")
-    solve_parser.add_argument("--dir", help=f"Puzzle directory. Defaults to {solver_runner.DEFAULT_PUZZLE_DIR}")
-    solve_parser.add_argument(
-        "--mode",
-        choices=list(solver_runner.SOLVE_MODES),
-        default="sto-stone",
-        help="Select which solver mode to run",
-    )
+    solve_parser.add_argument("--dir", help=f"Puzzle directory. Defaults to {DEFAULT_PUZZLE_DIR}")
+    solve_parser.add_argument("--mode", choices=list(SOLVE_MODES), default="sto-stone", help="Select which solver mode to run")
     solve_parser.add_argument(
         "--log-level",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
@@ -160,7 +148,6 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """CLI entrypoint."""
     parser = build_parser()
     args = parser.parse_args(argv)
 
@@ -172,12 +159,12 @@ def main(argv: list[str] | None = None) -> int:
         puzzle_dir = resolve_puzzle_dir(getattr(args, "dir", None))
 
         if args.command == "list":
-            for puzzle_path in solver_runner.discover_puzzles(puzzle_dir):
+            for puzzle_path in discover_puzzles(puzzle_dir):
                 print(puzzle_path.name)
             return 0
 
         if args.command == "show":
-            emit_show(solver_runner.resolve_puzzle_target(args.puzzle, puzzle_dir))
+            emit_show(resolve_puzzle_target(args.puzzle, puzzle_dir))
             return 0
 
         if args.command == "solve":
@@ -188,3 +175,7 @@ def main(argv: list[str] | None = None) -> int:
 
     parser.print_help()
     return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
