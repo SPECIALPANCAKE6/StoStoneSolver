@@ -5,3 +5,8 @@ logs/*
 solutions/*
 **/__pycache__/*
 artifacts/*
+.pytest_cache/*
+tests/.pytest-tmp/*
+test-output/*
+pytest-work/*
+pytest-cache-files-*/

@@ -63,8 +63,8 @@ Example commands:
 ```bash
 python Solver.py --help
 python Solver.py list
-python Solver.py show 000-000
-python Solver.py solve 000-000 --solutions-dir solutions
+python Solver.py show 000-000.txt
+python Solver.py solve 000-000.txt --solutions-dir solutions
 ```
 
 Example successful solve output:
@@ -137,7 +137,8 @@ The core modules in the active path are:
 - `src/stostone/models.py`: dataclasses for puzzle spec, caches, state, and solve results
 - `src/stostone/core/`: shared grid, connectivity, and domain helpers
 - `src/stostone/solver/`: search, validation, and state operations
-- `src/stostone/generator/`: generator-facing construction/reset seams
+- `src/stostone/assembly/`: puzzle assembly and room-cache construction from parsed specs
+- `src/stostone/generator/`: compatibility exports for the old construction naming while real generation is still future work
 - `src/stostone/compat/`: wrappers for the older flat module API
 
 ## Repository Layout
@@ -153,6 +154,7 @@ StoStoneSolver/
 |   `-- stostone/
 |       |-- cli.py
 |       |-- models.py
+|       |-- assembly/
 |       |-- compat/
 |       |-- core/
 |       |-- generator/

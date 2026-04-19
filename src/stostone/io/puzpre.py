@@ -4,7 +4,7 @@ import json
 import re
 from pathlib import Path
 
-from ..generator import build_puzzle
+from ..assembly import assemble_puzzle
 from ..models import Puzzle, PuzzleMetadata, PuzzleSpec, PuzzleSummary, metadata_from_legacy_dict
 
 
@@ -105,7 +105,7 @@ def load_puzzle(path: Path | str) -> Puzzle:
         info_section=info,
         metadata=metadata,
     )
-    puzzle = build_puzzle(spec, source_path=puzzle_path)
+    puzzle = assemble_puzzle(spec, source_path=puzzle_path)
 
     for room_num, room_indices in enumerate(puzzle.cache.all_room_indices):
         initial_stones = {(r, c) for (r, c) in room_indices if puzzle.spec.initial_state[r][c] == " #"}
