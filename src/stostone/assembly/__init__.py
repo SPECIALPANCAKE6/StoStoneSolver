@@ -40,7 +40,18 @@ def assemble_puzzle(spec: PuzzleSpec, source_path: Path | None = None) -> Puzzle
     return Puzzle(spec=spec, cache=cache, state=state, source_path=source_path.resolve() if source_path else None)
 
 
+def apply_initial_state_constraints(puzzle: Puzzle) -> Puzzle:
+    for room_num, room_indices in enumerate(puzzle.cache.all_room_indices):
+        initial_stones = {(r, c) for (r, c) in room_indices if puzzle.spec.initial_state[r][c] == " #"}
+        if initial_stones:
+            puzzle.cache.all_room_domains[room_num] = [
+                subdomain for subdomain in puzzle.cache.all_room_domains[room_num] if initial_stones.issubset(subdomain)
+            ]
+    return puzzle
+
+
 __all__ = [
+    "apply_initial_state_constraints",
     "assemble_puzzle",
     "derive_room_cache",
     "reset_state",

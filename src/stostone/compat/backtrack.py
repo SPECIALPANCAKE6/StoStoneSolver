@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from ..models import legacy_dict_to_puzzle, sync_legacy_dict
 from ..solver.search import backtrack as _backtrack
+from ..solver.search import count_solutions as _count_solutions
 from ..solver.state_ops import draw_stone as _draw_stone
 from ..solver.state_ops import restore_cells as _restore_cells
 from ..solver.validation import can_stone_drop, drop_down, fills_bottom_half, get_below, is_sto_sand, is_sto_stone
@@ -37,6 +38,13 @@ def backtrack(roomNum: int, puzzleDict: dict[str, object], mode: str = "sto-ston
     return solved
 
 
+def countSolutions(roomNum: int, puzzleDict: dict[str, object], mode: str = "sto-stone", limit: int = 2) -> int:
+    puzzle = legacy_dict_to_puzzle(puzzleDict)
+    solution_count = _count_solutions(roomNum, puzzle, mode=mode, limit=limit)  # type: ignore[arg-type]
+    sync_legacy_dict(puzzleDict, puzzle)
+    return solution_count
+
+
 def dropDown(previous_stone, stone, state) -> None:
     drop_down(previous_stone, stone, state)
 
@@ -52,6 +60,7 @@ def unDraw(subgrid, state, initialState=None) -> None:
 __all__ = [
     "backtrack",
     "canStoneDrop",
+    "countSolutions",
     "drawStone",
     "dropDown",
     "fillsBottomHalf",

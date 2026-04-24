@@ -5,8 +5,8 @@ from pathlib import Path
 import pytest
 
 from src.stostone.compat import printFormatGrid, readPuzzle, readPuzzleMetadata
-from src.stostone.compat.backtrack import backtrack, isStoSand, isStoStone
-from src.stostone.compat.solver_runner import output_puzpre
+from src.stostone.compat.backtrack import backtrack, countSolutions, isStoSand, isStoStone
+from src.stostone.compat.solver_runner import count_puzzle_solutions, output_puzpre
 
 
 pytestmark = pytest.mark.integration
@@ -53,6 +53,24 @@ def test_backtrack_wrapper_solves_and_updates_legacy_dict(puzzle_path) -> None:
     assert all(stone is not None for stone in puzzle["drawnStones"])
     assert isStoSand(puzzle)
     assert puzzle["state"] == [[-1, -1, -1, -1], [-1, -1, -1, -1], [" #", " #", " #", " #"], [" #", " #", " #", " #"]]
+
+
+def test_count_solutions_wrapper_counts_unique_solution_and_restores_legacy_state(puzzle_path) -> None:
+    puzzle = readPuzzle(puzzle_path("000-001.txt"))
+
+    solution_count = countSolutions(0, puzzle, limit=2)
+
+    assert solution_count == 1
+    assert puzzle["state"] == puzzle["initialState"]
+    assert puzzle["drawnStones"] == [None] * puzzle["rooms"]
+
+
+def test_solver_runner_count_puzzle_solutions_reports_uniqueness(puzzle_path) -> None:
+    result = count_puzzle_solutions(puzzle_path("000-001.txt"), limit=2)
+
+    assert result["solution_count"] == 1
+    assert result["is_unique"] is True
+    assert result["limit_reached"] is False
 
 
 def test_output_puzpre_writes_file_from_legacy_dict(puzzle_path, workspace_tmp_dir: Path) -> None:

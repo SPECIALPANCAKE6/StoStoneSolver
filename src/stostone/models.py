@@ -13,6 +13,7 @@ CellGrid = list[list[Cell]]
 LayoutGrid = list[list[int]]
 Stone = list[Coord] | None
 SolveMode = Literal["sto-stone", "sto-sand", "both"]
+GenerationItemStatus = Literal["written", "duplicate", "rejected-quality", "failed"]
 
 
 @dataclass(slots=True)
@@ -168,6 +169,187 @@ class SolveResult:
             "solved": self.solved,
             "elapsed": self.elapsed,
             "solution_path": self.solution_path,
+        }
+
+
+@dataclass(slots=True)
+class SolutionCountResult:
+    path: Path
+    mode: SolveMode
+    solution_count: int
+    search_limit: int
+    elapsed: timedelta
+    puzzle: Puzzle | None = None
+
+    @property
+    def limit_reached(self) -> bool:
+        return self.solution_count >= self.search_limit
+
+    @property
+    def is_unique(self) -> bool:
+        return self.solution_count == 1 and self.search_limit >= 2
+
+    def to_legacy_dict(self) -> dict[str, object]:
+        return {
+            "path": self.path,
+            "mode": self.mode,
+            "solution_count": self.solution_count,
+            "search_limit": self.search_limit,
+            "limit_reached": self.limit_reached,
+            "is_unique": self.is_unique,
+            "elapsed": self.elapsed,
+        }
+
+
+@dataclass(slots=True)
+class GenerationResult:
+    puzzle: Puzzle
+    seed: int
+    attempts: int
+    uniqueness_limit: int
+    elapsed: timedelta
+    requested_reveal_policy: str
+    applied_reveal_policy: str
+    given_shaded_cells: int
+    pre_solved_rooms: int
+    numbered_rooms: int
+    numbered_rooms_before_carving: int
+    clue_carving_enabled: bool = True
+    clue_carving_checks: int = 0
+    solution_count: int = 1
+    quality: GenerationQuality | None = None
+
+    @property
+    def is_unique(self) -> bool:
+        return self.solution_count == 1
+
+    def to_legacy_dict(self) -> dict[str, object]:
+        return {
+            "seed": self.seed,
+            "attempts": self.attempts,
+            "uniqueness_limit": self.uniqueness_limit,
+            "elapsed": self.elapsed,
+            "requested_reveal_policy": self.requested_reveal_policy,
+            "applied_reveal_policy": self.applied_reveal_policy,
+            "given_shaded_cells": self.given_shaded_cells,
+            "pre_solved_rooms": self.pre_solved_rooms,
+            "numbered_rooms": self.numbered_rooms,
+            "numbered_rooms_before_carving": self.numbered_rooms_before_carving,
+            "clue_carving_enabled": self.clue_carving_enabled,
+            "clue_carving_checks": self.clue_carving_checks,
+            "solution_count": self.solution_count,
+            "is_unique": self.is_unique,
+            "quality": None if self.quality is None else self.quality.to_legacy_dict(),
+        }
+
+
+@dataclass(slots=True)
+class GenerationQuality:
+    room_size_min: int
+    room_size_max: int
+    room_size_spread: int
+    room_balance: float
+    shape_compactness: float
+    given_shaded_cells: int
+    pre_solved_rooms: int
+    solve_iterations: int
+    solve_elapsed: timedelta
+    difficulty_score: float
+    difficulty: str
+
+    def to_legacy_dict(self) -> dict[str, object]:
+        return {
+            "room_size_min": self.room_size_min,
+            "room_size_max": self.room_size_max,
+            "room_size_spread": self.room_size_spread,
+            "room_balance": self.room_balance,
+            "shape_compactness": self.shape_compactness,
+            "given_shaded_cells": self.given_shaded_cells,
+            "pre_solved_rooms": self.pre_solved_rooms,
+            "solve_iterations": self.solve_iterations,
+            "solve_elapsed": self.solve_elapsed,
+            "difficulty_score": self.difficulty_score,
+            "difficulty": self.difficulty,
+        }
+
+
+@dataclass(slots=True)
+class GenerationFilters:
+    min_room_balance: float | None = None
+    min_shape_compactness: float | None = None
+    max_room_size_spread: int | None = None
+    max_given_shaded_cells: int | None = None
+    max_pre_solved_rooms: int | None = None
+    min_solve_iterations: int | None = None
+    max_solve_iterations: int | None = None
+    min_difficulty_score: float | None = None
+    max_difficulty_score: float | None = None
+
+    def to_legacy_dict(self) -> dict[str, object]:
+        return {
+            "min_room_balance": self.min_room_balance,
+            "min_shape_compactness": self.min_shape_compactness,
+            "max_room_size_spread": self.max_room_size_spread,
+            "max_given_shaded_cells": self.max_given_shaded_cells,
+            "max_pre_solved_rooms": self.max_pre_solved_rooms,
+            "min_solve_iterations": self.min_solve_iterations,
+            "max_solve_iterations": self.max_solve_iterations,
+            "min_difficulty_score": self.min_difficulty_score,
+            "max_difficulty_score": self.max_difficulty_score,
+        }
+
+
+@dataclass(slots=True)
+class GenerationBatchItem:
+    seed: int
+    status: GenerationItemStatus
+    output_path: Path | None = None
+    signature: str | None = None
+    reason: str | None = None
+    generation: GenerationResult | None = None
+    quality: GenerationQuality | None = None
+
+    def to_legacy_dict(self) -> dict[str, object]:
+        return {
+            "seed": self.seed,
+            "status": self.status,
+            "output_path": None if self.output_path is None else str(self.output_path),
+            "signature": self.signature,
+            "reason": self.reason,
+            "generation": None if self.generation is None else self.generation.to_legacy_dict(),
+            "quality": None if self.quality is None else self.quality.to_legacy_dict(),
+        }
+
+
+@dataclass(slots=True)
+class GenerationBatchResult:
+    requested_count: int
+    generated_count: int
+    seeds_tried: int
+    seed_start: int
+    seed_step: int
+    duplicates_skipped: int
+    quality_rejected: int
+    generation_failures: int
+    output_dir: Path
+    elapsed: timedelta
+    items: list[GenerationBatchItem] = field(default_factory=list)
+    summary_path: Path | None = None
+
+    def to_legacy_dict(self) -> dict[str, object]:
+        return {
+            "requested_count": self.requested_count,
+            "generated_count": self.generated_count,
+            "seeds_tried": self.seeds_tried,
+            "seed_start": self.seed_start,
+            "seed_step": self.seed_step,
+            "duplicates_skipped": self.duplicates_skipped,
+            "quality_rejected": self.quality_rejected,
+            "generation_failures": self.generation_failures,
+            "output_dir": str(self.output_dir),
+            "elapsed": self.elapsed,
+            "summary_path": None if self.summary_path is None else str(self.summary_path),
+            "items": [item.to_legacy_dict() for item in self.items],
         }
 
 

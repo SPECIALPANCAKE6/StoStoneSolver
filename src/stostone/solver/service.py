@@ -5,8 +5,8 @@ from datetime import datetime
 from pathlib import Path
 
 from ..io.puzpre import load_puzzle, load_puzzle_summary, write_puzpre
-from ..models import Puzzle, PuzzleSummary, SolveMode, SolveResult
-from .search import backtrack
+from ..models import Puzzle, PuzzleSummary, SolutionCountResult, SolveMode, SolveResult
+from .search import backtrack, count_solutions
 
 logger = logging.getLogger(__name__)
 
@@ -68,10 +68,13 @@ def resolve_puzzle_target(target: str, puzzle_dir: Path) -> Path:
     raise FileNotFoundError(f"Puzzle file was not found: {target}")
 
 
-def solve_puzzle(puzzle: Puzzle, mode: SolveMode = "sto-stone") -> SolveResult:
+def _validate_mode(mode: SolveMode) -> None:
     if mode not in SOLVE_MODES:
         raise ValueError(f"Unsupported solve mode: {mode}")
 
+
+def solve_puzzle(puzzle: Puzzle, mode: SolveMode = "sto-stone") -> SolveResult:
+    _validate_mode(mode)
     puzzle.state.constraint_checks = 0
     start_time = _now()
     try:
@@ -88,6 +91,30 @@ def solve_puzzle(puzzle: Puzzle, mode: SolveMode = "sto-stone") -> SolveResult:
         path=puzzle.source_path or Path("<unknown puzzle>"),
         mode=mode,
         solved=solved,
+        elapsed=finished_at - start_time,
+        puzzle=puzzle,
+    )
+
+
+def count_puzzle_solutions(puzzle: Puzzle, mode: SolveMode = "sto-stone", limit: int = 2) -> SolutionCountResult:
+    _validate_mode(mode)
+    puzzle.state.constraint_checks = 0
+    start_time = _now()
+    try:
+        solution_count = count_solutions(0, puzzle, mode=mode, limit=limit)
+    except KeyboardInterrupt as exc:
+        raise SolveInterrupted(
+            puzzle.source_path or Path("<unknown puzzle>"),
+            puzzle.state.constraint_checks,
+            _now() - start_time,
+        ) from exc
+
+    finished_at = _now()
+    return SolutionCountResult(
+        path=puzzle.source_path or Path("<unknown puzzle>"),
+        mode=mode,
+        solution_count=solution_count,
+        search_limit=limit,
         elapsed=finished_at - start_time,
         puzzle=puzzle,
     )
@@ -114,6 +141,19 @@ def solve_puzzle_file(
     if result.solved and solutions_dir is not None:
         result.solution_path = solutions_dir.joinpath(f"{result.path.stem}-solved.txt")
         write_puzpre(result.solution_path, puzzle)
+    return result
+
+
+def count_puzzle_file_solutions(path: Path | str, mode: SolveMode = "sto-stone", limit: int = 2) -> SolutionCountResult:
+    ingest_started_at = _now()
+    puzzle = load_puzzle(path)
+    try:
+        result = count_puzzle_solutions(puzzle, mode=mode, limit=limit)
+    except SolveInterrupted as exc:
+        exc.elapsed = _now() - ingest_started_at
+        raise
+
+    result.elapsed = _now() - ingest_started_at
     return result
 
 

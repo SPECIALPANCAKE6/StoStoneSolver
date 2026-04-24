@@ -2,7 +2,7 @@
 
 This repository began as my thesis project: a Python solver for the Sto-Stone puzzle and its Sto-Sand variant. I am revisiting it now as the solver foundation for a broader Sto-Stone project that should eventually include puzzle generation and simple playable desktop, browser, and mobile experiences.
 
-Today, this repository is still solver-first. It already parses puzzle files, solves sample puzzles from the command line, and exports solved PUZ-PRE files, but it does not yet include a generator or a playable UI. The codebase now uses a module-based package layout centered on `src/stostone/` instead of the older flat root-module arrangement.
+Today, this repository is still solver-first. It already parses puzzle files, solves sample puzzles from the command line, exports solved PUZ-PRE files, and now includes a seeded generator path that can build small local corpora of uniquely solvable puzzles. The current generator is constructive and solution-first: it builds a valid witness placement, greedily carves redundant numbered-room clues, then proves uniqueness, scores the result, and applies batch filters. The codebase now uses a module-based package layout centered on `src/stostone/` instead of the older flat root-module arrangement.
 
 ## Vision
 
@@ -20,17 +20,19 @@ The longer-term direction for this project is:
 What exists today:
 
 - PUZ-PRE v3 puzzle parsing from `puzzles/*.txt`
-- command-line puzzle listing, inspection, and solving
+- command-line puzzle listing, inspection, solving, and generation
+- batch corpus generation with seed ranges, duplicate detection, and optional JSON summary output
 - solve modes for `sto-stone`, `sto-sand`, and `both`
 - optional solved-puzzle export via `--solutions-dir`
 - optional CLI logging via `--log-file`
+- a clean engine API for app-facing `load`, `summarize`, `solve`, `count`, `generate`, and `generate_corpus` calls
+- a seeded generator API with constructive solution-first generation, greedy numbered-room clue carving, uniqueness proof, quality scoring, and a mostly-empty initial-state policy
+- a repo-owned pytest suite covering the current package layout
 - a standard-library-only Python codebase targeting Python 3.14
 
 What does not exist yet:
 
-- a puzzle generator
 - a playable desktop, browser, or mobile UI
-- a formal automated test suite
 
 ## What Sto-Stone Is
 
@@ -51,6 +53,7 @@ Run the solver from the repository root. The current CLI surface is:
 - `list`: list bundled puzzle files
 - `show`: inspect puzzle metadata without solving
 - `solve`: solve one or more puzzles and optionally export solved PUZ-PRE files
+- `generate`: create one puzzle or a small corpus and write the results to disk
 
 The available solve modes are:
 
@@ -65,6 +68,18 @@ python Solver.py --help
 python Solver.py list
 python Solver.py show 000-000.txt
 python Solver.py solve 000-000.txt --solutions-dir solutions
+python Solver.py generate --rows 4 --cols 4 --rooms 4 --seed 0
+python Solver.py generate --rows 4 --cols 4 --rooms 4 --seed 0 --no-clue-carving
+python Solver.py generate --rows 4 --cols 4 --rooms 4 --count 5 --seed-start 0 --out-dir puzzles/generated --summary-file artifacts/generation-summary.json
+```
+
+By default, generated puzzles are written into `puzzles/` with a `generated-` prefix, for example `puzzles/generated-4x4-4r-seed0.txt`.
+By default, generation also runs a greedy clue-carving pass that removes redundant numbered-room clues while preserving uniqueness. Use `--no-clue-carving` if you want the fully numbered version for debugging or comparison.
+
+The corpus route supports quality filters and duplicate control, for example:
+
+```bash
+python Solver.py generate --count 10 --rows 6 --cols 6 --rooms 6 --seed-start 100 --max-seeds 200 --min-room-balance 0.50 --min-shape-compactness 0.55 --min-solve-iterations 40 --out-dir puzzles/generated
 ```
 
 Example successful solve output:
@@ -80,6 +95,27 @@ For full solve options:
 
 ```bash
 python Solver.py solve --help
+```
+
+The generator also lives in Python API form:
+
+```python
+import stostone
+
+result = stostone.generate_unique_puzzle(rows=4, cols=4, rooms=4, seed=0)
+print(result.attempts, result.applied_reveal_policy, result.solution_count)
+```
+
+For future desktop/mobile callers, the package also exposes a thin engine surface:
+
+```python
+import stostone
+
+summary = stostone.engine.summarize("puzzles/000-000.txt")
+solve_result = stostone.engine.solve("puzzles/000-000.txt")
+count_result = stostone.engine.count("puzzles/000-001.txt", limit=2)
+generation = stostone.engine.generate(rows=4, cols=4, rooms=4, seed=0)
+corpus = stostone.engine.generate_corpus(count=5, rows=4, cols=4, rooms=4, seed_start=0, out_dir="puzzles/generated")
 ```
 
 ## Puzzle Files and Outputs
@@ -133,12 +169,13 @@ The core modules in the active path are:
 
 - `Solver.py`: thin repo-root CLI entrypoint
 - `src/stostone/cli.py`: argument parsing, command dispatch, and logging setup
+- `src/stostone/engine.py`: thin app-facing API over load, summarize, solve, count, and generation services
 - `src/stostone/io/`: PUZ-PRE parsing, metadata loading, and solved-file export
 - `src/stostone/models.py`: dataclasses for puzzle spec, caches, state, and solve results
 - `src/stostone/core/`: shared grid, connectivity, and domain helpers
 - `src/stostone/solver/`: search, validation, and state operations
 - `src/stostone/assembly/`: puzzle assembly and room-cache construction from parsed specs
-- `src/stostone/generator/`: compatibility exports for the old construction naming while real generation is still future work
+- `src/stostone/generator/`: seeded single-puzzle and corpus generation using a constructive solution-first search, uniqueness proof, duplicate detection, and quality filters
 - `src/stostone/compat/`: wrappers for the older flat module API
 
 ## Repository Layout
@@ -192,12 +229,14 @@ The order matters here: solver quality comes first, then generator work, then ga
 
 - Prefer explicit puzzle data passed through puzzle dictionaries over module-global state.
 - Keep changes surgical and compatibility-minded; this repo is being modernized, not redesigned from scratch.
-- There is no formal automated test suite yet, so use smoke validation on known sample puzzles.
+- The repo has a formal pytest suite; use that first, then add smoke commands when validating CLI behavior or manual flows.
 - Useful smoke commands:
 
 ```bash
 python Solver.py show 000-000
 python Solver.py solve 000-000 --solutions-dir solutions
+python Solver.py generate --count 2 --rows 4 --cols 4 --rooms 4 --seed-start 0 --out-dir test-output/manual-corpus
+python -m pytest
 ```
 
 - Project-specific workflow guidance lives in `AGENTS.md`.

@@ -6,7 +6,10 @@ import pathlib
 import sys
 from logging.handlers import RotatingFileHandler
 
-from .solver.service import DEFAULT_PUZZLE_DIR, SOLVE_MODES, SolveInterrupted, discover_puzzles, resolve_puzzle_target, solve_puzzle_file, summarize_puzzle
+from .engine import engine
+from .generator import DEFAULT_OUTPUT_PREFIX, DEFAULT_REVEAL_POLICY, REVEAL_POLICIES, GenerationFailed, quality_rejection_reason, write_generated_puzzle
+from .models import GenerationFilters
+from .solver.service import DEFAULT_PUZZLE_DIR, SOLVE_MODES, SolveInterrupted, discover_puzzles, resolve_puzzle_target
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +77,7 @@ def collect_solve_targets(puzzles: list[str], solve_all: bool, puzzle_dir: pathl
 
 
 def emit_show(puzzle_path: pathlib.Path) -> None:
-    summary = summarize_puzzle(puzzle_path)
+    summary = engine.summarize(puzzle_path)
     print(f"Puzzle: {summary.path}")
     print(f"Size: {summary.rows} x {summary.cols}")
     print(f"Rooms: {summary.rooms}")
@@ -96,7 +99,7 @@ def run_solve(args: argparse.Namespace) -> int:
     for puzzle_path in puzzle_paths:
         logger.info("Solving %s in %s mode", puzzle_path.name, describe_mode(args.mode))
         try:
-            result = solve_puzzle_file(puzzle_path, mode=args.mode, solutions_dir=solutions_dir)
+            result = engine.solve(puzzle_path, mode=args.mode, solutions_dir=solutions_dir)
         except SolveInterrupted as exc:
             logger.warning(
                 "[%s] Solve interrupted by user after %s at last attempted iteration %s",
@@ -117,6 +120,154 @@ def run_solve(args: argparse.Namespace) -> int:
 
     logger.info("Summary: solved %s of %s puzzle(s)", solved_count, len(puzzle_paths))
     return 0
+
+
+def run_generate(args: argparse.Namespace) -> int:
+    log_file = resolve_cli_path(args.log_file) if args.log_file else None
+    output_path = resolve_cli_path(args.output) if args.output else None
+    output_dir = resolve_cli_path(args.out_dir) if args.out_dir else None
+    summary_path = resolve_cli_path(args.summary_file) if args.summary_file else None
+
+    setup_logging(args.log_level, log_file)
+    logger.info(
+        "Generating puzzle corpus: rows=%s cols=%s rooms=%s count=%s mode=%s reveal_policy=%s clue_carving=%s",
+        args.rows,
+        args.cols,
+        "auto" if args.rooms is None else args.rooms,
+        args.count,
+        describe_mode(args.mode),
+        args.reveal_policy,
+        not args.no_clue_carving,
+    )
+
+    if args.seed is not None and args.seed_start is not None:
+        raise ValueError("Choose either --seed or --seed-start, not both.")
+    if output_path is not None and output_dir is not None:
+        raise ValueError("Choose either --output or --out-dir, not both.")
+    if args.count > 1 and output_path is not None:
+        raise ValueError("Batch generation does not support --output. Use --out-dir instead.")
+
+    filters = GenerationFilters(
+        min_room_balance=args.min_room_balance,
+        min_shape_compactness=args.min_shape_compactness,
+        max_room_size_spread=args.max_room_size_spread,
+        max_given_shaded_cells=args.max_given_cells,
+        max_pre_solved_rooms=args.max_pre_solved_rooms,
+        min_solve_iterations=args.min_solve_iterations,
+        max_solve_iterations=args.max_solve_iterations,
+        min_difficulty_score=args.min_difficulty_score,
+        max_difficulty_score=args.max_difficulty_score,
+    )
+
+    try:
+        if args.count == 1:
+            result = engine.generate(
+                rows=args.rows,
+                cols=args.cols,
+                rooms=args.rooms,
+                seed=args.seed if args.seed is not None else args.seed_start,
+                max_attempts=args.max_attempts,
+                uniqueness_limit=args.uniqueness_limit,
+                reveal_policy=args.reveal_policy,
+                mode=args.mode,
+                clue_carving=not args.no_clue_carving,
+            )
+            if result.quality is None:
+                raise GenerationFailed("Generated puzzle is missing quality metrics.")
+            rejection_reason = quality_rejection_reason(result.quality, filters)
+            if rejection_reason is not None:
+                logger.warning("Generated puzzle failed quality filters: %s", rejection_reason)
+                return 1
+
+            written_path = write_generated_puzzle(
+                result,
+                output_path=output_path,
+                output_dir=output_dir,
+                output_prefix=args.output_prefix,
+                overwrite=False,
+            )
+            logger.info("Generated %s in %s after %s attempt(s)", written_path, result.elapsed, result.attempts)
+            logger.info(
+                "Difficulty: %s (score %.2f); solve iterations: %s; room balance: %.3f; compactness: %.3f",
+                result.quality.difficulty,
+                result.quality.difficulty_score,
+                result.quality.solve_iterations,
+                result.quality.room_balance,
+                result.quality.shape_compactness,
+            )
+            logger.info(
+                "Uniqueness: %s solution(s) with limit %s; reveal policy: %s -> %s",
+                result.solution_count,
+                result.uniqueness_limit,
+                result.requested_reveal_policy,
+                result.applied_reveal_policy,
+            )
+            logger.info(
+                "Numbered rooms: %s of %s after clue carving (%s uniqueness check(s))",
+                result.numbered_rooms,
+                result.numbered_rooms_before_carving,
+                result.clue_carving_checks,
+            )
+            logger.info("Seed: %s", result.seed)
+            return 0
+
+        batch_result = engine.generate_corpus(
+            count=args.count,
+            rows=args.rows,
+            cols=args.cols,
+            rooms=args.rooms,
+            seed_start=args.seed_start if args.seed_start is not None else args.seed,
+            seed_step=args.seed_step,
+            max_seeds=args.max_seeds,
+            out_dir=output_dir,
+            output_prefix=args.output_prefix,
+            max_attempts=args.max_attempts,
+            uniqueness_limit=args.uniqueness_limit,
+            reveal_policy=args.reveal_policy,
+            mode=args.mode,
+            clue_carving=not args.no_clue_carving,
+            filters=filters,
+            allow_duplicates=args.allow_duplicates,
+            summary_path=summary_path,
+        )
+    except GenerationFailed as exc:
+        logger.error("Generation failed: %s", exc)
+        return 1
+    except KeyboardInterrupt:
+        logger.warning("Generation interrupted by user")
+        return 130
+
+    for item in batch_result.items:
+        if item.status == "written" and item.output_path is not None and item.quality is not None:
+            logger.info(
+                "Wrote %s (seed=%s, numbered_rooms=%s/%s, difficulty=%s, score=%.2f, iterations=%s)",
+                item.output_path,
+                item.seed,
+                item.generation.numbered_rooms if item.generation is not None else "?",
+                item.generation.numbered_rooms_before_carving if item.generation is not None else "?",
+                item.quality.difficulty,
+                item.quality.difficulty_score,
+                item.quality.solve_iterations,
+            )
+        elif item.status == "duplicate":
+            logger.info("Skipped duplicate puzzle for seed %s", item.seed)
+        elif item.status == "rejected-quality":
+            logger.info("Rejected seed %s on quality filters: %s", item.seed, item.reason)
+        elif item.status == "failed":
+            logger.warning("Seed %s failed to generate a unique puzzle: %s", item.seed, item.reason)
+
+    logger.info(
+        "Summary: wrote %s of %s requested puzzle(s) after %s seed(s); duplicates=%s quality_rejected=%s generation_failures=%s",
+        batch_result.generated_count,
+        batch_result.requested_count,
+        batch_result.seeds_tried,
+        batch_result.duplicates_skipped,
+        batch_result.quality_rejected,
+        batch_result.generation_failures,
+    )
+    if batch_result.summary_path is not None:
+        logger.info("Wrote summary file: %s", batch_result.summary_path)
+    return 0 if batch_result.generated_count == batch_result.requested_count else 1
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -144,6 +295,45 @@ def build_parser() -> argparse.ArgumentParser:
     solve_parser.add_argument("--log-file", help="Optional log file path")
     solve_parser.add_argument("--solutions-dir", help="Optional output directory for solved puzzle files")
 
+    generate_parser = subparsers.add_parser("generate", help="Generate one or more unique puzzles and write them to disk")
+    generate_parser.add_argument("--rows", type=int, default=4, help="Puzzle row count")
+    generate_parser.add_argument("--cols", type=int, default=4, help="Puzzle column count")
+    generate_parser.add_argument("--rooms", type=int, help="Optional room count. Defaults to a board-derived value.")
+    generate_parser.add_argument("--count", type=int, default=1, help="Number of puzzles to generate")
+    generate_parser.add_argument("--seed", type=int, help="Optional random seed for reproducible generation")
+    generate_parser.add_argument("--seed-start", type=int, help="Optional starting seed for sequential corpus generation")
+    generate_parser.add_argument("--seed-step", type=int, default=1, help="Seed increment when generating multiple puzzles")
+    generate_parser.add_argument("--max-seeds", type=int, help="Maximum seeds to try before stopping corpus generation")
+    generate_parser.add_argument("--max-attempts", type=int, default=256, help="Maximum generation attempts before failing")
+    generate_parser.add_argument("--uniqueness-limit", type=int, default=2, help="Maximum solution count searched during uniqueness checks")
+    generate_parser.add_argument("--reveal-policy", choices=list(REVEAL_POLICIES), default=DEFAULT_REVEAL_POLICY, help="Initial-state reveal policy")
+    generate_parser.add_argument("--mode", choices=list(SOLVE_MODES), default="sto-stone", help="Mode used for uniqueness checks")
+    generate_parser.add_argument(
+        "--output",
+        help="Optional output file path. Defaults to puzzles/generated-<rows>x<cols>-<rooms>r-seed<seed>.txt",
+    )
+    generate_parser.add_argument("--out-dir", help=f"Optional output directory. Defaults to {DEFAULT_PUZZLE_DIR}")
+    generate_parser.add_argument("--output-prefix", default=DEFAULT_OUTPUT_PREFIX, help="Filename prefix for generated puzzles")
+    generate_parser.add_argument("--summary-file", help="Optional JSON summary path for batch generation")
+    generate_parser.add_argument("--allow-duplicates", action="store_true", help="Allow duplicate puzzle signatures in corpus output")
+    generate_parser.add_argument("--no-clue-carving", action="store_true", help="Disable greedy numbered-room clue minimization")
+    generate_parser.add_argument("--min-room-balance", type=float, help="Reject puzzles below this room-size balance ratio")
+    generate_parser.add_argument("--min-shape-compactness", type=float, help="Reject puzzles below this average room compactness")
+    generate_parser.add_argument("--max-room-size-spread", type=int, help="Reject puzzles above this room-size spread")
+    generate_parser.add_argument("--max-given-cells", type=int, help="Reject puzzles with more than this many given shaded cells")
+    generate_parser.add_argument("--max-pre-solved-rooms", type=int, help="Reject puzzles with more than this many pre-solved rooms")
+    generate_parser.add_argument("--min-solve-iterations", type=int, help="Reject puzzles below this solve-iteration count")
+    generate_parser.add_argument("--max-solve-iterations", type=int, help="Reject puzzles above this solve-iteration count")
+    generate_parser.add_argument("--min-difficulty-score", type=float, help="Reject puzzles below this difficulty score")
+    generate_parser.add_argument("--max-difficulty-score", type=float, help="Reject puzzles above this difficulty score")
+    generate_parser.add_argument(
+        "--log-level",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        default="INFO",
+        help="Console logging verbosity",
+    )
+    generate_parser.add_argument("--log-file", help="Optional log file path")
+
     return parser
 
 
@@ -169,6 +359,9 @@ def main(argv: list[str] | None = None) -> int:
 
         if args.command == "solve":
             return run_solve(args)
+
+        if args.command == "generate":
+            return run_generate(args)
     except (FileNotFoundError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

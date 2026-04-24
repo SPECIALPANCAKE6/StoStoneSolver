@@ -4,7 +4,7 @@ import json
 import re
 from pathlib import Path
 
-from ..assembly import assemble_puzzle
+from ..assembly import apply_initial_state_constraints, assemble_puzzle
 from ..models import Puzzle, PuzzleMetadata, PuzzleSpec, PuzzleSummary, metadata_from_legacy_dict
 
 
@@ -105,16 +105,7 @@ def load_puzzle(path: Path | str) -> Puzzle:
         info_section=info,
         metadata=metadata,
     )
-    puzzle = assemble_puzzle(spec, source_path=puzzle_path)
-
-    for room_num, room_indices in enumerate(puzzle.cache.all_room_indices):
-        initial_stones = {(r, c) for (r, c) in room_indices if puzzle.spec.initial_state[r][c] == " #"}
-        if initial_stones:
-            puzzle.cache.all_room_domains[room_num] = [
-                subdomain for subdomain in puzzle.cache.all_room_domains[room_num] if initial_stones.issubset(subdomain)
-            ]
-
-    return puzzle
+    return apply_initial_state_constraints(assemble_puzzle(spec, source_path=puzzle_path))
 
 
 def write_puzpre(path: Path | str, puzzle: Puzzle) -> None:
@@ -137,7 +128,15 @@ def write_puzpre(path: Path | str, puzzle: Puzzle) -> None:
         ]
         write_grid(file, weight_rows)
 
-        filled_cells = {coord for stone in puzzle.state.drawn_stones if stone is not None for coord in stone}
+        if any(stone is not None for stone in puzzle.state.drawn_stones):
+            filled_cells = {coord for stone in puzzle.state.drawn_stones if stone is not None for coord in stone}
+        else:
+            filled_cells = {
+                (r, c)
+                for r, row in enumerate(puzzle.spec.initial_state)
+                for c, cell in enumerate(row)
+                if cell == " #"
+            }
         stone_rows = [
             ["#" if (r, c) in filled_cells else "." for c in range(puzzle.spec.cols)]
             for r in range(puzzle.spec.rows)

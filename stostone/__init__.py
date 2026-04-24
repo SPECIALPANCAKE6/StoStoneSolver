@@ -4,14 +4,25 @@ _SRC_PACKAGE = Path(__file__).resolve().parent.parent.joinpath("src", "stostone"
 if _SRC_PACKAGE.is_dir():
     __path__.append(str(_SRC_PACKAGE))
 
-from .assembly import assemble_puzzle, derive_room_cache, reset_state
-from .generator import build_puzzle
-from .io.puzpre import load_puzzle, load_puzzle_summary, write_puzpre
-from .models import Puzzle, PuzzleMetadata, PuzzleSpec, PuzzleState, PuzzleSummary, RoomCache, SolveMode, SolveResult
-from .solver.service import DEFAULT_PUZZLE_DIR, SOLVE_MODES, SolveInterrupted, discover_puzzles, resolve_puzzle_target, solve_puzzle, solve_puzzle_file
+from src.stostone.assembly import apply_initial_state_constraints, assemble_puzzle, derive_room_cache, reset_state
+from src.stostone.engine import StoStoneEngine, engine
+from src.stostone.generator import DEFAULT_GENERATOR_NAME, DEFAULT_OUTPUT_PREFIX, DEFAULT_REVEAL_POLICY, REVEAL_POLICIES, GenerationFailed, build_puzzle, build_puzzle_corpus, generate_unique_puzzle, quality_rejection_reason, write_generated_puzzle, write_generation_summary
+from src.stostone.io.puzpre import load_puzzle, load_puzzle_summary, write_puzpre
+from src.stostone.models import GenerationBatchItem, GenerationBatchResult, GenerationFilters, GenerationQuality, GenerationResult, Puzzle, PuzzleMetadata, PuzzleSpec, PuzzleState, PuzzleSummary, RoomCache, SolutionCountResult, SolveMode, SolveResult
+from src.stostone.solver.service import DEFAULT_PUZZLE_DIR, SOLVE_MODES, SolveInterrupted, count_puzzle_file_solutions, count_puzzle_solutions, discover_puzzles, resolve_puzzle_target, solve_puzzle, solve_puzzle_file
 
 __all__ = [
+    "DEFAULT_GENERATOR_NAME",
+    "DEFAULT_OUTPUT_PREFIX",
     "DEFAULT_PUZZLE_DIR",
+    "DEFAULT_REVEAL_POLICY",
+    "GenerationFailed",
+    "GenerationBatchItem",
+    "GenerationBatchResult",
+    "GenerationFilters",
+    "GenerationQuality",
+    "GenerationResult",
+    "REVEAL_POLICIES",
     "SOLVE_MODES",
     "SolveInterrupted",
     "SolveMode",
@@ -21,16 +32,27 @@ __all__ = [
     "RoomCache",
     "PuzzleState",
     "Puzzle",
+    "SolutionCountResult",
     "SolveResult",
+    "apply_initial_state_constraints",
     "assemble_puzzle",
+    "build_puzzle_corpus",
     "build_puzzle",
     "derive_room_cache",
+    "engine",
+    "generate_unique_puzzle",
+    "quality_rejection_reason",
     "reset_state",
+    "StoStoneEngine",
     "load_puzzle",
     "load_puzzle_summary",
     "write_puzpre",
+    "write_generated_puzzle",
+    "write_generation_summary",
     "discover_puzzles",
     "resolve_puzzle_target",
+    "count_puzzle_solutions",
+    "count_puzzle_file_solutions",
     "solve_puzzle",
     "solve_puzzle_file",
 ]

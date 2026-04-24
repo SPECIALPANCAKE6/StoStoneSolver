@@ -56,3 +56,22 @@ def test_write_puzpre_round_trips_drawn_stones_and_metadata(build_puzzle, worksp
     assert reloaded.spec.metadata.extra_fields["label"] == "roundtrip"
     assert reloaded.spec.initial_state[0][0] == " #"
     assert reloaded.spec.initial_state[1][0] == " #"
+
+
+def test_write_puzpre_round_trips_unsolved_initial_state_givens(build_puzzle, workspace_tmp_dir) -> None:
+    puzzle = build_puzzle(
+        2,
+        2,
+        [[0, 0], [0, 0]],
+        initial_state=[[" #", -1], [-1, -1]],
+        info_section="info:{}",
+        metadata=PuzzleMetadata(author="Pytest"),
+    )
+
+    output_path = workspace_tmp_dir.joinpath("unsolved-givens.txt")
+    write_puzpre(output_path, puzzle)
+    reloaded = load_puzzle(output_path)
+
+    assert output_path.is_file()
+    assert reloaded.spec.initial_state[0][0] == " #"
+    assert reloaded.spec.initial_state[0][1] == -1
