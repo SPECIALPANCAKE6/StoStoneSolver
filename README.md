@@ -75,6 +75,7 @@ python Solver.py generate --rows 4 --cols 4 --rooms 4 --count 5 --seed-start 0 -
 
 By default, generated puzzles are written into `puzzles/` with a `generated-` prefix, for example `puzzles/generated-4x4-4r-seed0.txt`.
 By default, generation also runs a greedy clue-carving pass that removes redundant numbered-room clues while preserving uniqueness. Use `--no-clue-carving` if you want the fully numbered version for debugging or comparison.
+The default `mostly-empty` reveal policy now resolves to `empty` 80% of the time, `single-cell` 15% of the time, and `full-room` 5% of the time.
 
 The corpus route supports quality filters and duplicate control, for example:
 

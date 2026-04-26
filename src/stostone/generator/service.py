@@ -182,9 +182,9 @@ def _choose_applied_reveal_policy(requested_policy: str, rng: random.Random) -> 
         return requested_policy
 
     roll = rng.random()
-    if roll < 0.9:
+    if roll < 0.8:
         return "empty"
-    if roll < 0.98:
+    if roll < 0.95:
         return "single-cell"
     return "full-room"
 

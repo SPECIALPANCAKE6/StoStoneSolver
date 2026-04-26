@@ -91,7 +91,7 @@
 - Added `stostone.generator.service.generate_unique_puzzle(...)`, a seedable API that builds random connected room layouts, assigns positive room weights summing to half the board, and accepts only candidates with exactly one solution under the bounded solution-count path.
 - Added `GenerationResult` plus generator metadata tracking for seed, attempts, elapsed time, reveal policy, given shaded cells, and uniqueness settings.
 - Added `assembly.apply_initial_state_constraints(...)` so generated puzzles with non-empty givens constrain room domains the same way file-loaded puzzles already do.
-- Added reveal policies for `mostly-empty`, `empty`, `single-cell`, and `full-room`. The default `mostly-empty` policy currently resolves to `empty` 90% of the time, `single-cell` 8% of the time, and `full-room` 2% of the time.
+- Added reveal policies for `mostly-empty`, `empty`, `single-cell`, and `full-room`. The default `mostly-empty` policy currently resolves to `empty` 80% of the time, `single-cell` 15% of the time, and `full-room` 5% of the time.
 - Updated package exports and repo docs so the generator API is now part of the public package surface.
 
 ### Commands Run
@@ -186,3 +186,23 @@
 - `python -m pytest tests\test_generator.py tests\test_io_puzpre.py tests\test_cli.py tests\test_engine.py tests\test_models.py` -> initially failed with 1 regression due to `pre_solved_rooms` being recomputed from room area instead of preserved reveal-policy semantics
 - `python -m pytest tests\test_generator.py tests\test_io_puzpre.py tests\test_cli.py tests\test_engine.py tests\test_models.py` -> `29 passed in 6.95s`
 - `python -m pytest` -> `57 passed in 7.41s`
+
+## Current Task: Reveal Policy Distribution Tuning
+
+### Assumptions
+- The user wants pre-shaded starts to stay uncommon, but not vanishingly rare.
+- The `mostly-empty` policy should remain the default reveal policy instead of introducing a new named preset for this one tuning change.
+
+### Checklist
+- [x] Change the default `mostly-empty` reveal distribution to `80% empty / 15% single-cell / 5% full-room`.
+- [x] Add a direct regression for the reveal-policy cutoffs.
+- [x] Update the repo docs/task notes to stop claiming the old `90 / 8 / 2` split.
+
+### Review
+- Updated the live `mostly-empty` reveal policy thresholds in `stostone.generator.service` so generated puzzles now resolve to `empty` for rolls below `0.8`, `single-cell` up to `0.95`, and `full-room` after that.
+- Added a focused regression that checks the exact cutoff behavior directly, so future generator changes cannot silently drift the reveal distribution.
+- Updated the README to describe the new default reveal split.
+
+### Commands Run
+- `python -m pytest tests\test_generator.py` -> `11 passed in 4.83s`
+- `python -m pytest` -> `58 passed in 6.98s`

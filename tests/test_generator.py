@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 
 from src.stostone.generator import DEFAULT_GENERATOR_NAME, GenerationFailed, build_puzzle_corpus, generate_unique_puzzle
+from src.stostone.generator import service as generator_service
 from src.stostone.models import GenerationFilters
 from src.stostone.solver.service import count_puzzle_solutions
 
@@ -12,6 +13,21 @@ pytestmark = pytest.mark.integration
 
 def _count_given_cells(initial_state: list[list[int | str]]) -> int:
     return sum(cell == " #" for row in initial_state for cell in row)
+
+
+def test_mostly_empty_reveal_policy_distribution_cutoffs() -> None:
+    class StubRandom:
+        def __init__(self, value: float) -> None:
+            self.value = value
+
+        def random(self) -> float:
+            return self.value
+
+    assert generator_service._choose_applied_reveal_policy("mostly-empty", StubRandom(0.0)) == "empty"
+    assert generator_service._choose_applied_reveal_policy("mostly-empty", StubRandom(0.7999)) == "empty"
+    assert generator_service._choose_applied_reveal_policy("mostly-empty", StubRandom(0.8)) == "single-cell"
+    assert generator_service._choose_applied_reveal_policy("mostly-empty", StubRandom(0.9499)) == "single-cell"
+    assert generator_service._choose_applied_reveal_policy("mostly-empty", StubRandom(0.95)) == "full-room"
 
 
 @pytest.mark.regression
