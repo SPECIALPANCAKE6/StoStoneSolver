@@ -6,7 +6,7 @@ import pytest
 
 from datetime import timedelta
 
-from src.stostone.models import GenerationBatchItem, GenerationBatchResult, GenerationFilters, GenerationQuality, PuzzleMetadata, PuzzleSummary, SolutionCountResult, legacy_dict_to_puzzle, metadata_from_legacy_dict, sync_legacy_dict
+from src.stostone.models import GenerationBatchItem, GenerationBatchResult, GenerationFilters, GenerationQuality, PuzzleMetadata, PuzzleSummary, SolutionCountResult, metadata_from_legacy_dict
 
 
 pytestmark = pytest.mark.unit
@@ -47,7 +47,7 @@ def test_puzzle_summary_to_legacy_dict_uses_nested_metadata() -> None:
     assert legacy["path"] == Path("puzzles/000-000.txt")
 
 
-def test_legacy_puzzle_round_trip_preserves_state_and_source(build_puzzle) -> None:
+def test_puzzle_keeps_mutable_runtime_state(build_puzzle) -> None:
     puzzle = build_puzzle(
         2,
         2,
@@ -61,20 +61,10 @@ def test_legacy_puzzle_round_trip_preserves_state_and_source(build_puzzle) -> No
     puzzle.state.drawn_stones[0] = [(0, 1)]
     puzzle.state.constraint_checks = 7
 
-    legacy = puzzle.to_legacy_dict()
-    restored = legacy_dict_to_puzzle(legacy)
-
-    assert restored.source_path == puzzle.source_path
-    assert restored.state.grid == puzzle.state.grid
-    assert restored.state.drawn_stones == puzzle.state.drawn_stones
-    assert restored.state.constraint_checks == 7
-
-    synced = {"stale": True}
-    sync_legacy_dict(synced, restored)
-
-    assert "stale" not in synced
-    assert synced["constraintChecks"] == 7
-    assert synced["metadata"]["author"] == "Pytest"
+    assert puzzle.source_path == Path("puzzles/000-000.txt").resolve()
+    assert puzzle.state.grid[0][1] == " #"
+    assert puzzle.state.drawn_stones == [[(0, 1)]]
+    assert puzzle.state.constraint_checks == 7
 
 
 def test_solution_count_result_exposes_limit_and_uniqueness_flags() -> None:

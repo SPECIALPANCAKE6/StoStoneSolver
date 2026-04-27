@@ -129,6 +129,19 @@ def test_large_board_witness_prefilter_keeps_searchable_seeded_layout() -> None:
     assert generator_service._witness_search_rejection_reason(puzzle) is None
 
 
+def test_clone_puzzle_returns_independent_copy(build_puzzle) -> None:
+    puzzle = build_puzzle(2, 2, [[0, 0], [0, 0]])
+    puzzle.state.grid[0][0] = " #"
+    puzzle.state.drawn_stones[0] = [(0, 0)]
+
+    cloned = generator_service._clone_puzzle(puzzle)
+    cloned.state.grid[1][1] = " #"
+    cloned.state.drawn_stones[0] = [(1, 1)]
+
+    assert puzzle.state.grid == [[" #", -1], [-1, -1]]
+    assert puzzle.state.drawn_stones == [[(0, 0)]]
+
+
 def test_mostly_empty_reveal_policy_distribution_cutoffs() -> None:
     class StubRandom:
         def __init__(self, value: float) -> None:

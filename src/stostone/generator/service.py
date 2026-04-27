@@ -25,7 +25,6 @@ from ..models import (
     PuzzleSpec,
     SolveMode,
     WeightEntry,
-    legacy_dict_to_puzzle,
 )
 from .presets import board_family_key, difficulty_label_from_score, difficulty_scale_for_family, resolve_generation_controls
 from .scoring import DIFFICULTY_SCORE_MODEL, score_generation_quality
@@ -686,7 +685,7 @@ def _carve_number_clues(
 
 
 def _clone_puzzle(puzzle: Puzzle) -> Puzzle:
-    return legacy_dict_to_puzzle(deepcopy(puzzle.to_legacy_dict()))
+    return deepcopy(puzzle)
 
 
 def _room_shape_compactness(room_indices: list[tuple[int, int]]) -> float:

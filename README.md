@@ -181,19 +181,15 @@ stostone.load_puzzle(path) -> Puzzle
 
 The active `Puzzle` model carries separate immutable puzzle data, derived room caches, and mutable solver state while preserving the existing low-level grid/list representations.
 
-Compatibility wrappers for the older flat API still live under `stostone.compat`.
+The parser returns a `Puzzle` object with three main layers:
 
-The returned puzzle dictionary currently carries the solver's working state and precomputed room data, including:
-
-- `rows`, `cols`, `rooms`
-- `layout`, `weights`
-- `initialState`, `state`
-- `allRoomIndices`, `allRoomBorders`, `allRoomDomains`
-- `drawnStones`
+- `spec`: immutable puzzle inputs such as `rows`, `cols`, `rooms`, `layout`, `weights`, and `initial_state`
+- `cache`: derived room data such as `all_room_indices`, `all_room_borders`, and `all_room_domains`
+- `state`: mutable solver state such as the working grid, drawn stones, and constraint-check count
 
 The active solver flow is:
 
-1. Parse a PUZ-PRE puzzle into a puzzle dictionary.
+1. Parse a PUZ-PRE puzzle into a `Puzzle`.
 2. Precompute room indices, borders, and candidate connected subgrids.
 3. Backtrack by selecting one valid connected region per room.
 4. Reject assignments that violate room-local or cross-room constraints.
@@ -210,7 +206,6 @@ The core modules in the active path are:
 - `src/stostone/solver/`: search, validation, and state operations
 - `src/stostone/assembly/`: puzzle assembly and room-cache construction from parsed specs
 - `src/stostone/generator/`: seeded single-puzzle and corpus generation using a constructive solution-first search, uniqueness proof, duplicate detection, quality filters, presets, and calibration reporting
-- `src/stostone/compat/`: wrappers for the older flat module API
 
 ## Repository Layout
 
@@ -226,7 +221,6 @@ StoStoneSolver/
 |       |-- cli.py
 |       |-- models.py
 |       |-- assembly/
-|       |-- compat/
 |       |-- core/
 |       |-- generator/
 |       |-- io/
@@ -262,7 +256,7 @@ The order matters here: solver quality comes first, then generator work, then ga
 ## Contributing / Developer Notes
 
 - Prefer explicit puzzle data passed through puzzle dictionaries over module-global state.
-- Keep changes surgical and compatibility-minded; this repo is being modernized, not redesigned from scratch.
+- Keep changes surgical and package-oriented; this repo is being modernized, not redesigned from scratch.
 - The repo has a formal pytest suite; use that first, then add smoke commands when validating CLI behavior or manual flows.
 - Useful smoke commands:
 

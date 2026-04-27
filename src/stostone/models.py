@@ -131,27 +131,6 @@ class Puzzle:
     def rooms(self) -> int:
         return self.spec.rooms
 
-    def to_legacy_dict(self) -> dict[str, object]:
-        legacy = {
-            "rows": self.spec.rows,
-            "cols": self.spec.cols,
-            "rooms": self.spec.rooms,
-            "layout": self.spec.layout,
-            "weights": self.spec.weights,
-            "initialState": self.spec.initial_state,
-            "state": self.state.grid,
-            "allRoomIndices": self.cache.all_room_indices,
-            "allRoomBorders": self.cache.all_room_borders,
-            "allRoomDomains": self.cache.all_room_domains,
-            "drawnStones": self.state.drawn_stones,
-            "infoSection": self.spec.info_section,
-            "metadata": self.spec.metadata.to_legacy_dict(),
-            "constraintChecks": self.state.constraint_checks,
-        }
-        if self.source_path is not None:
-            legacy["puzzlePath"] = str(self.source_path)
-        return legacy
-
 
 @dataclass(slots=True)
 class SolveResult:
@@ -411,39 +390,3 @@ def metadata_from_legacy_dict(metadata: PuzzleMetadata | dict[str, object] | Non
             },
         )
     return PuzzleMetadata()
-
-
-def legacy_dict_to_puzzle(puzzle_dict: dict[str, object]) -> Puzzle:
-    spec = PuzzleSpec(
-        rows=puzzle_dict["rows"],  # type: ignore[arg-type]
-        cols=puzzle_dict["cols"],  # type: ignore[arg-type]
-        rooms=puzzle_dict["rooms"],  # type: ignore[arg-type]
-        layout=puzzle_dict["layout"],  # type: ignore[arg-type]
-        weights=puzzle_dict["weights"],  # type: ignore[arg-type]
-        initial_state=puzzle_dict["initialState"],  # type: ignore[arg-type]
-        info_section=puzzle_dict.get("infoSection"),  # type: ignore[arg-type]
-        metadata=metadata_from_legacy_dict(puzzle_dict.get("metadata")),  # type: ignore[arg-type]
-    )
-    cache = RoomCache(
-        all_room_indices=puzzle_dict["allRoomIndices"],  # type: ignore[arg-type]
-        all_room_borders=puzzle_dict["allRoomBorders"],  # type: ignore[arg-type]
-        all_room_domains=puzzle_dict["allRoomDomains"],  # type: ignore[arg-type]
-    )
-    state = PuzzleState(
-        grid=puzzle_dict["state"],  # type: ignore[arg-type]
-        drawn_stones=puzzle_dict["drawnStones"],  # type: ignore[arg-type]
-        constraint_checks=int(puzzle_dict.get("constraintChecks", 0)),
-    )
-    source_path = puzzle_dict.get("puzzlePath")
-    return Puzzle(
-        spec=spec,
-        cache=cache,
-        state=state,
-        source_path=Path(source_path).resolve() if isinstance(source_path, str) else None,
-    )
-
-
-def sync_legacy_dict(puzzle_dict: dict[str, object], puzzle: Puzzle) -> dict[str, object]:
-    puzzle_dict.clear()
-    puzzle_dict.update(puzzle.to_legacy_dict())
-    return puzzle_dict

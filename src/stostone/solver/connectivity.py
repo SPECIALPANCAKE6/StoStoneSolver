@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from ..core.grid import is_connected
-from ..models import Puzzle, legacy_dict_to_puzzle
+from ..models import Puzzle
 
 
 def room_is_connected(puzzle: Puzzle, room_num: int) -> bool:
@@ -13,9 +13,7 @@ def room_is_connected(puzzle: Puzzle, room_num: int) -> bool:
     return len(shaded) <= 1 or is_connected(shaded)
 
 
-def connChecker(puzzle: Puzzle | dict[str, object], roomNum: int) -> bool:
-    if isinstance(puzzle, dict):
-        return room_is_connected(legacy_dict_to_puzzle(puzzle), roomNum)
+def connChecker(puzzle: Puzzle, roomNum: int) -> bool:
     return room_is_connected(puzzle, roomNum)
 
 
