@@ -208,14 +208,22 @@ class GenerationResult:
     attempts: int
     uniqueness_limit: int
     elapsed: timedelta
+    quality_preset: str | None
+    difficulty_preset: str | None
+    difficulty_family: str
+    difficulty_scale: str
+    clue_profile: str | None
     requested_reveal_policy: str
     applied_reveal_policy: str
+    revealed_cell_count: int
+    revealed_room_count: int
     given_shaded_cells: int
     pre_solved_rooms: int
     numbered_rooms: int
     numbered_rooms_before_carving: int
     clue_carving_enabled: bool = True
     clue_carving_checks: int = 0
+    clue_carving_budget_exhausted: bool = False
     solution_count: int = 1
     quality: GenerationQuality | None = None
 
@@ -229,14 +237,25 @@ class GenerationResult:
             "attempts": self.attempts,
             "uniqueness_limit": self.uniqueness_limit,
             "elapsed": self.elapsed,
+            "rows": self.puzzle.rows,
+            "cols": self.puzzle.cols,
+            "rooms": self.puzzle.rooms,
+            "quality_preset": self.quality_preset,
+            "difficulty_preset": self.difficulty_preset,
+            "difficulty_family": self.difficulty_family,
+            "difficulty_scale": self.difficulty_scale,
+            "clue_profile": self.clue_profile,
             "requested_reveal_policy": self.requested_reveal_policy,
             "applied_reveal_policy": self.applied_reveal_policy,
+            "revealed_cell_count": self.revealed_cell_count,
+            "revealed_room_count": self.revealed_room_count,
             "given_shaded_cells": self.given_shaded_cells,
             "pre_solved_rooms": self.pre_solved_rooms,
             "numbered_rooms": self.numbered_rooms,
             "numbered_rooms_before_carving": self.numbered_rooms_before_carving,
             "clue_carving_enabled": self.clue_carving_enabled,
             "clue_carving_checks": self.clue_carving_checks,
+            "clue_carving_budget_exhausted": self.clue_carving_budget_exhausted,
             "solution_count": self.solution_count,
             "is_unique": self.is_unique,
             "quality": None if self.quality is None else self.quality.to_legacy_dict(),
@@ -256,6 +275,8 @@ class GenerationQuality:
     solve_elapsed: timedelta
     difficulty_score: float
     difficulty: str
+    difficulty_score_model: str = "unknown"
+    solve_iteration_source: str = "solver"
 
     def to_legacy_dict(self) -> dict[str, object]:
         return {
@@ -270,6 +291,8 @@ class GenerationQuality:
             "solve_elapsed": self.solve_elapsed,
             "difficulty_score": self.difficulty_score,
             "difficulty": self.difficulty,
+            "difficulty_score_model": self.difficulty_score_model,
+            "solve_iteration_source": self.solve_iteration_source,
         }
 
 

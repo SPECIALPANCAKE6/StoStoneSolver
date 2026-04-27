@@ -20,13 +20,13 @@ The longer-term direction for this project is:
 What exists today:
 
 - PUZ-PRE v3 puzzle parsing from `puzzles/*.txt`
-- command-line puzzle listing, inspection, solving, and generation
+- command-line puzzle listing, inspection, solving, generation, and calibration reporting
 - batch corpus generation with seed ranges, duplicate detection, and optional JSON summary output
 - solve modes for `sto-stone`, `sto-sand`, and `both`
 - optional solved-puzzle export via `--solutions-dir`
 - optional CLI logging via `--log-file`
 - a clean engine API for app-facing `load`, `summarize`, `solve`, `count`, `generate`, and `generate_corpus` calls
-- a seeded generator API with constructive solution-first generation, greedy numbered-room clue carving, uniqueness proof, quality scoring, and a mostly-empty initial-state policy
+- a seeded generator API with constructive solution-first generation, greedy numbered-room clue carving, uniqueness proof, quality scoring, preset filters, and calibration reporting
 - a repo-owned pytest suite covering the current package layout
 - a standard-library-only Python codebase targeting Python 3.14
 
@@ -54,6 +54,8 @@ Run the solver from the repository root. The current CLI surface is:
 - `show`: inspect puzzle metadata without solving
 - `solve`: solve one or more puzzles and optionally export solved PUZ-PRE files
 - `generate`: create one puzzle or a small corpus and write the results to disk
+- `calibrate`: analyze generated corpus summaries and recommend preset bands
+- `calibrate-corpus`: run a JSON corpus matrix plan and write one combined calibration report
 
 The available solve modes are:
 
@@ -71,16 +73,47 @@ python Solver.py solve 000-000.txt --solutions-dir solutions
 python Solver.py generate --rows 4 --cols 4 --rooms 4 --seed 0
 python Solver.py generate --rows 4 --cols 4 --rooms 4 --seed 0 --no-clue-carving
 python Solver.py generate --rows 4 --cols 4 --rooms 4 --count 5 --seed-start 0 --out-dir puzzles/generated --summary-file artifacts/generation-summary.json
+python Solver.py calibrate artifacts/generation-summary.json --report artifacts/calibration/report.md --json-report artifacts/calibration/report.json
+python Solver.py calibrate-corpus --plan artifacts/calibration/plan.json --report artifacts/calibration/report.md --json-report artifacts/calibration/report.json
 ```
 
 By default, generated puzzles are written into `puzzles/` with a `generated-` prefix, for example `puzzles/generated-4x4-4r-seed0.txt`.
 By default, generation also runs a greedy clue-carving pass that removes redundant numbered-room clues while preserving uniqueness. Use `--no-clue-carving` if you want the fully numbered version for debugging or comparison.
-The default `mostly-empty` reveal policy now resolves to `empty` 80% of the time, `single-cell` 15% of the time, and `full-room` 5% of the time.
+Reveal selection is now driven by named policy maps. The default `mostly-empty` reveal policy map resolves to `empty` 80% of the time, `few-cells` 15% of the time, and `full-room` 5% of the time. The `few-cells` mode reveals between 1 and 4 pre-filled witness cells.
+Named generator presets now sit on top of that surface:
+
+- quality presets: `balanced`, `strict`
+- difficulty presets: `easy`, `medium`, `hard`, `expert`
+- clue profiles: `minimal`, `varied`, `guided`, `room-reveal`
+
+Clue profiles choose a default reveal/clue style, while quality and difficulty presets contribute reusable filter bands. Difficulty presets are size-aware: `4x4-4r`, `6x6-6r`, and `8x8-8r` use calibrated square-family bands, while other parseable sizes use a deterministic heuristic based on board area, aspect ratio, and room count until they have corpus data. Difficulty scoring uses the stamped `solver-log-area-v2` model so larger boards keep solve-iteration separation instead of saturating early. Explicit `--min-*` / `--max-*` CLI filters still apply on top and tighten the preset if both are provided.
 
 The corpus route supports quality filters and duplicate control, for example:
 
 ```bash
 python Solver.py generate --count 10 --rows 6 --cols 6 --rooms 6 --seed-start 100 --max-seeds 200 --min-room-balance 0.50 --min-shape-compactness 0.55 --min-solve-iterations 40 --out-dir puzzles/generated
+python Solver.py generate --rows 4 --cols 4 --rooms 4 --seed 1 --difficulty-preset easy --clue-profile guided
+```
+
+Calibration does not generate puzzles by itself. It reads one or more summary JSON files produced by `generate --summary-file`, dedupes by puzzle signature, reports metric percentiles by board family, and writes recommended quality/difficulty bands for review. Family-level hit rates use size-aware preset bands when available; the overall section still uses global bands so cross-size drift remains visible.
+
+For repeatable calibration runs, use `calibrate-corpus` with a plan file. Paths inside the plan are resolved relative to the plan file, and completed summaries are skipped unless `--force` is supplied:
+
+```json
+{
+  "defaults": {
+    "max_attempts": 256,
+    "reveal_policy": "mostly-empty",
+    "out_dir": "{family}",
+    "summary_file": "{family}-summary.json"
+  },
+  "families": [
+    { "rows": 4, "cols": 4, "rooms": 4, "count": 200, "seed_start": 0, "max_seeds": 1000 },
+    { "rows": 6, "cols": 6, "rooms": 6, "count": 100, "seed_start": 10000, "max_seeds": 1000 },
+    { "rows": 8, "cols": 8, "rooms": 8, "count": 50, "seed_start": 30000, "max_seeds": 1000 },
+    { "rows": 4, "cols": 6, "rooms": 6, "count": 200, "seed_start": 20000, "max_seeds": 2000 }
+  ]
+}
 ```
 
 Example successful solve output:
@@ -176,7 +209,7 @@ The core modules in the active path are:
 - `src/stostone/core/`: shared grid, connectivity, and domain helpers
 - `src/stostone/solver/`: search, validation, and state operations
 - `src/stostone/assembly/`: puzzle assembly and room-cache construction from parsed specs
-- `src/stostone/generator/`: seeded single-puzzle and corpus generation using a constructive solution-first search, uniqueness proof, duplicate detection, and quality filters
+- `src/stostone/generator/`: seeded single-puzzle and corpus generation using a constructive solution-first search, uniqueness proof, duplicate detection, quality filters, presets, and calibration reporting
 - `src/stostone/compat/`: wrappers for the older flat module API
 
 ## Repository Layout

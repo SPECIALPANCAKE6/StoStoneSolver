@@ -83,7 +83,7 @@
 ### Checklist
 - [x] Add a real generator service that can build random connected room layouts and numbered-room candidates.
 - [x] Use the uniqueness-count API to reject non-unique candidates and return only uniquely solvable puzzles.
-- [x] Support a mostly-empty reveal policy plus explicit `empty`, `single-cell`, and `full-room` reveal options.
+- [x] Support a mostly-empty reveal policy plus explicit `empty`, `few-cells`, and `full-room` reveal options.
 - [x] Record generation metadata on the emitted puzzle and expose a generation result object.
 - [x] Add focused tests and run generator smoke verification.
 
@@ -91,7 +91,7 @@
 - Added `stostone.generator.service.generate_unique_puzzle(...)`, a seedable API that builds random connected room layouts, assigns positive room weights summing to half the board, and accepts only candidates with exactly one solution under the bounded solution-count path.
 - Added `GenerationResult` plus generator metadata tracking for seed, attempts, elapsed time, reveal policy, given shaded cells, and uniqueness settings.
 - Added `assembly.apply_initial_state_constraints(...)` so generated puzzles with non-empty givens constrain room domains the same way file-loaded puzzles already do.
-- Added reveal policies for `mostly-empty`, `empty`, `single-cell`, and `full-room`. The default `mostly-empty` policy currently resolves to `empty` 80% of the time, `single-cell` 15% of the time, and `full-room` 5% of the time.
+- Added reveal policies for `mostly-empty`, `empty`, `few-cells`, and `full-room`. The default `mostly-empty` policy currently resolves to `empty` 80% of the time, `few-cells` 15% of the time, and `full-room` 5% of the time.
 - Updated package exports and repo docs so the generator API is now part of the public package surface.
 
 ### Commands Run
@@ -164,7 +164,7 @@
 ## Current Task: Greedy Clue Carving For Generation
 
 ### Assumptions
-- Clue carving in this slice means minimizing numbered-room clues, not reveal-policy givens, so the existing `empty` / `single-cell` / `full-room` semantics remain meaningful.
+- Clue carving in this slice means minimizing numbered-room clues, not reveal-policy givens, so the existing `empty` / `few-cells` / `full-room` semantics remain meaningful.
 - The generator should keep uniqueness proof as the hard gate after every clue-removal attempt.
 - Generated unsolved puzzles with givens must round-trip through PUZ-PRE export without depending on solved-state `drawnStones`.
 
@@ -194,15 +194,64 @@
 - The `mostly-empty` policy should remain the default reveal policy instead of introducing a new named preset for this one tuning change.
 
 ### Checklist
-- [x] Change the default `mostly-empty` reveal distribution to `80% empty / 15% single-cell / 5% full-room`.
+- [x] Change the default `mostly-empty` reveal distribution to `80% empty / 15% few-cells / 5% full-room`.
 - [x] Add a direct regression for the reveal-policy cutoffs.
 - [x] Update the repo docs/task notes to stop claiming the old `90 / 8 / 2` split.
 
 ### Review
-- Updated the live `mostly-empty` reveal policy thresholds in `stostone.generator.service` so generated puzzles now resolve to `empty` for rolls below `0.8`, `single-cell` up to `0.95`, and `full-room` after that.
+- Updated the live `mostly-empty` reveal policy thresholds in `stostone.generator.service` so generated puzzles now resolve to `empty` for rolls below `0.8`, `few-cells` up to `0.95`, and `full-room` after that.
+
+## Current Task: Few-Cells Reveal Mode And Reveal Count Metadata
+
+### Assumptions
+- The rare non-empty default branch should be a true `few-cells` reveal mode, not a one-cell-only mode under a different name.
+- `few-cells` should reveal between 1 and 4 witness cells without replacement.
+- Reveal counts should be recorded from the actual revealed cells, not inferred later from the reveal policy name.
+
+### Checklist
+- [x] Replace the old `single-cell` reveal mode with `few-cells`.
+- [x] Record `revealed_cell_count` and `revealed_room_count` in generation metadata and summary output.
+- [x] Update CLI logging, regressions, and repo docs for the new reveal mode.
+- [x] Run focused and full verification and capture exact outcomes.
+
+### Review
+- Replaced the old one-cell reveal branch with a real `few-cells` mode that reveals between 1 and 4 witness cells, and updated the default `mostly-empty` policy so its 15 percent non-empty bucket now uses that mode directly.
+- Added explicit `revealed_cell_count` and `revealed_room_count` fields to `GenerationResult` and generation metadata, while keeping the existing `given_shaded_cells` and `pre_solved_rooms` values for quality scoring and filtering.
+- Updated CLI logging and batch summary JSON coverage so generated puzzle reports now expose how many cells and rooms were actually revealed.
+- Updated README, task notes, and thesis docs so the repo consistently refers to `few-cells` rather than the removed `single-cell` label.
+
+### Commands Run
+- `python -m pytest tests\test_generator.py tests\test_cli.py tests\test_engine.py tests\test_models.py` -> `26 passed in 7.23s`
+- `python -m pytest` -> `58 passed in 7.86s`
 - Added a focused regression that checks the exact cutoff behavior directly, so future generator changes cannot silently drift the reveal distribution.
 - Updated the README to describe the new default reveal split.
 
 ### Commands Run
 - `python -m pytest tests\test_generator.py` -> `11 passed in 4.83s`
 - `python -m pytest` -> `58 passed in 6.98s`
+
+## Current Task: Reveal Policy Maps
+
+### Assumptions
+- The public CLI and engine should keep exposing the same reveal-policy names, but the default distribution should stop living as inline threshold logic.
+- Direct reveal modes like `empty` and `full-room` should be treated as degenerate one-entry policy maps so the selection path stays uniform.
+- The map structure should be exported for future generator tuning instead of staying private to one helper.
+
+### Checklist
+- [x] Replace the hardcoded `mostly-empty` threshold logic with explicit reveal policy maps.
+- [x] Export the reveal policy maps through the generator package surface.
+- [x] Add focused regressions and doc updates for the new map-driven structure.
+- [x] Run focused verification and capture exact outcomes.
+
+### Review
+- Replaced the inline `mostly-empty` cutoff logic with `REVEAL_POLICY_MAPS`, so reveal selection is now data-driven and all public reveal modes flow through the same selection helper.
+- Exported `REVEAL_POLICY_MAPS` from both `src/stostone` and the root `stostone` compatibility shim so future generator tuning can inspect the live maps without reaching into a private module.
+- Added a regression that pins the expected map contents and updated the README to describe the reveal configuration as named policy maps instead of hardcoded thresholds.
+- Verification caught two follow-up issues and they were fixed immediately: the generic weighted selector needed decimal-based threshold accumulation to preserve the exact `0.95` boundary, and the root shim needed the new export wired through explicitly.
+
+### Commands Run
+- `python -m pytest tests\test_generator.py` -> initially failed with 1 cutoff regression after the first refactor because float accumulation changed the exact `0.95` boundary
+- `python -c "import stostone; print(stostone.REVEAL_POLICY_MAPS['mostly-empty']); print(stostone.REVEAL_POLICIES)"` -> initially failed with `AttributeError` because the root compatibility shim was not re-exporting `REVEAL_POLICY_MAPS`
+- `python -m pytest tests\test_generator.py` -> `12 passed in 4.95s`
+- `python -c "import stostone; print(stostone.REVEAL_POLICY_MAPS['mostly-empty']); print(stostone.REVEAL_POLICIES)"` -> printed `(('empty', 0.8), ('few-cells', 0.15), ('full-room', 0.05))` and `('mostly-empty', 'empty', 'few-cells', 'full-room')`
+- `python -m pytest` -> `59 passed in 6.57s`

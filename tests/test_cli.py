@@ -113,6 +113,42 @@ def test_cli_generate_supports_disabling_clue_carving(repo_root: Path, workspace
 
 
 @pytest.mark.regression
+def test_cli_generate_accepts_preset_flags(repo_root: Path, workspace_tmp_dir: Path) -> None:
+    output_path = workspace_tmp_dir.joinpath("guided-easy.txt")
+    result = run_cli(
+        repo_root,
+        "generate",
+        "--rows",
+        "4",
+        "--cols",
+        "4",
+        "--rooms",
+        "4",
+        "--seed",
+        "1",
+        "--max-attempts",
+        "20",
+        "--difficulty-preset",
+        "easy",
+        "--clue-profile",
+        "guided",
+        "--output",
+        str(output_path),
+    )
+
+    assert result.returncode == 0
+    assert "Presets: quality=none difficulty=easy clue_profile=guided" in result.stdout
+
+    puzzle = load_puzzle(output_path)
+    assert puzzle.spec.metadata.extra_fields["difficulty_preset"] == "easy"
+    assert puzzle.spec.metadata.extra_fields["difficulty_family"] == "4x4-4r"
+    assert puzzle.spec.metadata.extra_fields["difficulty_scale"] == "calibrated"
+    assert puzzle.spec.metadata.extra_fields["clue_profile"] == "guided"
+    assert puzzle.spec.metadata.extra_fields["requested_reveal_policy"] == "few-cells"
+    assert puzzle.spec.metadata.difficulty == "Easy"
+
+
+@pytest.mark.regression
 def test_cli_generate_batch_writes_corpus_and_summary(repo_root: Path, workspace_tmp_dir: Path) -> None:
     output_dir = workspace_tmp_dir.joinpath("corpus")
     summary_path = workspace_tmp_dir.joinpath("generation-summary.json")
@@ -149,6 +185,116 @@ def test_cli_generate_batch_writes_corpus_and_summary(repo_root: Path, workspace
     assert summary["generated_count"] == 2
     assert summary["requested_count"] == 2
     assert len(summary["items"]) >= 2
+    written_items = [item for item in summary["items"] if item["status"] == "written"]
+    assert written_items
+    assert "revealed_cell_count" in written_items[0]["generation"]
+    assert "revealed_room_count" in written_items[0]["generation"]
+
+
+@pytest.mark.regression
+def test_cli_calibrate_writes_markdown_and_json_reports(repo_root: Path, workspace_tmp_dir: Path) -> None:
+    summary_path = workspace_tmp_dir.joinpath("synthetic-summary.json")
+    report_path = workspace_tmp_dir.joinpath("calibration-report.md")
+    json_report_path = workspace_tmp_dir.joinpath("calibration-report.json")
+    summary = {
+        "items": [
+            {
+                "seed": 1,
+                "status": "written",
+                "signature": "sig-1",
+                "generation": {
+                    "rows": 4,
+                    "cols": 4,
+                    "rooms": 4,
+                    "attempts": 2,
+                    "numbered_rooms": 2,
+                    "requested_reveal_policy": "empty",
+                    "applied_reveal_policy": "empty",
+                },
+                "quality": {
+                    "difficulty_score": 20,
+                    "solve_iterations": 8,
+                    "room_balance": 0.5,
+                    "shape_compactness": 0.8,
+                    "room_size_spread": 2,
+                    "given_shaded_cells": 0,
+                    "pre_solved_rooms": 0,
+                },
+            }
+        ]
+    }
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+
+    result = run_cli(
+        repo_root,
+        "calibrate",
+        str(summary_path),
+        "--report",
+        str(report_path),
+        "--json-report",
+        str(json_report_path),
+    )
+
+    assert result.returncode == 0
+    assert "Wrote calibration report" in result.stdout
+    assert report_path.is_file()
+    assert json_report_path.is_file()
+    assert "Sto-Stone Generator Calibration Report" in report_path.read_text(encoding="utf-8")
+
+    report = json.loads(json_report_path.read_text(encoding="utf-8"))
+    assert report["record_count"] == 1
+    assert report["families"]["4x4-4r"]["record_count"] == 1
+
+
+@pytest.mark.regression
+def test_cli_calibrate_corpus_runs_plan_and_writes_combined_report(repo_root: Path, workspace_tmp_dir: Path) -> None:
+    plan_path = workspace_tmp_dir.joinpath("calibration", "plan.json")
+    plan_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path = workspace_tmp_dir.joinpath("calibration", "report.md")
+    json_report_path = workspace_tmp_dir.joinpath("calibration", "report.json")
+    summary_path = plan_path.parent.joinpath("summaries", "4x4-4r.json")
+    plan_path.write_text(
+        json.dumps(
+            {
+                "families": [
+                    {
+                        "rows": 4,
+                        "cols": 4,
+                        "rooms": 4,
+                        "count": 1,
+                        "seed_start": 0,
+                        "max_seeds": 5,
+                        "max_attempts": 20,
+                        "reveal_policy": "empty",
+                        "out_dir": "corpus/4x4-4r",
+                        "summary_file": "summaries/4x4-4r.json",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = run_cli(
+        repo_root,
+        "calibrate-corpus",
+        "--plan",
+        str(plan_path),
+        "--report",
+        str(report_path),
+        "--json-report",
+        str(json_report_path),
+    )
+
+    assert result.returncode == 0
+    assert "Generated 4x4-4r" in result.stdout
+    assert summary_path.is_file()
+    assert report_path.is_file()
+    assert json_report_path.is_file()
+
+    report = json.loads(json_report_path.read_text(encoding="utf-8"))
+    assert report["record_count"] == 1
+    assert report["families"]["4x4-4r"]["record_count"] == 1
 
 
 @pytest.mark.regression

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from .generator.calibration_corpus import CalibrationCorpusRunResult, run_calibration_corpus_plan
 from .generator.service import DEFAULT_GENERATOR_NAME, DEFAULT_OUTPUT_PREFIX, DEFAULT_REVEAL_POLICY, build_puzzle_corpus, generate_unique_puzzle
 from .io.puzpre import load_puzzle, load_puzzle_summary
 from .models import GenerationBatchResult, GenerationFilters, GenerationResult, Puzzle, PuzzleSummary, SolutionCountResult, SolveMode, SolveResult
@@ -51,6 +52,10 @@ class StoStoneEngine:
         mode: SolveMode = "sto-stone",
         generator_name: str = DEFAULT_GENERATOR_NAME,
         clue_carving: bool = True,
+        filters: GenerationFilters | None = None,
+        quality_preset: str | None = None,
+        difficulty_preset: str | None = None,
+        clue_profile: str | None = None,
     ) -> GenerationResult:
         return generate_unique_puzzle(
             rows=rows,
@@ -63,6 +68,10 @@ class StoStoneEngine:
             mode=mode,
             generator_name=generator_name,
             clue_carving=clue_carving,
+            filters=filters,
+            quality_preset=quality_preset,
+            difficulty_preset=difficulty_preset,
+            clue_profile=clue_profile,
         )
 
     def generate_corpus(
@@ -84,6 +93,9 @@ class StoStoneEngine:
         generator_name: str = DEFAULT_GENERATOR_NAME,
         clue_carving: bool = True,
         filters: GenerationFilters | None = None,
+        quality_preset: str | None = None,
+        difficulty_preset: str | None = None,
+        clue_profile: str | None = None,
         allow_duplicates: bool = False,
         summary_path: Path | str | None = None,
     ) -> GenerationBatchResult:
@@ -104,8 +116,26 @@ class StoStoneEngine:
             generator_name=generator_name,
             clue_carving=clue_carving,
             filters=filters,
+            quality_preset=quality_preset,
+            difficulty_preset=difficulty_preset,
+            clue_profile=clue_profile,
             allow_duplicates=allow_duplicates,
             summary_path=summary_path,
+        )
+
+    def calibrate_corpus(
+        self,
+        plan_path: Path | str,
+        *,
+        force: bool = False,
+        report_path: Path | str | None = None,
+        json_report_path: Path | str | None = None,
+    ) -> CalibrationCorpusRunResult:
+        return run_calibration_corpus_plan(
+            plan_path,
+            force=force,
+            markdown_path=report_path,
+            json_path=json_report_path,
         )
 
 

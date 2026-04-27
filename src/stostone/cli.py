@@ -7,7 +7,7 @@ import sys
 from logging.handlers import RotatingFileHandler
 
 from .engine import engine
-from .generator import DEFAULT_OUTPUT_PREFIX, DEFAULT_REVEAL_POLICY, REVEAL_POLICIES, GenerationFailed, quality_rejection_reason, write_generated_puzzle
+from .generator import CLUE_PROFILES, DIFFICULTY_PRESETS, QUALITY_PRESETS, DEFAULT_OUTPUT_PREFIX, DEFAULT_REVEAL_POLICY, REVEAL_POLICIES, GenerationFailed, analyze_calibration_summaries, render_markdown_report, write_calibration_reports, write_generated_puzzle
 from .models import GenerationFilters
 from .solver.service import DEFAULT_PUZZLE_DIR, SOLVE_MODES, SolveInterrupted, discover_puzzles, resolve_puzzle_target
 
@@ -130,7 +130,7 @@ def run_generate(args: argparse.Namespace) -> int:
 
     setup_logging(args.log_level, log_file)
     logger.info(
-        "Generating puzzle corpus: rows=%s cols=%s rooms=%s count=%s mode=%s reveal_policy=%s clue_carving=%s",
+        "Generating puzzle corpus: rows=%s cols=%s rooms=%s count=%s mode=%s reveal_policy=%s clue_carving=%s quality_preset=%s difficulty_preset=%s clue_profile=%s",
         args.rows,
         args.cols,
         "auto" if args.rooms is None else args.rooms,
@@ -138,6 +138,9 @@ def run_generate(args: argparse.Namespace) -> int:
         describe_mode(args.mode),
         args.reveal_policy,
         not args.no_clue_carving,
+        args.quality_preset or "none",
+        args.difficulty_preset or "none",
+        args.clue_profile or "none",
     )
 
     if args.seed is not None and args.seed_start is not None:
@@ -147,7 +150,7 @@ def run_generate(args: argparse.Namespace) -> int:
     if args.count > 1 and output_path is not None:
         raise ValueError("Batch generation does not support --output. Use --out-dir instead.")
 
-    filters = GenerationFilters(
+    explicit_filters = GenerationFilters(
         min_room_balance=args.min_room_balance,
         min_shape_compactness=args.min_shape_compactness,
         max_room_size_spread=args.max_room_size_spread,
@@ -171,13 +174,13 @@ def run_generate(args: argparse.Namespace) -> int:
                 reveal_policy=args.reveal_policy,
                 mode=args.mode,
                 clue_carving=not args.no_clue_carving,
+                filters=explicit_filters,
+                quality_preset=args.quality_preset,
+                difficulty_preset=args.difficulty_preset,
+                clue_profile=args.clue_profile,
             )
             if result.quality is None:
                 raise GenerationFailed("Generated puzzle is missing quality metrics.")
-            rejection_reason = quality_rejection_reason(result.quality, filters)
-            if rejection_reason is not None:
-                logger.warning("Generated puzzle failed quality filters: %s", rejection_reason)
-                return 1
 
             written_path = write_generated_puzzle(
                 result,
@@ -188,9 +191,11 @@ def run_generate(args: argparse.Namespace) -> int:
             )
             logger.info("Generated %s in %s after %s attempt(s)", written_path, result.elapsed, result.attempts)
             logger.info(
-                "Difficulty: %s (score %.2f); solve iterations: %s; room balance: %.3f; compactness: %.3f",
+                "Difficulty: %s (score %.2f, %s scale %s); solve iterations: %s; room balance: %.3f; compactness: %.3f",
                 result.quality.difficulty,
                 result.quality.difficulty_score,
+                result.difficulty_scale,
+                result.difficulty_family,
                 result.quality.solve_iterations,
                 result.quality.room_balance,
                 result.quality.shape_compactness,
@@ -203,10 +208,23 @@ def run_generate(args: argparse.Namespace) -> int:
                 result.applied_reveal_policy,
             )
             logger.info(
-                "Numbered rooms: %s of %s after clue carving (%s uniqueness check(s))",
+                "Presets: quality=%s difficulty=%s clue_profile=%s",
+                result.quality_preset or "none",
+                result.difficulty_preset or "none",
+                result.clue_profile or "none",
+            )
+            logger.info(
+                "Revealed cells: %s across %s room(s); fully revealed rooms: %s",
+                result.revealed_cell_count,
+                result.revealed_room_count,
+                result.pre_solved_rooms,
+            )
+            logger.info(
+                "Numbered rooms: %s of %s after clue carving (%s uniqueness check(s), budget exhausted: %s)",
                 result.numbered_rooms,
                 result.numbered_rooms_before_carving,
                 result.clue_carving_checks,
+                result.clue_carving_budget_exhausted,
             )
             logger.info("Seed: %s", result.seed)
             return 0
@@ -226,7 +244,10 @@ def run_generate(args: argparse.Namespace) -> int:
             reveal_policy=args.reveal_policy,
             mode=args.mode,
             clue_carving=not args.no_clue_carving,
-            filters=filters,
+            filters=explicit_filters,
+            quality_preset=args.quality_preset,
+            difficulty_preset=args.difficulty_preset,
+            clue_profile=args.clue_profile,
             allow_duplicates=args.allow_duplicates,
             summary_path=summary_path,
         )
@@ -240,9 +261,11 @@ def run_generate(args: argparse.Namespace) -> int:
     for item in batch_result.items:
         if item.status == "written" and item.output_path is not None and item.quality is not None:
             logger.info(
-                "Wrote %s (seed=%s, numbered_rooms=%s/%s, difficulty=%s, score=%.2f, iterations=%s)",
+                "Wrote %s (seed=%s, revealed=%s cells/%s rooms, numbered_rooms=%s/%s, difficulty=%s, score=%.2f, iterations=%s)",
                 item.output_path,
                 item.seed,
+                item.generation.revealed_cell_count if item.generation is not None else "?",
+                item.generation.revealed_room_count if item.generation is not None else "?",
                 item.generation.numbered_rooms if item.generation is not None else "?",
                 item.generation.numbered_rooms_before_carving if item.generation is not None else "?",
                 item.quality.difficulty,
@@ -268,6 +291,76 @@ def run_generate(args: argparse.Namespace) -> int:
     if batch_result.summary_path is not None:
         logger.info("Wrote summary file: %s", batch_result.summary_path)
     return 0 if batch_result.generated_count == batch_result.requested_count else 1
+
+
+def run_calibrate(args: argparse.Namespace) -> int:
+    summary_paths = [resolve_cli_path(path_name) for path_name in args.summary_json]
+    report_path = resolve_cli_path(args.report) if args.report else None
+    json_report_path = resolve_cli_path(args.json_report) if args.json_report else None
+    report = analyze_calibration_summaries(summary_paths)
+    written_report, written_json = write_calibration_reports(
+        report,
+        markdown_path=report_path,
+        json_path=json_report_path,
+    )
+    if written_report is not None:
+        print(f"Wrote calibration report: {written_report}")
+    if written_json is not None:
+        print(f"Wrote calibration JSON: {written_json}")
+    if written_report is None and written_json is None:
+        print(render_markdown_report(report), end="")
+    return 0
+
+
+def run_calibrate_corpus(args: argparse.Namespace) -> int:
+    log_file = resolve_cli_path(args.log_file) if args.log_file else None
+    plan_path = resolve_cli_path(args.plan)
+    report_path = resolve_cli_path(args.report) if args.report else None
+    json_report_path = resolve_cli_path(args.json_report) if args.json_report else None
+
+    setup_logging(args.log_level, log_file)
+    logger.info("Running calibration corpus plan: %s", plan_path)
+    result = engine.calibrate_corpus(
+        plan_path,
+        force=args.force,
+        report_path=report_path,
+        json_report_path=json_report_path,
+    )
+
+    for item in result.items:
+        if item.status == "skipped":
+            logger.info(
+                "Skipped %s: existing summary has %s/%s puzzle(s)",
+                item.family,
+                item.generated_count,
+                item.requested_count,
+            )
+        elif item.status == "generated":
+            logger.info(
+                "Generated %s: wrote %s/%s puzzle(s) after %s seed(s)",
+                item.family,
+                item.generated_count,
+                item.requested_count,
+                item.seeds_tried,
+            )
+        elif item.status == "incomplete":
+            logger.warning(
+                "Incomplete %s: wrote %s/%s puzzle(s) after %s seed(s): %s",
+                item.family,
+                item.generated_count,
+                item.requested_count,
+                item.seeds_tried,
+                item.reason,
+            )
+        elif item.status == "failed":
+            logger.error("Failed %s: %s", item.family, item.reason)
+
+    logger.info("Calibration records analyzed: %s", result.report["record_count"])
+    if result.markdown_path is not None:
+        logger.info("Wrote calibration report: %s", result.markdown_path)
+    if result.json_path is not None:
+        logger.info("Wrote calibration JSON: %s", result.json_path)
+    return 0 if result.completed else 1
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -307,6 +400,9 @@ def build_parser() -> argparse.ArgumentParser:
     generate_parser.add_argument("--max-attempts", type=int, default=256, help="Maximum generation attempts before failing")
     generate_parser.add_argument("--uniqueness-limit", type=int, default=2, help="Maximum solution count searched during uniqueness checks")
     generate_parser.add_argument("--reveal-policy", choices=list(REVEAL_POLICIES), default=DEFAULT_REVEAL_POLICY, help="Initial-state reveal policy")
+    generate_parser.add_argument("--quality-preset", choices=list(QUALITY_PRESETS), help="Named structural quality filter preset")
+    generate_parser.add_argument("--difficulty-preset", choices=list(DIFFICULTY_PRESETS), help="Named difficulty-score filter preset")
+    generate_parser.add_argument("--clue-profile", choices=list(CLUE_PROFILES), help="Named reveal/clue profile preset")
     generate_parser.add_argument("--mode", choices=list(SOLVE_MODES), default="sto-stone", help="Mode used for uniqueness checks")
     generate_parser.add_argument(
         "--output",
@@ -333,6 +429,24 @@ def build_parser() -> argparse.ArgumentParser:
         help="Console logging verbosity",
     )
     generate_parser.add_argument("--log-file", help="Optional log file path")
+
+    calibrate_parser = subparsers.add_parser("calibrate", help="Analyze generated corpus summaries and recommend preset bands")
+    calibrate_parser.add_argument("summary_json", nargs="+", help="Generation summary JSON file(s) from the generate command")
+    calibrate_parser.add_argument("--report", help="Optional markdown report output path")
+    calibrate_parser.add_argument("--json-report", help="Optional machine-readable JSON report output path")
+
+    calibrate_corpus_parser = subparsers.add_parser("calibrate-corpus", help="Generate a planned corpus matrix and calibrate it")
+    calibrate_corpus_parser.add_argument("--plan", required=True, help="Calibration corpus plan JSON path")
+    calibrate_corpus_parser.add_argument("--force", action="store_true", help="Regenerate families even when their summary already satisfies the requested count")
+    calibrate_corpus_parser.add_argument("--report", help="Optional markdown report output path")
+    calibrate_corpus_parser.add_argument("--json-report", help="Optional machine-readable JSON report output path")
+    calibrate_corpus_parser.add_argument(
+        "--log-level",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        default="INFO",
+        help="Console logging verbosity",
+    )
+    calibrate_corpus_parser.add_argument("--log-file", help="Optional log file path")
 
     return parser
 
@@ -362,6 +476,12 @@ def main(argv: list[str] | None = None) -> int:
 
         if args.command == "generate":
             return run_generate(args)
+
+        if args.command == "calibrate":
+            return run_calibrate(args)
+
+        if args.command == "calibrate-corpus":
+            return run_calibrate_corpus(args)
     except (FileNotFoundError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

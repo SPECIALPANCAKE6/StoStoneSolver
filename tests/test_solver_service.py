@@ -6,6 +6,8 @@ import pytest
 
 from src.stostone.io.puzpre import load_puzzle
 from src.stostone.solver import service
+from src.stostone.solver import search as solver_search
+from src.stostone.solver.search import count_solutions
 
 
 pytestmark = pytest.mark.integration
@@ -33,6 +35,62 @@ def test_count_puzzle_solutions_rejects_invalid_limit(build_puzzle) -> None:
 
     with pytest.raises(ValueError):
         service.count_puzzle_solutions(puzzle, limit=0)
+
+
+def test_count_solutions_reports_first_solution_iteration(puzzle_path) -> None:
+    puzzle = load_puzzle(puzzle_path("000-001.txt"))
+    solution_iterations: list[int] = []
+
+    solution_count = count_solutions(
+        0,
+        puzzle,
+        mode="sto-stone",
+        limit=2,
+        on_solution=solution_iterations.append,
+    )
+
+    assert solution_count == 1
+    assert len(solution_iterations) == 1
+    assert 0 < solution_iterations[0] <= puzzle.state.constraint_checks
+
+
+def test_count_solutions_mrv_prefers_smallest_reduced_domain(build_puzzle) -> None:
+    puzzle = build_puzzle(
+        2,
+        3,
+        [
+            [0, 0, 1],
+            [0, 0, 2],
+        ],
+    )
+
+    candidates = solver_search._remaining_room_candidates((0, 1, 2), puzzle)
+
+    assert candidates is not None
+    best = min(candidates, key=lambda room_candidates: (len(room_candidates.domains), room_candidates.room_num))
+    assert best.room_num == 1
+    assert len(best.domains) == 1
+
+
+def test_count_solutions_forward_check_prunes_overfilled_columns(build_puzzle) -> None:
+    puzzle = build_puzzle(
+        2,
+        2,
+        [
+            [0, 1],
+            [0, 1],
+        ],
+        weights=[((0, 0), 1), ((0, 1), 1)],
+        initial_state=[
+            [" #", -1],
+            [" #", -1],
+        ],
+    )
+
+    solution_count = count_solutions(0, puzzle, mode="sto-stone", limit=2)
+
+    assert solution_count == 0
+    assert puzzle.state.constraint_checks == 0
 
 
 @pytest.mark.regression
