@@ -19,7 +19,6 @@ StoStoneSolver/
 |       |-- cli.py
 |       |-- models.py
 |       |-- assembly/
-|       |-- compat/
 |       |-- core/
 |       |-- generator/
 |       |-- io/
@@ -38,7 +37,6 @@ StoStoneSolver/
 - `stostone.solver`: state mutation, validation, search, and solve orchestration.
 - `stostone.assembly`: in-memory puzzle assembly and room-cache construction from parsed specs.
 - `stostone.generator`: seeded single-puzzle and corpus generation using a constructive solution-first search, greedy numbered-room clue carving, uniqueness proof, duplicate detection, quality filters, size-aware presets, calibration reports, and plan-driven calibration corpus runs.
-- `stostone.compat`: compatibility wrappers for the old flat-module APIs, kept inside the package instead of the repo root.
 
 ## Entry Points
 
