@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stostone.local/schemas/PuzzleDTO.schema.json",
+  "title": "PuzzleDTO",
+  "type": "object",
+  "additionalProperties": true,
+  "description": "Safe-to-ship StoStone puzzle data. All coordinates are zero-based [row, col].",
+  "required": [
+    "schema_version",
+    "puzzle_id",
+    "canonical_hash",
+    "ruleset",
+    "ruleset_version",
+    "rows",
+    "cols",
+    "rooms",
+    "layout",
+    "weights",
+    "initial_state",
+    "difficulty",
+    "source"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "puzzle_id": { "type": "string", "pattern": "^puz_[a-f0-9]{16,64}$" },
+    "canonical_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "ruleset": { "const": "sto-stone" },
+    "ruleset_version": { "type": "string" },
+    "rows": { "type": "integer", "minimum": 1 },
+    "cols": { "type": "integer", "minimum": 1 },
+    "rooms": { "type": "integer", "minimum": 1 },
+    "layout": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "weights": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["room_id", "cell", "value"],
+        "properties": {
+          "room_id": { "type": "integer", "minimum": 0 },
+          "cell": { "$ref": "#/$defs/cell_coord" },
+          "value": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "initial_state": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/cell_coord" }
+    },
+    "difficulty": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["label"],
+      "properties": {
+        "label": { "type": "string" },
+        "score": { "type": ["number", "null"] },
+        "scale": { "type": ["string", "null"] }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["kind"],
+      "properties": {
+        "kind": { "type": "string" },
+        "path": { "type": ["string", "null"] },
+        "generator_seed": { "type": ["integer", "null"] }
+      }
+    },
+    "tutorial": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "unique_solution_proof": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "cell_coord": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "integer", "minimum": 0 }
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    }
+  }
+}

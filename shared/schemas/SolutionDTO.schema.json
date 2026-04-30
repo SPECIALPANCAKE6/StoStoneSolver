@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stostone.local/schemas/SolutionDTO.schema.json",
+  "title": "SolutionDTO",
+  "type": "object",
+  "additionalProperties": true,
+  "description": "Local-MVP/dev convenience solution data only; not valid for competitive, paid, rewarded, or server-authoritative modes. All coordinates are zero-based [row, col].",
+  "required": [
+    "schema_version",
+    "puzzle_id",
+    "solution_id",
+    "shaded_cells",
+    "stones_by_room_id",
+    "drop_preview",
+    "usage_scope"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "puzzle_id": { "type": "string" },
+    "solution_id": { "type": "string" },
+    "usage_scope": { "const": "local_mvp_dev_only" },
+    "shaded_cells": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/cell_coord" }
+    },
+    "stones_by_room_id": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/cell_coord" }
+      }
+    },
+    "drop_preview": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["start_stones_by_room_id", "final_stones_by_room_id", "final_filled_cells"],
+      "properties": {
+        "start_stones_by_room_id": { "type": "object" },
+        "final_stones_by_room_id": { "type": "object" },
+        "final_filled_cells": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/cell_coord" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "cell_coord": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "integer", "minimum": 0 }
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    }
+  }
+}

@@ -9,9 +9,11 @@ from src.stostone.engine import StoStoneEngine, engine
 from src.stostone.generator import CLUE_PROFILES, DIFFICULTY_PRESETS, DIFFICULTY_SCORE_MODEL, DEFAULT_GENERATOR_NAME, DEFAULT_OUTPUT_PREFIX, DEFAULT_REVEAL_POLICY, QUALITY_PRESETS, REVEAL_POLICY_MAPS, REVEAL_POLICIES, SIZE_AWARE_DIFFICULTY_PRESETS, CalibrationCorpusFamilyPlan, CalibrationCorpusPlan, CalibrationCorpusRunItem, CalibrationCorpusRunResult, GenerationFailed, analyze_calibration_summaries, board_family_key, build_puzzle, build_puzzle_corpus, difficulty_filter_for_preset, difficulty_label_from_score, difficulty_presets_for_family, difficulty_scale_for_family, generate_unique_puzzle, has_size_aware_difficulty, iteration_difficulty_component, load_calibration_corpus_plan, load_calibration_records, quality_rejection_reason, render_markdown_report, run_calibration_corpus_plan, score_generation_quality, write_calibration_reports, write_generated_puzzle, write_generation_summary
 from src.stostone.io.puzpre import load_puzzle, load_puzzle_summary, write_puzpre
 from src.stostone.models import GenerationBatchItem, GenerationBatchResult, GenerationFilters, GenerationQuality, GenerationResult, Puzzle, PuzzleMetadata, PuzzleSpec, PuzzleState, PuzzleSummary, RoomCache, SolutionCountResult, SolveMode, SolveResult
+from src.stostone.pack_export import PACK_SCHEMA_VERSION, PackExportResult, canonical_puzzle_hash, canonical_puzzle_payload, export_pack, puzzle_id_for_hash
 from src.stostone.solver.service import DEFAULT_PUZZLE_DIR, SOLVE_MODES, SolveInterrupted, count_puzzle_file_solutions, count_puzzle_solutions, discover_puzzles, resolve_puzzle_target, solve_puzzle, solve_puzzle_file
 
 __all__ = [
+    "PACK_SCHEMA_VERSION",
     "DEFAULT_GENERATOR_NAME",
     "DEFAULT_OUTPUT_PREFIX",
     "DEFAULT_PUZZLE_DIR",
@@ -42,6 +44,7 @@ __all__ = [
     "RoomCache",
     "PuzzleState",
     "Puzzle",
+    "PackExportResult",
     "SolutionCountResult",
     "SolveResult",
     "analyze_calibration_summaries",
@@ -56,12 +59,16 @@ __all__ = [
     "difficulty_presets_for_family",
     "difficulty_scale_for_family",
     "engine",
+    "export_pack",
     "generate_unique_puzzle",
+    "canonical_puzzle_hash",
+    "canonical_puzzle_payload",
     "has_size_aware_difficulty",
     "iteration_difficulty_component",
     "load_calibration_corpus_plan",
     "load_calibration_records",
     "quality_rejection_reason",
+    "puzzle_id_for_hash",
     "render_markdown_report",
     "reset_state",
     "run_calibration_corpus_plan",

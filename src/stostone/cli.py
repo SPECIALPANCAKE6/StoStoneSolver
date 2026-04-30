@@ -9,6 +9,8 @@ from logging.handlers import RotatingFileHandler
 from .engine import engine
 from .generator import CLUE_PROFILES, DIFFICULTY_PRESETS, QUALITY_PRESETS, DEFAULT_OUTPUT_PREFIX, DEFAULT_REVEAL_POLICY, REVEAL_POLICIES, GenerationFailed, analyze_calibration_summaries, render_markdown_report, write_calibration_reports, write_generated_puzzle
 from .models import GenerationFilters
+from .pack_export import export_pack
+from .pack_export.service import GeneratedPuzzleSpec, SourcePuzzleSpec
 from .solver.service import DEFAULT_PUZZLE_DIR, SOLVE_MODES, SolveInterrupted, discover_puzzles, resolve_puzzle_target
 
 logger = logging.getLogger(__name__)
@@ -363,6 +365,48 @@ def run_calibrate_corpus(args: argparse.Namespace) -> int:
     return 0 if result.completed else 1
 
 
+def run_export_pack(args: argparse.Namespace) -> int:
+    output_path = resolve_cli_path(args.out)
+    puzzle_dir = resolve_puzzle_dir(args.dir)
+    source_specs = [
+        SourcePuzzleSpec(path=puzzle_name, category=args.source_category, difficulty=args.source_difficulty)
+        for puzzle_name in args.puzzles
+    ]
+    generated_specs: list[GeneratedPuzzleSpec] = []
+    if args.generate_count > 0:
+        generated_specs.append(
+            GeneratedPuzzleSpec(
+                count=args.generate_count,
+                category=args.generated_category,
+                rows=args.rows,
+                cols=args.cols,
+                rooms=args.rooms,
+                seed_start=args.seed_start,
+                difficulty_preset=args.difficulty_preset,
+                reveal_policy=args.reveal_policy,
+                max_attempts=args.max_attempts,
+                max_seeds=args.max_seeds,
+            )
+        )
+
+    result = export_pack(
+        output_path=output_path,
+        pack_id=args.pack_id,
+        title=args.title,
+        description=args.description,
+        pack_type=args.pack_type,
+        puzzle_dir=puzzle_dir,
+        source_specs=source_specs,
+        generated_specs=generated_specs,
+        starter=args.starter,
+    )
+    print(f"Wrote puzzle pack: {result.pack_path}")
+    print(f"Wrote build report: {result.build_report_path}")
+    print(f"Puzzles: {result.pack['manifest']['puzzle_count']}")  # type: ignore[index]
+    print(f"Pack type: {result.pack['pack_type']}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Sto-Stone solver CLI")
     subparsers = parser.add_subparsers(dest="command")
@@ -448,6 +492,37 @@ def build_parser() -> argparse.ArgumentParser:
     )
     calibrate_corpus_parser.add_argument("--log-file", help="Optional log file path")
 
+    export_pack_parser = subparsers.add_parser("export-pack", help="Export Godot-friendly JSON puzzle packs")
+    export_pack_parser.add_argument("--out", required=True, help="Output pack JSON path")
+    export_pack_parser.add_argument("--pack-id", default="starter_pack", help="Stable pack identifier")
+    export_pack_parser.add_argument("--title", default="StoStone Starter Pack", help="Pack display title")
+    export_pack_parser.add_argument(
+        "--description",
+        default="Local MVP starter puzzles for the StoStone Godot app.",
+        help="Pack description",
+    )
+    export_pack_parser.add_argument(
+        "--pack-type",
+        choices=["local_mvp", "dev", "debug", "public", "competitive"],
+        default="local_mvp",
+        help="Pack classification",
+    )
+    export_pack_parser.add_argument("--dir", help=f"Puzzle directory. Defaults to {DEFAULT_PUZZLE_DIR}")
+    export_pack_parser.add_argument("--starter", action="store_true", help="Use the built-in MVP starter-pack recipe")
+    export_pack_parser.add_argument("--puzzles", nargs="*", default=[], help="Source PUZ-PRE puzzle names or paths")
+    export_pack_parser.add_argument("--source-category", default="library", help="Category for --puzzles entries")
+    export_pack_parser.add_argument("--source-difficulty", help="Difficulty label override for --puzzles entries")
+    export_pack_parser.add_argument("--generate-count", type=int, default=0, help="Number of generated puzzles to add")
+    export_pack_parser.add_argument("--generated-category", default="generated", help="Category for generated puzzles")
+    export_pack_parser.add_argument("--rows", type=int, default=4, help="Generated puzzle row count")
+    export_pack_parser.add_argument("--cols", type=int, default=4, help="Generated puzzle column count")
+    export_pack_parser.add_argument("--rooms", type=int, default=4, help="Generated puzzle room count")
+    export_pack_parser.add_argument("--seed-start", type=int, default=0, help="Generated puzzle starting seed")
+    export_pack_parser.add_argument("--max-seeds", type=int, default=128, help="Maximum generated seeds to try")
+    export_pack_parser.add_argument("--max-attempts", type=int, default=32, help="Maximum attempts per generated seed")
+    export_pack_parser.add_argument("--difficulty-preset", choices=list(DIFFICULTY_PRESETS), help="Generated puzzle difficulty preset")
+    export_pack_parser.add_argument("--reveal-policy", choices=list(REVEAL_POLICIES), default="empty", help="Generated puzzle reveal policy")
+
     return parser
 
 
@@ -482,6 +557,9 @@ def main(argv: list[str] | None = None) -> int:
 
         if args.command == "calibrate-corpus":
             return run_calibrate_corpus(args)
+
+        if args.command == "export-pack":
+            return run_export_pack(args)
     except (FileNotFoundError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stostone.local/schemas/PuzzlePack.schema.json",
+  "title": "PuzzlePack",
+  "type": "object",
+  "additionalProperties": true,
+  "description": "ID-indexed StoStone pack. All coordinates in nested DTOs are zero-based [row, col].",
+  "required": [
+    "schema_version",
+    "pack_id",
+    "pack_type",
+    "contains_solutions",
+    "contains_debug_data",
+    "manifest",
+    "puzzles_by_id",
+    "solutions_by_puzzle_id",
+    "hint_plans_by_puzzle_id"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "pack_id": { "type": "string" },
+    "pack_type": {
+      "type": "string",
+      "enum": ["local_mvp", "dev", "debug", "public", "competitive"]
+    },
+    "contains_solutions": { "type": "boolean" },
+    "contains_debug_data": { "type": "boolean" },
+    "manifest": { "$ref": "PuzzleManifest.schema.json" },
+    "puzzles_by_id": {
+      "type": "object",
+      "additionalProperties": { "$ref": "PuzzleDTO.schema.json" }
+    },
+    "solutions_by_puzzle_id": {
+      "type": "object",
+      "additionalProperties": { "$ref": "SolutionDTO.schema.json" }
+    },
+    "hint_plans_by_puzzle_id": {
+      "type": "object",
+      "additionalProperties": { "$ref": "HintPlanDTO.schema.json" }
+    }
+  }
+}

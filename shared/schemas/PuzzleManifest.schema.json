@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stostone.local/schemas/PuzzleManifest.schema.json",
+  "title": "PuzzleManifest",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["title", "description", "puzzle_count", "categories", "schema_major"],
+  "properties": {
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "puzzle_count": { "type": "integer", "minimum": 0 },
+    "categories": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "schema_major": { "type": "integer", "minimum": 1 }
+  }
+}

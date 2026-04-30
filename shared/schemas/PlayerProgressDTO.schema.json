@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stostone.local/schemas/PlayerProgressDTO.schema.json",
+  "title": "PlayerProgressDTO",
+  "type": "object",
+  "additionalProperties": true,
+  "description": "Local-only MVP progress. Lives, coins, unlocks, and inventory are prototype data and not secure or authoritative.",
+  "required": ["schema_version", "completed_puzzles_by_id", "prototype_wallet", "unlocks"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "completed_puzzles_by_id": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["best_time_ms", "completed_count"],
+        "properties": {
+          "best_time_ms": { "type": "integer", "minimum": 0 },
+          "completed_count": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "prototype_wallet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lives", "coins"],
+      "properties": {
+        "lives": { "type": "integer", "minimum": 0 },
+        "coins": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "unlocks": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "drafts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  }
+}

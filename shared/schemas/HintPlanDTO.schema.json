@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stostone.local/schemas/HintPlanDTO.schema.json",
+  "title": "HintPlanDTO",
+  "type": "array",
+  "description": "Ordered, limited local hint actions derived from solution data. All coordinates are zero-based [row, col].",
+  "items": {
+    "type": "object",
+    "additionalProperties": true,
+    "required": ["kind", "message"],
+    "properties": {
+      "kind": {
+        "type": "string",
+        "enum": ["tutorial", "room_focus", "reveal_cell", "fix_extra_cell", "drop_preview"]
+      },
+      "message": { "type": "string" },
+      "room_id": { "type": ["integer", "null"], "minimum": 0 },
+      "cell": {
+        "type": ["array", "null"],
+        "prefixItems": [
+          { "type": "integer", "minimum": 0 },
+          { "type": "integer", "minimum": 0 }
+        ],
+        "items": false,
+        "minItems": 2,
+        "maxItems": 2
+      }
+    }
+  }
+}
