@@ -1,0 +1,6517 @@
+{
+  "contains_debug_data": false,
+  "contains_solutions": true,
+  "hint_plans_by_puzzle_id": {
+    "puz_0200446e708184d4": [
+      {
+        "kind": "room_focus",
+        "message": "Room 1 must contain exactly 3 shaded cell(s).",
+        "room_id": 0
+      },
+      {
+        "cell": [
+          0,
+          0
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 0] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_2a1ad01590fefb51": [
+      {
+        "kind": "room_focus",
+        "message": "Room 1 must contain exactly 2 shaded cell(s).",
+        "room_id": 0
+      },
+      {
+        "cell": [
+          0,
+          0
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 0] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_2b865a62290f27d8": [
+      {
+        "kind": "tutorial",
+        "message": "Use room numbers as exact shaded-cell counts before testing the full drop."
+      },
+      {
+        "kind": "room_focus",
+        "message": "Room 2 must contain exactly 2 shaded cell(s).",
+        "room_id": 1
+      },
+      {
+        "cell": [
+          0,
+          0
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 0] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_2e3d360bc17a6ca3": [
+      {
+        "kind": "tutorial",
+        "message": "Shaded cells may touch inside a room, but they cannot touch across a room border."
+      },
+      {
+        "kind": "room_focus",
+        "message": "Room 1 must contain exactly 2 shaded cell(s).",
+        "room_id": 0
+      },
+      {
+        "cell": [
+          0,
+          0
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 0] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_4447728eeb571ca5": [
+      {
+        "kind": "room_focus",
+        "message": "Room 1 must contain exactly 3 shaded cell(s).",
+        "room_id": 0
+      },
+      {
+        "cell": [
+          0,
+          1
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 1] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_6898de6a87b363f7": [
+      {
+        "kind": "room_focus",
+        "message": "Room 2 must contain exactly 1 shaded cell(s).",
+        "room_id": 1
+      },
+      {
+        "cell": [
+          0,
+          1
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 1] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_696e00ffe18a47d7": [
+      {
+        "kind": "room_focus",
+        "message": "Room 3 must contain exactly 2 shaded cell(s).",
+        "room_id": 2
+      },
+      {
+        "cell": [
+          0,
+          1
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 1] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_73ab64a0a4557e0b": [
+      {
+        "kind": "room_focus",
+        "message": "Room 1 must contain exactly 3 shaded cell(s).",
+        "room_id": 0
+      },
+      {
+        "cell": [
+          0,
+          0
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 0] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_92608610d2afe3da": [
+      {
+        "kind": "tutorial",
+        "message": "Shade a connected shape inside each numbered room, then check how the stones fall."
+      },
+      {
+        "kind": "room_focus",
+        "message": "Room 2 must contain exactly 1 shaded cell(s).",
+        "room_id": 1
+      },
+      {
+        "cell": [
+          0,
+          0
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 0] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_9aaf25bd61b78ad4": [
+      {
+        "kind": "room_focus",
+        "message": "Room 1 must contain exactly 4 shaded cell(s).",
+        "room_id": 0
+      },
+      {
+        "cell": [
+          0,
+          3
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 3] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_bc8a91d0f4c4c5a5": [
+      {
+        "kind": "room_focus",
+        "message": "Room 1 must contain exactly 1 shaded cell(s).",
+        "room_id": 0
+      },
+      {
+        "cell": [
+          0,
+          0
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 0] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_ced86e183b9540bf": [
+      {
+        "kind": "room_focus",
+        "message": "Room 1 must contain exactly 4 shaded cell(s).",
+        "room_id": 0
+      },
+      {
+        "cell": [
+          0,
+          0
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 0] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_ec816afd75d59b41": [
+      {
+        "kind": "room_focus",
+        "message": "Room 1 must contain exactly 4 shaded cell(s).",
+        "room_id": 0
+      },
+      {
+        "cell": [
+          0,
+          1
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 1] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ],
+    "puz_f50910387398e55a": [
+      {
+        "kind": "room_focus",
+        "message": "Room 4 must contain exactly 3 shaded cell(s).",
+        "room_id": 3
+      },
+      {
+        "cell": [
+          0,
+          1
+        ],
+        "kind": "reveal_cell",
+        "message": "Cell [0, 1] is part of the solution."
+      },
+      {
+        "kind": "drop_preview",
+        "message": "Preview the rigid stone fall to see whether the bottom half fills cleanly."
+      }
+    ]
+  },
+  "manifest": {
+    "categories": {
+      "easy": 5,
+      "medium": 5,
+      "showcase": 1,
+      "tutorial": 3
+    },
+    "description": "Tutorial, easy, medium, and showcase puzzles for the local MVP.",
+    "puzzle_count": 14,
+    "schema_major": 1,
+    "solution_data_notice": "SolutionDTO data is local-MVP/dev convenience data only and is not valid for competitive, paid, rewarded, or server-authoritative modes.",
+    "title": "StoStone Starter Pack"
+  },
+  "pack_id": "starter_pack",
+  "pack_type": "local_mvp",
+  "puzzles_by_id": {
+    "puz_0200446e708184d4": {
+      "canonical_hash": "0200446e708184d4154b9ab57e23bcffb03ae811b64a127ab76a1358dad5548d",
+      "category": "easy",
+      "cols": 4,
+      "difficulty": {
+        "family": "4x4-4r",
+        "label": "Easy",
+        "scale": "source-label",
+        "score": null,
+        "solve_iterations": null
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          2,
+          1,
+          1
+        ],
+        [
+          2,
+          2,
+          1,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "metadata": {},
+      "puzzle_id": "puz_0200446e708184d4",
+      "rooms": 4,
+      "rows": 4,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "author": null,
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-002.txt"
+      },
+      "title": "Small Steps",
+      "unique_solution_proof": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.0002,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            0,
+            0
+          ],
+          "room_id": 0,
+          "value": 3
+        },
+        {
+          "cell": [
+            0,
+            2
+          ],
+          "room_id": 1,
+          "value": 1
+        },
+        {
+          "cell": [
+            2,
+            0
+          ],
+          "room_id": 2,
+          "value": 1
+        }
+      ]
+    },
+    "puz_2a1ad01590fefb51": {
+      "canonical_hash": "2a1ad01590fefb515ef5ba7b1518ad4217bf962ce07bcfd90ea36ca86cfeaab3",
+      "category": "easy",
+      "cols": 4,
+      "difficulty": {
+        "family": "4x4-4r",
+        "label": "Easy",
+        "scale": "calibrated",
+        "score": 28.037125007211564,
+        "solve_iterations": 2
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          2,
+          2
+        ],
+        [
+          0,
+          3,
+          3,
+          2
+        ],
+        [
+          0,
+          3,
+          3,
+          2
+        ]
+      ],
+      "metadata": {
+        "applied_reveal_policy": "empty",
+        "author": "StoStoneSolver Generator",
+        "clue_carving_budget_exhausted": "false",
+        "clue_carving_checks": "4",
+        "clue_carving_enabled": "true",
+        "clue_carving_removed_numbered_rooms": "2",
+        "clue_carving_strategy": "greedy-number-removal",
+        "cols": "4",
+        "difficulty": "Easy",
+        "difficulty_family": "4x4-4r",
+        "difficulty_label": "Easy",
+        "difficulty_preset": "easy",
+        "difficulty_scale": "calibrated",
+        "difficulty_score": "28.037125",
+        "difficulty_score_model": "solver-log-area-v2",
+        "generated_at": "2026-04-29T03:12:58.052365-05:00",
+        "generated_timezone": "Central Daylight Time",
+        "generation_attempts": "1",
+        "generation_elapsed": "0:00:00.002910",
+        "generation_elapsed_seconds": "0.002910",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": "200",
+        "generator_solve_elapsed": "0:00:00",
+        "generator_solve_elapsed_seconds": "0.000000",
+        "generator_solve_iteration_source": "uniqueness-first-solution",
+        "generator_solve_iterations": "2",
+        "given_shaded_cells": "0",
+        "layout_strategy": "balanced-frontier",
+        "numbered_rooms": "2",
+        "numbered_rooms_before_carving": "4",
+        "pre_solved_rooms": "0",
+        "requested_reveal_policy": "empty",
+        "revealed_cell_count": "0",
+        "revealed_room_count": "0",
+        "room_balance": "0.333333",
+        "room_size_max": "6",
+        "room_size_min": "2",
+        "room_size_spread": "4",
+        "rooms": "4",
+        "rows": "4",
+        "shape_compactness": "0.854167",
+        "solution_count": "1",
+        "uniqueness_limit": "2"
+      },
+      "puzzle_id": "puz_2a1ad01590fefb51",
+      "rooms": 4,
+      "rows": 4,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "applied_reveal_policy": "empty",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": 200,
+        "kind": "generated",
+        "path": null,
+        "requested_reveal_policy": "empty"
+      },
+      "title": "Generated Easy 200",
+      "unique_solution_proof": {
+        "constraint_checks": 2,
+        "elapsed_seconds": 0.000281,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            1,
+            0
+          ],
+          "room_id": 0,
+          "value": 2
+        },
+        {
+          "cell": [
+            0,
+            3
+          ],
+          "room_id": 1,
+          "value": 2
+        }
+      ]
+    },
+    "puz_2b865a62290f27d8": {
+      "canonical_hash": "2b865a62290f27d876fd9ef25967205344f8af497d55bc9a05ee505ebb2e4b53",
+      "category": "tutorial",
+      "cols": 4,
+      "difficulty": {
+        "family": "4x4-5r",
+        "label": "Tutorial",
+        "scale": "source-label",
+        "score": null,
+        "solve_iterations": null
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          2,
+          2,
+          0,
+          1
+        ],
+        [
+          3,
+          2,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4
+        ]
+      ],
+      "metadata": {
+        "author": "Addison Allen",
+        "difficulty": "Easy"
+      },
+      "puzzle_id": "puz_2b865a62290f27d8",
+      "rooms": 5,
+      "rows": 4,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "author": "Addison Allen",
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\000-002.txt"
+      },
+      "title": "Room Counts",
+      "tutorial": {
+        "message": "Use room numbers as exact shaded-cell counts before testing the full drop."
+      },
+      "unique_solution_proof": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.000289,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            0,
+            3
+          ],
+          "room_id": 1,
+          "value": 2
+        },
+        {
+          "cell": [
+            2,
+            0
+          ],
+          "room_id": 3,
+          "value": 1
+        }
+      ]
+    },
+    "puz_2e3d360bc17a6ca3": {
+      "canonical_hash": "2e3d360bc17a6ca3afa87fe23bd8cfe97675795efd06737de97355e53e7f7d27",
+      "category": "tutorial",
+      "cols": 4,
+      "difficulty": {
+        "family": "4x4-5r",
+        "label": "Tutorial",
+        "scale": "source-label",
+        "score": null,
+        "solve_iterations": null
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          1,
+          2,
+          1
+        ],
+        [
+          3,
+          3,
+          2,
+          4
+        ],
+        [
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "metadata": {},
+      "puzzle_id": "puz_2e3d360bc17a6ca3",
+      "rooms": 5,
+      "rows": 4,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "author": null,
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-001.txt"
+      },
+      "title": "No Touching Across Rooms",
+      "tutorial": {
+        "message": "Shaded cells may touch inside a room, but they cannot touch across a room border."
+      },
+      "unique_solution_proof": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.000176,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            0,
+            0
+          ],
+          "room_id": 0,
+          "value": 2
+        },
+        {
+          "cell": [
+            0,
+            1
+          ],
+          "room_id": 1,
+          "value": 1
+        },
+        {
+          "cell": [
+            1,
+            2
+          ],
+          "room_id": 2,
+          "value": 1
+        },
+        {
+          "cell": [
+            2,
+            0
+          ],
+          "room_id": 3,
+          "value": 3
+        },
+        {
+          "cell": [
+            2,
+            3
+          ],
+          "room_id": 4,
+          "value": 1
+        }
+      ]
+    },
+    "puz_4447728eeb571ca5": {
+      "canonical_hash": "4447728eeb571ca5b8ca2733db35c72045bb9c810cc4a9d44c2a491f39a51f4e",
+      "category": "easy",
+      "cols": 6,
+      "difficulty": {
+        "family": "6x6-8r",
+        "label": "Easy",
+        "scale": "source-label",
+        "score": null,
+        "solve_iterations": null
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          2,
+          2,
+          2,
+          2,
+          3,
+          1
+        ],
+        [
+          2,
+          2,
+          2,
+          2,
+          2,
+          4
+        ],
+        [
+          5,
+          2,
+          2,
+          2,
+          4,
+          4
+        ],
+        [
+          5,
+          5,
+          6,
+          4,
+          4,
+          7
+        ],
+        [
+          5,
+          5,
+          6,
+          6,
+          7,
+          7
+        ]
+      ],
+      "metadata": {
+        "author": "Mind Games",
+        "difficulty": "Easy"
+      },
+      "puzzle_id": "puz_4447728eeb571ca5",
+      "rooms": 8,
+      "rows": 6,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "author": "Mind Games",
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\MG-001-001.txt"
+      },
+      "title": "Mind Games Easy",
+      "unique_solution_proof": {
+        "constraint_checks": 2,
+        "elapsed_seconds": 0.00141,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            0,
+            0
+          ],
+          "room_id": 0,
+          "value": 3
+        },
+        {
+          "cell": [
+            0,
+            4
+          ],
+          "room_id": 1,
+          "value": 1
+        },
+        {
+          "cell": [
+            1,
+            0
+          ],
+          "room_id": 2,
+          "value": 4
+        },
+        {
+          "cell": [
+            4,
+            3
+          ],
+          "room_id": 4,
+          "value": 3
+        },
+        {
+          "cell": [
+            3,
+            0
+          ],
+          "room_id": 5,
+          "value": 4
+        },
+        {
+          "cell": [
+            4,
+            2
+          ],
+          "room_id": 6,
+          "value": 1
+        },
+        {
+          "cell": [
+            5,
+            4
+          ],
+          "room_id": 7,
+          "value": 1
+        }
+      ]
+    },
+    "puz_6898de6a87b363f7": {
+      "canonical_hash": "6898de6a87b363f7262591a21df75a7ac8a8879e9547c3923b47ca2784b165e0",
+      "category": "easy",
+      "cols": 4,
+      "difficulty": {
+        "family": "4x4-4r",
+        "label": "Easy",
+        "scale": "calibrated",
+        "score": 18.34375,
+        "solve_iterations": 1
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          1,
+          1,
+          2
+        ],
+        [
+          0,
+          1,
+          1,
+          2
+        ],
+        [
+          0,
+          3,
+          3,
+          2
+        ],
+        [
+          0,
+          0,
+          3,
+          2
+        ]
+      ],
+      "metadata": {
+        "applied_reveal_policy": "empty",
+        "author": "StoStoneSolver Generator",
+        "clue_carving_budget_exhausted": "false",
+        "clue_carving_checks": "4",
+        "clue_carving_enabled": "true",
+        "clue_carving_removed_numbered_rooms": "3",
+        "clue_carving_strategy": "greedy-number-removal",
+        "cols": "4",
+        "difficulty": "Easy",
+        "difficulty_family": "4x4-4r",
+        "difficulty_label": "Easy",
+        "difficulty_preset": "easy",
+        "difficulty_scale": "calibrated",
+        "difficulty_score": "18.343750",
+        "difficulty_score_model": "solver-log-area-v2",
+        "generated_at": "2026-04-29T03:12:58.058122-05:00",
+        "generated_timezone": "Central Daylight Time",
+        "generation_attempts": "1",
+        "generation_elapsed": "0:00:00.002617",
+        "generation_elapsed_seconds": "0.002617",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": "202",
+        "generator_solve_elapsed": "0:00:00",
+        "generator_solve_elapsed_seconds": "0.000000",
+        "generator_solve_iteration_source": "uniqueness-first-solution",
+        "generator_solve_iterations": "1",
+        "given_shaded_cells": "0",
+        "layout_strategy": "balanced-frontier",
+        "numbered_rooms": "1",
+        "numbered_rooms_before_carving": "4",
+        "pre_solved_rooms": "0",
+        "requested_reveal_policy": "empty",
+        "revealed_cell_count": "0",
+        "revealed_room_count": "0",
+        "room_balance": "0.600000",
+        "room_size_max": "5",
+        "room_size_min": "3",
+        "room_size_spread": "2",
+        "rooms": "4",
+        "rows": "4",
+        "shape_compactness": "0.843750",
+        "solution_count": "1",
+        "uniqueness_limit": "2"
+      },
+      "puzzle_id": "puz_6898de6a87b363f7",
+      "rooms": 4,
+      "rows": 4,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "applied_reveal_policy": "empty",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": 202,
+        "kind": "generated",
+        "path": null,
+        "requested_reveal_policy": "empty"
+      },
+      "title": "Generated Easy 202",
+      "unique_solution_proof": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.000405,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            2,
+            2
+          ],
+          "room_id": 3,
+          "value": 1
+        }
+      ]
+    },
+    "puz_696e00ffe18a47d7": {
+      "canonical_hash": "696e00ffe18a47d750b35c8f6d08cfedef0aad4d5853fb778ae8c28f4bc14513",
+      "category": "showcase",
+      "cols": 6,
+      "difficulty": {
+        "family": "6x6-6r",
+        "label": "Hard",
+        "scale": "calibrated",
+        "score": 82.23611111111111,
+        "solve_iterations": 205
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          1,
+          1,
+          2,
+          2,
+          2
+        ],
+        [
+          0,
+          1,
+          1,
+          2,
+          2,
+          2
+        ],
+        [
+          0,
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          4,
+          4,
+          5,
+          5,
+          3,
+          3
+        ],
+        [
+          4,
+          4,
+          5,
+          5,
+          5,
+          5
+        ]
+      ],
+      "metadata": {
+        "applied_reveal_policy": "empty",
+        "author": "StoStoneSolver Generator",
+        "clue_carving_budget_exhausted": "false",
+        "clue_carving_checks": "6",
+        "clue_carving_enabled": "true",
+        "clue_carving_removed_numbered_rooms": "5",
+        "clue_carving_strategy": "greedy-number-removal",
+        "cols": "6",
+        "difficulty": "Hard",
+        "difficulty_family": "6x6-6r",
+        "difficulty_label": "Hard",
+        "difficulty_preset": "hard",
+        "difficulty_scale": "calibrated",
+        "difficulty_score": "82.236111",
+        "difficulty_score_model": "solver-log-area-v2",
+        "generated_at": "2026-04-29T03:12:59.028973-05:00",
+        "generated_timezone": "Central Daylight Time",
+        "generation_attempts": "13",
+        "generation_elapsed": "0:00:00.966910",
+        "generation_elapsed_seconds": "0.966910",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": "702",
+        "generator_solve_elapsed": "0:00:00",
+        "generator_solve_elapsed_seconds": "0.000000",
+        "generator_solve_iteration_source": "uniqueness-first-solution",
+        "generator_solve_iterations": "205",
+        "given_shaded_cells": "0",
+        "layout_strategy": "balanced-frontier",
+        "numbered_rooms": "1",
+        "numbered_rooms_before_carving": "6",
+        "pre_solved_rooms": "0",
+        "requested_reveal_policy": "empty",
+        "revealed_cell_count": "0",
+        "revealed_room_count": "0",
+        "room_balance": "0.300000",
+        "room_size_max": "10",
+        "room_size_min": "3",
+        "room_size_spread": "7",
+        "rooms": "6",
+        "rows": "6",
+        "shape_compactness": "0.884259",
+        "solution_count": "1",
+        "uniqueness_limit": "2"
+      },
+      "puzzle_id": "puz_696e00ffe18a47d7",
+      "rooms": 6,
+      "rows": 6,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "applied_reveal_policy": "empty",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": 702,
+        "kind": "generated",
+        "path": null,
+        "requested_reveal_policy": "empty"
+      },
+      "title": "Generated Showcase 702",
+      "unique_solution_proof": {
+        "constraint_checks": 257,
+        "elapsed_seconds": 0.15142,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            2,
+            0
+          ],
+          "room_id": 0,
+          "value": 2
+        }
+      ]
+    },
+    "puz_73ab64a0a4557e0b": {
+      "canonical_hash": "73ab64a0a4557e0b61a200973191b3a2e9d80e20216a18f77ce383e213f31ffd",
+      "category": "medium",
+      "cols": 6,
+      "difficulty": {
+        "family": "6x6-8r",
+        "label": "Medium",
+        "scale": "source-label",
+        "score": null,
+        "solve_iterations": null
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          2,
+          0,
+          3,
+          4,
+          5,
+          5
+        ],
+        [
+          2,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        [
+          2,
+          2,
+          4,
+          4,
+          4,
+          6
+        ],
+        [
+          7,
+          7,
+          7,
+          4,
+          6,
+          6
+        ],
+        [
+          7,
+          7,
+          7,
+          7,
+          6,
+          6
+        ]
+      ],
+      "metadata": {},
+      "puzzle_id": "puz_73ab64a0a4557e0b",
+      "rooms": 8,
+      "rows": 6,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "author": null,
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-004-corrected.txt"
+      },
+      "title": "Corrected Rooms",
+      "unique_solution_proof": {
+        "constraint_checks": 2,
+        "elapsed_seconds": 0.000587,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            0,
+            0
+          ],
+          "room_id": 0,
+          "value": 3
+        },
+        {
+          "cell": [
+            0,
+            2
+          ],
+          "room_id": 1,
+          "value": 1
+        },
+        {
+          "cell": [
+            1,
+            0
+          ],
+          "room_id": 2,
+          "value": 3
+        },
+        {
+          "cell": [
+            1,
+            2
+          ],
+          "room_id": 3,
+          "value": 1
+        },
+        {
+          "cell": [
+            3,
+            2
+          ],
+          "room_id": 4,
+          "value": 1
+        },
+        {
+          "cell": [
+            1,
+            4
+          ],
+          "room_id": 5,
+          "value": 3
+        },
+        {
+          "cell": [
+            4,
+            4
+          ],
+          "room_id": 6,
+          "value": 3
+        },
+        {
+          "cell": [
+            4,
+            0
+          ],
+          "room_id": 7,
+          "value": 3
+        }
+      ]
+    },
+    "puz_92608610d2afe3da": {
+      "canonical_hash": "92608610d2afe3da7c150b7e296cc24f472ba76fddc58103e98aa77323e23f18",
+      "category": "tutorial",
+      "cols": 4,
+      "difficulty": {
+        "family": "4x4-4r",
+        "label": "Tutorial",
+        "scale": "source-label",
+        "score": null,
+        "solve_iterations": null
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          2,
+          2,
+          3
+        ],
+        [
+          2,
+          2,
+          2,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "metadata": {
+        "author": "Addison Allen",
+        "difficulty": "Easy"
+      },
+      "puzzle_id": "puz_92608610d2afe3da",
+      "rooms": 4,
+      "rows": 4,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "author": "Addison Allen",
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\000-001.txt"
+      },
+      "title": "First Stone",
+      "tutorial": {
+        "message": "Shade a connected shape inside each numbered room, then check how the stones fall."
+      },
+      "unique_solution_proof": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.000417,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            0,
+            3
+          ],
+          "room_id": 1,
+          "value": 1
+        },
+        {
+          "cell": [
+            3,
+            0
+          ],
+          "room_id": 3,
+          "value": 2
+        }
+      ]
+    },
+    "puz_9aaf25bd61b78ad4": {
+      "canonical_hash": "9aaf25bd61b78ad49176eded8c4f6e828103e4df6e51562d8941c055b85081a4",
+      "category": "medium",
+      "cols": 6,
+      "difficulty": {
+        "family": "6x6-7r",
+        "label": "Medium",
+        "scale": "source-label",
+        "score": null,
+        "solve_iterations": null
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          1,
+          2,
+          2,
+          3,
+          3
+        ],
+        [
+          0,
+          1,
+          1,
+          2,
+          4,
+          3
+        ],
+        [
+          0,
+          1,
+          5,
+          4,
+          4,
+          3
+        ],
+        [
+          0,
+          0,
+          5,
+          5,
+          4,
+          6
+        ],
+        [
+          0,
+          0,
+          5,
+          5,
+          6,
+          6
+        ],
+        [
+          0,
+          0,
+          6,
+          6,
+          6,
+          6
+        ]
+      ],
+      "metadata": {},
+      "puzzle_id": "puz_9aaf25bd61b78ad4",
+      "rooms": 7,
+      "rows": 6,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "author": null,
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-005.txt"
+      },
+      "title": "Middle Weight",
+      "unique_solution_proof": {
+        "constraint_checks": 2,
+        "elapsed_seconds": 0.000533,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            0,
+            0
+          ],
+          "room_id": 0,
+          "value": 4
+        },
+        {
+          "cell": [
+            0,
+            1
+          ],
+          "room_id": 1,
+          "value": 3
+        },
+        {
+          "cell": [
+            0,
+            2
+          ],
+          "room_id": 2,
+          "value": 1
+        },
+        {
+          "cell": [
+            2,
+            3
+          ],
+          "room_id": 4,
+          "value": 4
+        },
+        {
+          "cell": [
+            2,
+            2
+          ],
+          "room_id": 5,
+          "value": 3
+        },
+        {
+          "cell": [
+            5,
+            2
+          ],
+          "room_id": 6,
+          "value": 2
+        }
+      ]
+    },
+    "puz_bc8a91d0f4c4c5a5": {
+      "canonical_hash": "bc8a91d0f4c4c5a5368d94e61e1495cfcc49d22a1829c13d98c429650894c930",
+      "category": "medium",
+      "cols": 6,
+      "difficulty": {
+        "family": "6x6-7r",
+        "label": "Medium",
+        "scale": "source-label",
+        "score": null,
+        "solve_iterations": null
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          2
+        ],
+        [
+          0,
+          3,
+          3,
+          1,
+          2,
+          2
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          2,
+          2
+        ],
+        [
+          4,
+          3,
+          3,
+          3,
+          5,
+          5
+        ],
+        [
+          4,
+          6,
+          6,
+          5,
+          5,
+          5
+        ],
+        [
+          4,
+          4,
+          6,
+          6,
+          6,
+          5
+        ]
+      ],
+      "metadata": {
+        "author": "Yellow Puzzle",
+        "comment": "Puzzle from http://kiiroipazuru.blog.fc2.com/blog-entry-206.html",
+        "difficulty": "Medium"
+      },
+      "puzzle_id": "puz_bc8a91d0f4c4c5a5",
+      "rooms": 7,
+      "rows": 6,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "author": "Yellow Puzzle",
+        "comment": "Puzzle from http://kiiroipazuru.blog.fc2.com/blog-entry-206.html",
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\YP-001.txt"
+      },
+      "title": "Yellow Medium",
+      "unique_solution_proof": {
+        "constraint_checks": 2,
+        "elapsed_seconds": 0.003196,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            0,
+            0
+          ],
+          "room_id": 0,
+          "value": 1
+        },
+        {
+          "cell": [
+            1,
+            4
+          ],
+          "room_id": 2,
+          "value": 1
+        },
+        {
+          "cell": [
+            1,
+            1
+          ],
+          "room_id": 3,
+          "value": 6
+        },
+        {
+          "cell": [
+            3,
+            0
+          ],
+          "room_id": 4,
+          "value": 2
+        },
+        {
+          "cell": [
+            4,
+            3
+          ],
+          "room_id": 5,
+          "value": 3
+        }
+      ]
+    },
+    "puz_ced86e183b9540bf": {
+      "canonical_hash": "ced86e183b9540bfe30616eb5b203c25bd8cc99434a7418bd84811f44dd8fd82",
+      "category": "easy",
+      "cols": 4,
+      "difficulty": {
+        "family": "4x4-4r",
+        "label": "Easy",
+        "scale": "calibrated",
+        "score": 23.125,
+        "solve_iterations": 1
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          2,
+          2
+        ],
+        [
+          1,
+          1,
+          2,
+          3
+        ],
+        [
+          1,
+          1,
+          2,
+          2
+        ]
+      ],
+      "metadata": {
+        "applied_reveal_policy": "empty",
+        "author": "StoStoneSolver Generator",
+        "clue_carving_budget_exhausted": "false",
+        "clue_carving_checks": "4",
+        "clue_carving_enabled": "true",
+        "clue_carving_removed_numbered_rooms": "3",
+        "clue_carving_strategy": "greedy-number-removal",
+        "cols": "4",
+        "difficulty": "Easy",
+        "difficulty_family": "4x4-4r",
+        "difficulty_label": "Easy",
+        "difficulty_preset": "easy",
+        "difficulty_scale": "calibrated",
+        "difficulty_score": "23.125000",
+        "difficulty_score_model": "solver-log-area-v2",
+        "generated_at": "2026-04-29T03:12:58.055241-05:00",
+        "generated_timezone": "Central Daylight Time",
+        "generation_attempts": "1",
+        "generation_elapsed": "0:00:00.002673",
+        "generation_elapsed_seconds": "0.002673",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": "201",
+        "generator_solve_elapsed": "0:00:00",
+        "generator_solve_elapsed_seconds": "0.000000",
+        "generator_solve_iteration_source": "uniqueness-first-solution",
+        "generator_solve_iterations": "1",
+        "given_shaded_cells": "0",
+        "layout_strategy": "balanced-frontier",
+        "numbered_rooms": "1",
+        "numbered_rooms_before_carving": "4",
+        "pre_solved_rooms": "0",
+        "requested_reveal_policy": "empty",
+        "revealed_cell_count": "0",
+        "revealed_room_count": "0",
+        "room_balance": "0.166667",
+        "room_size_max": "6",
+        "room_size_min": "1",
+        "room_size_spread": "5",
+        "rooms": "4",
+        "rows": "4",
+        "shape_compactness": "0.958333",
+        "solution_count": "1",
+        "uniqueness_limit": "2"
+      },
+      "puzzle_id": "puz_ced86e183b9540bf",
+      "rooms": 4,
+      "rows": 4,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "applied_reveal_policy": "empty",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": 201,
+        "kind": "generated",
+        "path": null,
+        "requested_reveal_policy": "empty"
+      },
+      "title": "Generated Easy 201",
+      "unique_solution_proof": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.00022,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            0,
+            1
+          ],
+          "room_id": 0,
+          "value": 4
+        }
+      ]
+    },
+    "puz_ec816afd75d59b41": {
+      "canonical_hash": "ec816afd75d59b41c8bec3e4b51ea1cbe7089122eb50cf958c78c51b0e56eb8a",
+      "category": "medium",
+      "cols": 6,
+      "difficulty": {
+        "family": "6x6-7r",
+        "label": "Medium",
+        "scale": "source-label",
+        "score": null,
+        "solve_iterations": null
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          2,
+          0,
+          0,
+          3,
+          3,
+          1
+        ],
+        [
+          2,
+          2,
+          3,
+          3,
+          3,
+          1
+        ],
+        [
+          4,
+          4,
+          4,
+          3,
+          3,
+          1
+        ],
+        [
+          4,
+          4,
+          4,
+          3,
+          3,
+          5
+        ],
+        [
+          6,
+          4,
+          4,
+          3,
+          5,
+          5
+        ]
+      ],
+      "metadata": {},
+      "puzzle_id": "puz_ec816afd75d59b41",
+      "rooms": 7,
+      "rows": 6,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "author": null,
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-006.txt"
+      },
+      "title": "Steady Descent",
+      "unique_solution_proof": {
+        "constraint_checks": 3,
+        "elapsed_seconds": 0.00076,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            0,
+            0
+          ],
+          "room_id": 0,
+          "value": 4
+        },
+        {
+          "cell": [
+            1,
+            0
+          ],
+          "room_id": 2,
+          "value": 3
+        },
+        {
+          "cell": [
+            2,
+            2
+          ],
+          "room_id": 3,
+          "value": 4
+        },
+        {
+          "cell": [
+            3,
+            0
+          ],
+          "room_id": 4,
+          "value": 2
+        },
+        {
+          "cell": [
+            5,
+            4
+          ],
+          "room_id": 5,
+          "value": 3
+        },
+        {
+          "cell": [
+            5,
+            0
+          ],
+          "room_id": 6,
+          "value": 1
+        }
+      ]
+    },
+    "puz_f50910387398e55a": {
+      "canonical_hash": "f50910387398e55af2816f5df85844f3c0897cbf3f8e3e828f40d079678061f9",
+      "category": "medium",
+      "cols": 6,
+      "difficulty": {
+        "family": "8x6-8r",
+        "label": "Medium",
+        "scale": "source-label",
+        "score": null,
+        "solve_iterations": null
+      },
+      "initial_state": [],
+      "layout": [
+        [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          1,
+          1,
+          2,
+          1,
+          1
+        ],
+        [
+          0,
+          1,
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          0,
+          1,
+          3,
+          4,
+          4,
+          4
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          4,
+          4
+        ],
+        [
+          5,
+          6,
+          3,
+          7,
+          7,
+          7
+        ],
+        [
+          5,
+          6,
+          6,
+          7,
+          7,
+          7
+        ],
+        [
+          5,
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      ],
+      "metadata": {
+        "author": "Addison Allen",
+        "difficulty": "Medium"
+      },
+      "puzzle_id": "puz_f50910387398e55a",
+      "rooms": 8,
+      "rows": 8,
+      "ruleset": "sto-stone",
+      "ruleset_version": "1.0",
+      "schema_version": "1.0.0",
+      "source": {
+        "author": "Addison Allen",
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\001-001.txt"
+      },
+      "title": "Tall Drop",
+      "unique_solution_proof": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.022521,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      },
+      "weights": [
+        {
+          "cell": [
+            4,
+            0
+          ],
+          "room_id": 3,
+          "value": 3
+        },
+        {
+          "cell": [
+            3,
+            3
+          ],
+          "room_id": 4,
+          "value": 2
+        },
+        {
+          "cell": [
+            5,
+            0
+          ],
+          "room_id": 5,
+          "value": 2
+        },
+        {
+          "cell": [
+            5,
+            1
+          ],
+          "room_id": 6,
+          "value": 3
+        },
+        {
+          "cell": [
+            5,
+            3
+          ],
+          "room_id": 7,
+          "value": 5
+        }
+      ]
+    }
+  },
+  "schema_version": "1.0.0",
+  "solutions_by_puzzle_id": {
+    "puz_0200446e708184d4": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          "1": [
+            [
+              2,
+              2
+            ]
+          ],
+          "2": [
+            [
+              3,
+              1
+            ]
+          ],
+          "3": [
+            [
+              2,
+              3
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              3
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "1": [
+            [
+              1,
+              2
+            ]
+          ],
+          "2": [
+            [
+              2,
+              1
+            ]
+          ],
+          "3": [
+            [
+              2,
+              3
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              3
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_0200446e708184d4",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "solution_id": "sol_88e6df398290097e",
+      "stones_by_room_id": {
+        "0": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "1": [
+          [
+            1,
+            2
+          ]
+        ],
+        "2": [
+          [
+            2,
+            1
+          ]
+        ],
+        "3": [
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_2a1ad01590fefb51": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              2,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          "1": [
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          "2": [
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          "3": [
+            [
+              3,
+              3
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "1": [
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          "2": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          "3": [
+            [
+              2,
+              3
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_2a1ad01590fefb51",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "solution_id": "sol_b165a05265274562",
+      "stones_by_room_id": {
+        "0": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "1": [
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "2": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "3": [
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_2b865a62290f27d8": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              2,
+              0
+            ]
+          ],
+          "1": [
+            [
+              2,
+              3
+            ],
+            [
+              3,
+              3
+            ]
+          ],
+          "2": [
+            [
+              2,
+              1
+            ]
+          ],
+          "3": [
+            [
+              3,
+              0
+            ]
+          ],
+          "4": [
+            [
+              2,
+              2
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              0,
+              0
+            ]
+          ],
+          "1": [
+            [
+              0,
+              3
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          "2": [
+            [
+              1,
+              1
+            ]
+          ],
+          "3": [
+            [
+              2,
+              0
+            ]
+          ],
+          "4": [
+            [
+              2,
+              2
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_2b865a62290f27d8",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "solution_id": "sol_14c88ceba9acb36a",
+      "stones_by_room_id": {
+        "0": [
+          [
+            0,
+            0
+          ]
+        ],
+        "1": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        "2": [
+          [
+            1,
+            1
+          ]
+        ],
+        "3": [
+          [
+            2,
+            0
+          ]
+        ],
+        "4": [
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_2e3d360bc17a6ca3": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              2,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          "1": [
+            [
+              2,
+              3
+            ]
+          ],
+          "2": [
+            [
+              2,
+              2
+            ]
+          ],
+          "3": [
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          "4": [
+            [
+              3,
+              3
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "1": [
+            [
+              0,
+              3
+            ]
+          ],
+          "2": [
+            [
+              1,
+              2
+            ]
+          ],
+          "3": [
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          "4": [
+            [
+              2,
+              3
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_2e3d360bc17a6ca3",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "solution_id": "sol_2a575869a061cb06",
+      "stones_by_room_id": {
+        "0": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "1": [
+          [
+            0,
+            3
+          ]
+        ],
+        "2": [
+          [
+            1,
+            2
+          ]
+        ],
+        "3": [
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "4": [
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_4447728eeb571ca5": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              3
+            ]
+          ],
+          "1": [
+            [
+              3,
+              5
+            ]
+          ],
+          "2": [
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              5,
+              2
+            ]
+          ],
+          "3": [
+            [
+              3,
+              4
+            ]
+          ],
+          "4": [
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              4
+            ]
+          ],
+          "5": [
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          "6": [
+            [
+              5,
+              3
+            ]
+          ],
+          "7": [
+            [
+              5,
+              5
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          "1": [
+            [
+              0,
+              5
+            ]
+          ],
+          "2": [
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          "3": [
+            [
+              1,
+              4
+            ]
+          ],
+          "4": [
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "5": [
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          "6": [
+            [
+              5,
+              3
+            ]
+          ],
+          "7": [
+            [
+              5,
+              5
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_4447728eeb571ca5",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "solution_id": "sol_55c0fdf1a08cceee",
+      "stones_by_room_id": {
+        "0": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "1": [
+          [
+            0,
+            5
+          ]
+        ],
+        "2": [
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "3": [
+          [
+            1,
+            4
+          ]
+        ],
+        "4": [
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "5": [
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ]
+        ],
+        "6": [
+          [
+            5,
+            3
+          ]
+        ],
+        "7": [
+          [
+            5,
+            5
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_6898de6a87b363f7": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              2,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          "1": [
+            [
+              3,
+              2
+            ]
+          ],
+          "2": [
+            [
+              2,
+              3
+            ],
+            [
+              3,
+              3
+            ]
+          ],
+          "3": [
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              3,
+              1
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              2,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          "1": [
+            [
+              3,
+              2
+            ]
+          ],
+          "2": [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          "3": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_6898de6a87b363f7",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "solution_id": "sol_8e0333f0f504746f",
+      "stones_by_room_id": {
+        "0": [
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ]
+        ],
+        "1": [
+          [
+            3,
+            2
+          ]
+        ],
+        "2": [
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "3": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_696e00ffe18a47d7": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              4,
+              2
+            ],
+            [
+              5,
+              2
+            ]
+          ],
+          "1": [
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          "2": [
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ]
+          ],
+          "3": [
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          "4": [
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "5": [
+            [
+              4,
+              3
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              2,
+              2
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          "1": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "2": [
+            [
+              1,
+              0
+            ],
+            [
+              2,
+              0
+            ]
+          ],
+          "3": [
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          "4": [
+            [
+              1,
+              3
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              5
+            ]
+          ],
+          "5": [
+            [
+              4,
+              3
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_696e00ffe18a47d7",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "solution_id": "sol_28bf4f092422cb60",
+      "stones_by_room_id": {
+        "0": [
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "1": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ]
+        ],
+        "2": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        "3": [
+          [
+            4,
+            1
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ]
+        ],
+        "4": [
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ]
+        ],
+        "5": [
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_73ab64a0a4557e0b": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              4,
+              1
+            ]
+          ],
+          "1": [
+            [
+              3,
+              3
+            ]
+          ],
+          "2": [
+            [
+              4,
+              0
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          "3": [
+            [
+              3,
+              2
+            ]
+          ],
+          "4": [
+            [
+              4,
+              3
+            ]
+          ],
+          "5": [
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "6": [
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ]
+          ],
+          "7": [
+            [
+              4,
+              2
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "1": [
+            [
+              0,
+              3
+            ]
+          ],
+          "2": [
+            [
+              2,
+              0
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          "3": [
+            [
+              2,
+              2
+            ]
+          ],
+          "4": [
+            [
+              3,
+              3
+            ]
+          ],
+          "5": [
+            [
+              1,
+              4
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          "6": [
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "7": [
+            [
+              4,
+              2
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_73ab64a0a4557e0b",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          3
+        ]
+      ],
+      "solution_id": "sol_80d871e8d666370e",
+      "stones_by_room_id": {
+        "0": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "1": [
+          [
+            0,
+            3
+          ]
+        ],
+        "2": [
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ]
+        ],
+        "3": [
+          [
+            2,
+            2
+          ]
+        ],
+        "4": [
+          [
+            3,
+            3
+          ]
+        ],
+        "5": [
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "7": [
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_92608610d2afe3da": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              2,
+              0
+            ]
+          ],
+          "1": [
+            [
+              2,
+              3
+            ]
+          ],
+          "2": [
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          "3": [
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              3
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              0,
+              0
+            ]
+          ],
+          "1": [
+            [
+              0,
+              3
+            ]
+          ],
+          "2": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "3": [
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              3
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_92608610d2afe3da",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "solution_id": "sol_e10050ddfb682833",
+      "stones_by_room_id": {
+        "0": [
+          [
+            0,
+            0
+          ]
+        ],
+        "1": [
+          [
+            0,
+            3
+          ]
+        ],
+        "2": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        "3": [
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_9aaf25bd61b78ad4": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          "1": [
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              4,
+              1
+            ]
+          ],
+          "2": [
+            [
+              3,
+              3
+            ]
+          ],
+          "3": [
+            [
+              3,
+              5
+            ]
+          ],
+          "4": [
+            [
+              3,
+              4
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              5,
+              4
+            ]
+          ],
+          "5": [
+            [
+              4,
+              2
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ]
+          ],
+          "6": [
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          "1": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "2": [
+            [
+              0,
+              3
+            ]
+          ],
+          "3": [
+            [
+              0,
+              5
+            ]
+          ],
+          "4": [
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              4
+            ]
+          ],
+          "5": [
+            [
+              3,
+              2
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ]
+          ],
+          "6": [
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_9aaf25bd61b78ad4",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "solution_id": "sol_5426071bd697b74f",
+      "stones_by_room_id": {
+        "0": [
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ]
+        ],
+        "1": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        "2": [
+          [
+            0,
+            3
+          ]
+        ],
+        "3": [
+          [
+            0,
+            5
+          ]
+        ],
+        "4": [
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "5": [
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ],
+        "6": [
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            5
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_bc8a91d0f4c4c5a5": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              3,
+              0
+            ]
+          ],
+          "1": [
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ]
+          ],
+          "2": [
+            [
+              3,
+              5
+            ]
+          ],
+          "3": [
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          "4": [
+            [
+              4,
+              0
+            ],
+            [
+              5,
+              0
+            ]
+          ],
+          "5": [
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ]
+          ],
+          "6": [
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              0,
+              0
+            ]
+          ],
+          "1": [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          "2": [
+            [
+              1,
+              5
+            ]
+          ],
+          "3": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          "4": [
+            [
+              4,
+              0
+            ],
+            [
+              5,
+              0
+            ]
+          ],
+          "5": [
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "6": [
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_bc8a91d0f4c4c5a5",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          4
+        ]
+      ],
+      "solution_id": "sol_724cbcb1aaabc325",
+      "stones_by_room_id": {
+        "0": [
+          [
+            0,
+            0
+          ]
+        ],
+        "1": [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            5
+          ]
+        ],
+        "3": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            1
+          ]
+        ],
+        "4": [
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ]
+        ],
+        "5": [
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "6": [
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_ced86e183b9540bf": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          "1": [
+            [
+              3,
+              3
+            ]
+          ],
+          "2": [
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          "3": [
+            [
+              3,
+              2
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          "1": [
+            [
+              2,
+              3
+            ]
+          ],
+          "2": [
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "3": [
+            [
+              3,
+              2
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_ced86e183b9540bf",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "solution_id": "sol_f6628825e071d412",
+      "stones_by_room_id": {
+        "0": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "1": [
+          [
+            2,
+            3
+          ]
+        ],
+        "2": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        "3": [
+          [
+            3,
+            2
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_ec816afd75d59b41": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          "1": [
+            [
+              3,
+              5
+            ]
+          ],
+          "2": [
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              4,
+              1
+            ]
+          ],
+          "3": [
+            [
+              3,
+              4
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              5,
+              3
+            ]
+          ],
+          "4": [
+            [
+              5,
+              1
+            ],
+            [
+              5,
+              2
+            ]
+          ],
+          "5": [
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ]
+          ],
+          "6": [
+            [
+              5,
+              0
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "1": [
+            [
+              0,
+              5
+            ]
+          ],
+          "2": [
+            [
+              1,
+              0
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "3": [
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              3
+            ]
+          ],
+          "4": [
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          "5": [
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ]
+          ],
+          "6": [
+            [
+              5,
+              0
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_ec816afd75d59b41",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "solution_id": "sol_261bc1b3e4e73e04",
+      "stones_by_room_id": {
+        "0": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "1": [
+          [
+            0,
+            5
+          ]
+        ],
+        "2": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        "3": [
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "4": [
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ]
+        ],
+        "5": [
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "6": [
+          [
+            5,
+            0
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    },
+    "puz_f50910387398e55a": {
+      "drop_preview": {
+        "final_filled_cells": [
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            7,
+            5
+          ]
+        ],
+        "final_stones_by_room_id": {
+          "0": [
+            [
+              4,
+              0
+            ],
+            [
+              5,
+              0
+            ]
+          ],
+          "1": [
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          "2": [
+            [
+              5,
+              3
+            ]
+          ],
+          "3": [
+            [
+              5,
+              2
+            ],
+            [
+              6,
+              1
+            ],
+            [
+              6,
+              2
+            ]
+          ],
+          "4": [
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ]
+          ],
+          "5": [
+            [
+              6,
+              0
+            ],
+            [
+              7,
+              0
+            ]
+          ],
+          "6": [
+            [
+              7,
+              1
+            ],
+            [
+              7,
+              2
+            ],
+            [
+              7,
+              3
+            ]
+          ],
+          "7": [
+            [
+              6,
+              3
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              7,
+              4
+            ],
+            [
+              7,
+              5
+            ]
+          ]
+        },
+        "start_stones_by_room_id": {
+          "0": [
+            [
+              2,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          "1": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "2": [
+            [
+              2,
+              3
+            ]
+          ],
+          "3": [
+            [
+              3,
+              2
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          "4": [
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          "5": [
+            [
+              5,
+              0
+            ],
+            [
+              6,
+              0
+            ]
+          ],
+          "6": [
+            [
+              7,
+              1
+            ],
+            [
+              7,
+              2
+            ],
+            [
+              7,
+              3
+            ]
+          ],
+          "7": [
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              6,
+              4
+            ],
+            [
+              6,
+              5
+            ]
+          ]
+        }
+      },
+      "puzzle_id": "puz_f50910387398e55a",
+      "schema_version": "1.0.0",
+      "shaded_cells": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          7,
+          3
+        ]
+      ],
+      "solution_id": "sol_08c8d98af8e4e7a6",
+      "stones_by_room_id": {
+        "0": [
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ]
+        ],
+        "1": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "2": [
+          [
+            2,
+            3
+          ]
+        ],
+        "3": [
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ]
+        ],
+        "4": [
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "5": [
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            0
+          ]
+        ],
+        "6": [
+          [
+            7,
+            1
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            7,
+            3
+          ]
+        ],
+        "7": [
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            6,
+            5
+          ]
+        ]
+      },
+      "usage_scope": "local_mvp_dev_only"
+    }
+  }
+}

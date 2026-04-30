@@ -1,0 +1,500 @@
+{
+  "difficulty_distribution": {
+    "Easy": 5,
+    "Hard": 1,
+    "Medium": 5,
+    "Tutorial": 3
+  },
+  "duplicate_count": 0,
+  "export_timestamp": "2026-04-29T03:13:08.886814-05:00",
+  "generated_seeds": [
+    200,
+    201,
+    202,
+    702
+  ],
+  "generator_options": [
+    {
+      "category": "easy",
+      "cols": 4,
+      "count": 3,
+      "difficulty_preset": "easy",
+      "max_attempts": 20,
+      "max_seeds": 20,
+      "reveal_policy": "empty",
+      "rooms": 4,
+      "rows": 4,
+      "seed_start": 200
+    },
+    {
+      "category": "showcase",
+      "cols": 6,
+      "count": 1,
+      "difficulty_preset": "hard",
+      "max_attempts": 32,
+      "max_seeds": 8,
+      "reveal_policy": "empty",
+      "rooms": 6,
+      "rows": 6,
+      "seed_start": 702
+    }
+  ],
+  "git_commit": "6915e6e",
+  "items": [
+    {
+      "canonical_hash": "92608610d2afe3da7c150b7e296cc24f472ba76fddc58103e98aa77323e23f18",
+      "category": "tutorial",
+      "difficulty": "Tutorial",
+      "puzzle_id": "puz_92608610d2afe3da",
+      "solve_iterations": 72,
+      "source": {
+        "author": "Addison Allen",
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\000-001.txt"
+      },
+      "title": "First Stone",
+      "uniqueness": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.000417,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "2b865a62290f27d876fd9ef25967205344f8af497d55bc9a05ee505ebb2e4b53",
+      "category": "tutorial",
+      "difficulty": "Tutorial",
+      "puzzle_id": "puz_2b865a62290f27d8",
+      "solve_iterations": 10,
+      "source": {
+        "author": "Addison Allen",
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\000-002.txt"
+      },
+      "title": "Room Counts",
+      "uniqueness": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.000289,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "2e3d360bc17a6ca3afa87fe23bd8cfe97675795efd06737de97355e53e7f7d27",
+      "category": "tutorial",
+      "difficulty": "Tutorial",
+      "puzzle_id": "puz_2e3d360bc17a6ca3",
+      "solve_iterations": 2,
+      "source": {
+        "author": null,
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-001.txt"
+      },
+      "title": "No Touching Across Rooms",
+      "uniqueness": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.000176,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "0200446e708184d4154b9ab57e23bcffb03ae811b64a127ab76a1358dad5548d",
+      "category": "easy",
+      "difficulty": "Easy",
+      "puzzle_id": "puz_0200446e708184d4",
+      "solve_iterations": 14,
+      "source": {
+        "author": null,
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-002.txt"
+      },
+      "title": "Small Steps",
+      "uniqueness": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.0002,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "4447728eeb571ca5b8ca2733db35c72045bb9c810cc4a9d44c2a491f39a51f4e",
+      "category": "easy",
+      "difficulty": "Easy",
+      "puzzle_id": "puz_4447728eeb571ca5",
+      "solve_iterations": 29,
+      "source": {
+        "author": "Mind Games",
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\MG-001-001.txt"
+      },
+      "title": "Mind Games Easy",
+      "uniqueness": {
+        "constraint_checks": 2,
+        "elapsed_seconds": 0.00141,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "f50910387398e55af2816f5df85844f3c0897cbf3f8e3e828f40d079678061f9",
+      "category": "medium",
+      "difficulty": "Medium",
+      "puzzle_id": "puz_f50910387398e55a",
+      "solve_iterations": 2023,
+      "source": {
+        "author": "Addison Allen",
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\001-001.txt"
+      },
+      "title": "Tall Drop",
+      "uniqueness": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.022521,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "bc8a91d0f4c4c5a5368d94e61e1495cfcc49d22a1829c13d98c429650894c930",
+      "category": "medium",
+      "difficulty": "Medium",
+      "puzzle_id": "puz_bc8a91d0f4c4c5a5",
+      "solve_iterations": 1913,
+      "source": {
+        "author": "Yellow Puzzle",
+        "comment": "Puzzle from http://kiiroipazuru.blog.fc2.com/blog-entry-206.html",
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\YP-001.txt"
+      },
+      "title": "Yellow Medium",
+      "uniqueness": {
+        "constraint_checks": 2,
+        "elapsed_seconds": 0.003196,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "73ab64a0a4557e0b61a200973191b3a2e9d80e20216a18f77ce383e213f31ffd",
+      "category": "medium",
+      "difficulty": "Medium",
+      "puzzle_id": "puz_73ab64a0a4557e0b",
+      "solve_iterations": 7,
+      "source": {
+        "author": null,
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-004-corrected.txt"
+      },
+      "title": "Corrected Rooms",
+      "uniqueness": {
+        "constraint_checks": 2,
+        "elapsed_seconds": 0.000587,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "9aaf25bd61b78ad49176eded8c4f6e828103e4df6e51562d8941c055b85081a4",
+      "category": "medium",
+      "difficulty": "Medium",
+      "puzzle_id": "puz_9aaf25bd61b78ad4",
+      "solve_iterations": 4,
+      "source": {
+        "author": null,
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-005.txt"
+      },
+      "title": "Middle Weight",
+      "uniqueness": {
+        "constraint_checks": 2,
+        "elapsed_seconds": 0.000533,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "ec816afd75d59b41c8bec3e4b51ea1cbe7089122eb50cf958c78c51b0e56eb8a",
+      "category": "medium",
+      "difficulty": "Medium",
+      "puzzle_id": "puz_ec816afd75d59b41",
+      "solve_iterations": 2,
+      "source": {
+        "author": null,
+        "comment": null,
+        "kind": "puzpre",
+        "path": "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-006.txt"
+      },
+      "title": "Steady Descent",
+      "uniqueness": {
+        "constraint_checks": 3,
+        "elapsed_seconds": 0.00076,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "2a1ad01590fefb515ef5ba7b1518ad4217bf962ce07bcfd90ea36ca86cfeaab3",
+      "category": "easy",
+      "difficulty": "Easy",
+      "puzzle_id": "puz_2a1ad01590fefb51",
+      "solve_iterations": 17,
+      "source": {
+        "applied_reveal_policy": "empty",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": 200,
+        "kind": "generated",
+        "path": null,
+        "requested_reveal_policy": "empty"
+      },
+      "title": "Generated Easy 200",
+      "uniqueness": {
+        "constraint_checks": 2,
+        "elapsed_seconds": 0.000281,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "ced86e183b9540bfe30616eb5b203c25bd8cc99434a7418bd84811f44dd8fd82",
+      "category": "easy",
+      "difficulty": "Easy",
+      "puzzle_id": "puz_ced86e183b9540bf",
+      "solve_iterations": 5,
+      "source": {
+        "applied_reveal_policy": "empty",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": 201,
+        "kind": "generated",
+        "path": null,
+        "requested_reveal_policy": "empty"
+      },
+      "title": "Generated Easy 201",
+      "uniqueness": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.00022,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "6898de6a87b363f7262591a21df75a7ac8a8879e9547c3923b47ca2784b165e0",
+      "category": "easy",
+      "difficulty": "Easy",
+      "puzzle_id": "puz_6898de6a87b363f7",
+      "solve_iterations": 380,
+      "source": {
+        "applied_reveal_policy": "empty",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": 202,
+        "kind": "generated",
+        "path": null,
+        "requested_reveal_policy": "empty"
+      },
+      "title": "Generated Easy 202",
+      "uniqueness": {
+        "constraint_checks": 1,
+        "elapsed_seconds": 0.000405,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    },
+    {
+      "canonical_hash": "696e00ffe18a47d750b35c8f6d08cfedef0aad4d5853fb778ae8c28f4bc14513",
+      "category": "showcase",
+      "difficulty": "Hard",
+      "puzzle_id": "puz_696e00ffe18a47d7",
+      "solve_iterations": 1754472,
+      "source": {
+        "applied_reveal_policy": "empty",
+        "generation_strategy": "solution-first",
+        "generator": "StoStoneSolver Generator",
+        "generator_seed": 702,
+        "kind": "generated",
+        "path": null,
+        "requested_reveal_policy": "empty"
+      },
+      "title": "Generated Showcase 702",
+      "uniqueness": {
+        "constraint_checks": 257,
+        "elapsed_seconds": 0.15142,
+        "is_unique": true,
+        "mode": "sto-stone",
+        "search_limit": 2,
+        "solution_count": 1
+      }
+    }
+  ],
+  "pack_id": "starter_pack",
+  "pack_type": "local_mvp",
+  "rejected_puzzle_count": 0,
+  "schema_version": "1.0.0",
+  "solve_iterations": {
+    "average": 125639.28571428571,
+    "max": 1754472,
+    "min": 2
+  },
+  "source_puzpre_files": [
+    "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\000-001.txt",
+    "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\000-002.txt",
+    "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-001.txt",
+    "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-002.txt",
+    "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\MG-001-001.txt",
+    "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\001-001.txt",
+    "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\YP-001.txt",
+    "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-004-corrected.txt",
+    "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-005.txt",
+    "C:\\Users\\xtrem\\OneDrive\\Documents\\codecraft\\StoStoneSolver\\puzzles\\162-006.txt"
+  ],
+  "uniqueness_count_results": {
+    "puz_0200446e708184d4": {
+      "constraint_checks": 1,
+      "elapsed_seconds": 0.0002,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_2a1ad01590fefb51": {
+      "constraint_checks": 2,
+      "elapsed_seconds": 0.000281,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_2b865a62290f27d8": {
+      "constraint_checks": 1,
+      "elapsed_seconds": 0.000289,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_2e3d360bc17a6ca3": {
+      "constraint_checks": 1,
+      "elapsed_seconds": 0.000176,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_4447728eeb571ca5": {
+      "constraint_checks": 2,
+      "elapsed_seconds": 0.00141,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_6898de6a87b363f7": {
+      "constraint_checks": 1,
+      "elapsed_seconds": 0.000405,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_696e00ffe18a47d7": {
+      "constraint_checks": 257,
+      "elapsed_seconds": 0.15142,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_73ab64a0a4557e0b": {
+      "constraint_checks": 2,
+      "elapsed_seconds": 0.000587,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_92608610d2afe3da": {
+      "constraint_checks": 1,
+      "elapsed_seconds": 0.000417,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_9aaf25bd61b78ad4": {
+      "constraint_checks": 2,
+      "elapsed_seconds": 0.000533,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_bc8a91d0f4c4c5a5": {
+      "constraint_checks": 2,
+      "elapsed_seconds": 0.003196,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_ced86e183b9540bf": {
+      "constraint_checks": 1,
+      "elapsed_seconds": 0.00022,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_ec816afd75d59b41": {
+      "constraint_checks": 3,
+      "elapsed_seconds": 0.00076,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    },
+    "puz_f50910387398e55a": {
+      "constraint_checks": 1,
+      "elapsed_seconds": 0.022521,
+      "is_unique": true,
+      "mode": "sto-stone",
+      "search_limit": 2,
+      "solution_count": 1
+    }
+  }
+}
