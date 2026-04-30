@@ -6,7 +6,7 @@
     "Tutorial": 3
   },
   "duplicate_count": 0,
-  "export_timestamp": "2026-04-29T03:13:08.886814-05:00",
+  "export_timestamp": "2026-04-30T09:47:11.895343-05:00",
   "generated_seeds": [
     200,
     201,
@@ -39,7 +39,7 @@
       "seed_start": 702
     }
   ],
-  "git_commit": "6915e6e",
+  "git_commit": "b99646c",
   "items": [
     {
       "canonical_hash": "92608610d2afe3da7c150b7e296cc24f472ba76fddc58103e98aa77323e23f18",
@@ -56,7 +56,7 @@
       "title": "First Stone",
       "uniqueness": {
         "constraint_checks": 1,
-        "elapsed_seconds": 0.000417,
+        "elapsed_seconds": 0.000447,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -78,7 +78,7 @@
       "title": "Room Counts",
       "uniqueness": {
         "constraint_checks": 1,
-        "elapsed_seconds": 0.000289,
+        "elapsed_seconds": 0.000312,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -100,7 +100,7 @@
       "title": "No Touching Across Rooms",
       "uniqueness": {
         "constraint_checks": 1,
-        "elapsed_seconds": 0.000176,
+        "elapsed_seconds": 0.000212,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -122,7 +122,7 @@
       "title": "Small Steps",
       "uniqueness": {
         "constraint_checks": 1,
-        "elapsed_seconds": 0.0002,
+        "elapsed_seconds": 0.000199,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -144,7 +144,7 @@
       "title": "Mind Games Easy",
       "uniqueness": {
         "constraint_checks": 2,
-        "elapsed_seconds": 0.00141,
+        "elapsed_seconds": 0.001453,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -166,7 +166,7 @@
       "title": "Tall Drop",
       "uniqueness": {
         "constraint_checks": 1,
-        "elapsed_seconds": 0.022521,
+        "elapsed_seconds": 0.024844,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -188,7 +188,7 @@
       "title": "Yellow Medium",
       "uniqueness": {
         "constraint_checks": 2,
-        "elapsed_seconds": 0.003196,
+        "elapsed_seconds": 0.003942,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -210,7 +210,7 @@
       "title": "Corrected Rooms",
       "uniqueness": {
         "constraint_checks": 2,
-        "elapsed_seconds": 0.000587,
+        "elapsed_seconds": 0.000589,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -232,7 +232,7 @@
       "title": "Middle Weight",
       "uniqueness": {
         "constraint_checks": 2,
-        "elapsed_seconds": 0.000533,
+        "elapsed_seconds": 0.000604,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -254,7 +254,7 @@
       "title": "Steady Descent",
       "uniqueness": {
         "constraint_checks": 3,
-        "elapsed_seconds": 0.00076,
+        "elapsed_seconds": 0.000799,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -279,7 +279,7 @@
       "title": "Generated Easy 200",
       "uniqueness": {
         "constraint_checks": 2,
-        "elapsed_seconds": 0.000281,
+        "elapsed_seconds": 0.000311,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -304,7 +304,7 @@
       "title": "Generated Easy 201",
       "uniqueness": {
         "constraint_checks": 1,
-        "elapsed_seconds": 0.00022,
+        "elapsed_seconds": 0.000225,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -329,7 +329,7 @@
       "title": "Generated Easy 202",
       "uniqueness": {
         "constraint_checks": 1,
-        "elapsed_seconds": 0.000405,
+        "elapsed_seconds": 0.000415,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -354,7 +354,7 @@
       "title": "Generated Showcase 702",
       "uniqueness": {
         "constraint_checks": 257,
-        "elapsed_seconds": 0.15142,
+        "elapsed_seconds": 0.2017,
         "is_unique": true,
         "mode": "sto-stone",
         "search_limit": 2,
@@ -386,7 +386,7 @@
   "uniqueness_count_results": {
     "puz_0200446e708184d4": {
       "constraint_checks": 1,
-      "elapsed_seconds": 0.0002,
+      "elapsed_seconds": 0.000199,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -394,7 +394,7 @@
     },
     "puz_2a1ad01590fefb51": {
       "constraint_checks": 2,
-      "elapsed_seconds": 0.000281,
+      "elapsed_seconds": 0.000311,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -402,7 +402,7 @@
     },
     "puz_2b865a62290f27d8": {
       "constraint_checks": 1,
-      "elapsed_seconds": 0.000289,
+      "elapsed_seconds": 0.000312,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -410,7 +410,7 @@
     },
     "puz_2e3d360bc17a6ca3": {
       "constraint_checks": 1,
-      "elapsed_seconds": 0.000176,
+      "elapsed_seconds": 0.000212,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -418,7 +418,7 @@
     },
     "puz_4447728eeb571ca5": {
       "constraint_checks": 2,
-      "elapsed_seconds": 0.00141,
+      "elapsed_seconds": 0.001453,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -426,7 +426,7 @@
     },
     "puz_6898de6a87b363f7": {
       "constraint_checks": 1,
-      "elapsed_seconds": 0.000405,
+      "elapsed_seconds": 0.000415,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -434,7 +434,7 @@
     },
     "puz_696e00ffe18a47d7": {
       "constraint_checks": 257,
-      "elapsed_seconds": 0.15142,
+      "elapsed_seconds": 0.2017,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -442,7 +442,7 @@
     },
     "puz_73ab64a0a4557e0b": {
       "constraint_checks": 2,
-      "elapsed_seconds": 0.000587,
+      "elapsed_seconds": 0.000589,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -450,7 +450,7 @@
     },
     "puz_92608610d2afe3da": {
       "constraint_checks": 1,
-      "elapsed_seconds": 0.000417,
+      "elapsed_seconds": 0.000447,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -458,7 +458,7 @@
     },
     "puz_9aaf25bd61b78ad4": {
       "constraint_checks": 2,
-      "elapsed_seconds": 0.000533,
+      "elapsed_seconds": 0.000604,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -466,7 +466,7 @@
     },
     "puz_bc8a91d0f4c4c5a5": {
       "constraint_checks": 2,
-      "elapsed_seconds": 0.003196,
+      "elapsed_seconds": 0.003942,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -474,7 +474,7 @@
     },
     "puz_ced86e183b9540bf": {
       "constraint_checks": 1,
-      "elapsed_seconds": 0.00022,
+      "elapsed_seconds": 0.000225,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -482,7 +482,7 @@
     },
     "puz_ec816afd75d59b41": {
       "constraint_checks": 3,
-      "elapsed_seconds": 0.00076,
+      "elapsed_seconds": 0.000799,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,
@@ -490,7 +490,7 @@
     },
     "puz_f50910387398e55a": {
       "constraint_checks": 1,
-      "elapsed_seconds": 0.022521,
+      "elapsed_seconds": 0.024844,
       "is_unique": true,
       "mode": "sto-stone",
       "search_limit": 2,

@@ -114,7 +114,7 @@ func _load_pack() -> void:
 	for puzzle_id: String in puzzle_ids:
 		var puzzle: Dictionary = puzzles_by_id[puzzle_id] as Dictionary
 		var difficulty: Dictionary = puzzle["difficulty"] as Dictionary
-		var label: String = "%s  %s  %sx%s" % [puzzle.get("title", puzzle_id), difficulty["label"], puzzle["rows"], puzzle["cols"]]
+		var label: String = "%s  %s  %sx%s" % [puzzle.get("title", puzzle_id), difficulty["label"], puzzle["rows"] as int, puzzle["cols"] as int]
 		puzzle_list.add_item(label)
 	progress_label.text = progress.summary_text()
 	if puzzle_ids.size() > 0:
@@ -185,7 +185,15 @@ func _check_board() -> void:
 		preview_enabled = true
 		_update_drop_preview()
 	else:
-		status_label.text = "Local rules look okay so far, but this does not match the bundled MVP solution yet."
+		var puzzles_by_id: Dictionary = pack["puzzles_by_id"] as Dictionary
+		var puzzle: Dictionary = puzzles_by_id[selected_puzzle_id] as Dictionary
+		var landed_stones: Dictionary = _simulate_current_drop(puzzle)
+		preview_enabled = true
+		board.set_drop_preview(landed_stones, preview_enabled)
+		if _drop_fills_bottom_half(puzzle, landed_stones):
+			status_label.text = "The drop fills the bottom half, but this does not match the bundled MVP solution metadata."
+		else:
+			status_label.text = "Placement rules pass, but after the drop this pattern does not fill the bottom half. The preview shows why it is not a StoStone solution."
 
 
 func _show_next_hint() -> void:
@@ -209,19 +217,16 @@ func _show_next_hint() -> void:
 func _toggle_drop_preview() -> void:
 	preview_enabled = not preview_enabled
 	_update_drop_preview()
-	status_label.text = "Drop preview shows where the solved room-shapes land after rigid gravity." if preview_enabled else "Drop preview hidden."
+	status_label.text = "Drop preview shows how your current shaded room-stones fall. Each room uses a different color." if preview_enabled else "Drop preview hidden."
 
 
 func _update_drop_preview() -> void:
 	if selected_puzzle_id == "":
 		return
-	var solutions_by_puzzle_id: Dictionary = pack["solutions_by_puzzle_id"] as Dictionary
-	var solution: Dictionary = solutions_by_puzzle_id.get(selected_puzzle_id, {}) as Dictionary
-	var cells: Array = []
-	if solution.has("drop_preview"):
-		var drop_preview: Dictionary = solution["drop_preview"] as Dictionary
-		cells = drop_preview.get("final_filled_cells", []) as Array
-	board.set_drop_preview(cells, preview_enabled)
+	var puzzles_by_id: Dictionary = pack["puzzles_by_id"] as Dictionary
+	var puzzle: Dictionary = puzzles_by_id[selected_puzzle_id] as Dictionary
+	var landed_stones: Dictionary = _simulate_current_drop(puzzle)
+	board.set_drop_preview(landed_stones, preview_enabled)
 
 
 func _reset_current_puzzle() -> void:
@@ -305,6 +310,80 @@ func _room_shaded_cells_connected(room_id: int, puzzle: Dictionary) -> bool:
 				seen[key] = true
 				queue.append(neighbor)
 	return seen.size() == target.size()
+
+
+func _simulate_current_drop(puzzle: Dictionary) -> Dictionary:
+	var layout: Array = puzzle["layout"] as Array
+	var stones_by_room_id: Dictionary = {}
+	for key: String in shaded.keys():
+		var parts: PackedStringArray = str(key).split(",")
+		var row: int = int(parts[0])
+		var col: int = int(parts[1])
+		var room_id: int = _room_at(layout, row, col)
+		var stone_cells: Array = stones_by_room_id.get(room_id, []) as Array
+		stone_cells.append([row, col])
+		stones_by_room_id[room_id] = stone_cells
+
+	var rows: int = int(puzzle["rows"])
+	var moved: bool = true
+	while moved:
+		moved = false
+		for room_id: int in _sorted_int_keys(stones_by_room_id):
+			var stone: Array = stones_by_room_id[room_id] as Array
+			if stone.is_empty():
+				continue
+			var below: Array = []
+			var can_drop: bool = true
+			var blocked_cells: Dictionary = _occupied_cells_except(stones_by_room_id, room_id)
+			for cell: Array in stone:
+				var next_cell: Array = [int(cell[0]) + 1, int(cell[1])]
+				if int(next_cell[0]) >= rows or blocked_cells.has(_key(int(next_cell[0]), int(next_cell[1]))):
+					can_drop = false
+					break
+				below.append(next_cell)
+			if can_drop:
+				stones_by_room_id[room_id] = below
+				moved = true
+
+	return stones_by_room_id
+
+
+func _sorted_int_keys(source: Dictionary) -> Array[int]:
+	var keys: Array[int] = []
+	for key: int in source.keys():
+		keys.append(key)
+	keys.sort()
+	return keys
+
+
+func _occupied_cells_except(stones_by_room_id: Dictionary, excluded_room_id: int) -> Dictionary:
+	var result: Dictionary = {}
+	for room_id: int in stones_by_room_id.keys():
+		if room_id == excluded_room_id:
+			continue
+		var cells: Array = stones_by_room_id[room_id] as Array
+		for cell: Array in cells:
+			result[_key(int(cell[0]), int(cell[1]))] = true
+	return result
+
+
+func _drop_fills_bottom_half(puzzle: Dictionary, stones_by_room_id: Dictionary) -> bool:
+	var rows: int = int(puzzle["rows"])
+	var cols: int = int(puzzle["cols"])
+	var half: int = int(rows / 2)
+	var filled: Dictionary = {}
+	for room_id: int in stones_by_room_id.keys():
+		var cells: Array = stones_by_room_id[room_id] as Array
+		for cell: Array in cells:
+			filled[_key(int(cell[0]), int(cell[1]))] = true
+	for row: int in range(rows):
+		for col: int in range(cols):
+			var has_cell: bool = filled.has(_key(row, col))
+			if row < half and has_cell:
+				return false
+			if row >= half and not has_cell:
+				return false
+	return true
 
 
 func _is_complete() -> bool:
